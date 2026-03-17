@@ -1,4 +1,4 @@
-import gridImage from '../assets/thumbnail.jpg';
+import ppImage from '../assets/pp.jpg';
 
 interface QuoteItem {
   id: number;
@@ -60,7 +60,7 @@ export function GantavySection() {
               {/* Image */}
               <div className="mb-4 h-40 overflow-hidden rounded">
                 <img
-                  src={gridImage}
+                  src={ppImage}
                   alt="Quote image"
                   className="w-full h-full object-cover"
                 />
