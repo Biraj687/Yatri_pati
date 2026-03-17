@@ -95,16 +95,16 @@ export function Home() {
       {hero && <HeroSection heroArticle={hero} />}
 
       {/* Samachar Section */}
-      <main className="main-content">
-        <section className="samachar-section">
-          <h2 className="samachar-heading">समाचार</h2>
+      <main className="max-w-7xl mx-auto px-5 py-10">
+        <section>
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">समाचार</h2>
 
-          <div className="samachar-grid perspective-container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left: Large featured article */}
             {featured && <FeaturedArticle article={featured} />}
 
             {/* Right: List of compact articles */}
-            <div className="samachar-list perspective-container">
+            <div className="space-y-0">
               {articles.map((article, index) => (
                 <CompactArticle
                   key={article.id}
