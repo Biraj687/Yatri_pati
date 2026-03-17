@@ -19,17 +19,6 @@ export interface ApiResponse {
   articles: Article[];
 }
 
-// Predefined image URLs for articles
-const imageUrls = [
-  'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80',
-  'https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=800&q=80',
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80',
-  'https://images.unsplash.com/photo-1504681869696-d977e3b956c0?w=800&q=80',
-  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80',
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
-  'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80'
-];
-
 // Normalization function to handle backend dataset variation
 export function normalizeArticle(rawArticle: any): Article {
   return {
