@@ -26,7 +26,7 @@ export function normalizeArticle(rawArticle: any): Article {
     title: rawArticle.title || rawArticle.headline || '',
     image: rawArticle.image || rawArticle.thumbnail || rawArticle.thumb || '',
     excerpt: rawArticle.excerpt || rawArticle.summary || '',
-    author: rawArticle.author || rawArticle.writer || 'बिराजन प्याकुरेल',
+    author: rawArticle.author || rawArticle.writer || 'बिराज प्याकुरेल',
     date: rawArticle.date || rawArticle.published_at || new Date().toLocaleDateString('ne-NP'),
     category: rawArticle.category || 'समाचार',
     authorAvatar: rawArticle.authorAvatar || ppImage
@@ -39,7 +39,7 @@ const mockHeroArticle = {
   headline: 'जहाँ जहाँ जान्छौ तिमि, म पाइला बनि पछ्याई रहन्छु',
   image: heroImage,
   summary: 'एक अनौठो कथा जो तपाईंको हृदय छुने छ र जीवनको अर्थ सिखाउँछ।',
-  writer: 'बिराजन प्याकुरेल',
+  writer: 'बिराज प्याकुरेल',
   published_at: '२२ फाल्गुन २०८२, बुधबार — २ दिन पहिले',
   category: 'पाइला'
 };
@@ -49,7 +49,7 @@ const mockFeaturedArticle = {
   title: 'कोही माथी निर्भर नहुनु, केही पनि आशा नराखु र केही पनि नमाग्रु नै स्वतन्त्रता हो।',
   image: thumbnailImage,
   excerpt: 'यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडीरहन्छु ।',
-  author: 'बिराजन प्याकुरेल',
+  author: 'बिराज प्याकुरेल',
   date: '२२ भदौ २०७९, बुधबार'
 };
 
@@ -59,7 +59,7 @@ const mockTargetArticles = [
     title: 'प्रत्येक मानिसले अर्को व्यक्तिलाई प्राकृतिक रूपमा आफू सरह सम्झनुपर्दछ',
     image: thumbnailImage,
     summary: 'यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडीरहन्छु ।',
-    author: 'बिराजन प्याकुरेल',
+    author: 'बिराज प्याकुरेल',
     published_at: '२२ भदौ २०७९, बुधबार'
   },
   {
@@ -67,7 +67,7 @@ const mockTargetArticles = [
     headline: 'कोही माथी निर्भर नहुनु, केही पनि आशा नराखु र केही पनि नमाग्रु नै स्वतन्त्रता हो।',
     image: thumbnailImage,
     excerpt: 'यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडीरहन्छु ।',
-    writer: 'बिराजन प्याकुरेल',
+    writer: 'बिराज प्याकुरेल',
     date: '२२ भदौ २०७९, बुधबार'
   },
   {
@@ -75,7 +75,7 @@ const mockTargetArticles = [
     title: 'संग्राममा हजारौं हजारलाई जिनेलाई भन्दा आफ्नो मनलाई जित सक्नेलाई संग्राम विजयी भनिन्छ',
     image: thumbnailImage,
     summary: 'यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडीरहन्छु ।',
-    author: 'बिराजन प्याकुरेल',
+    author: 'बिराज प्याकुरेल',
     published_at: '२२ भदौ २०७९, बुधबार'
   },
   {
@@ -83,7 +83,7 @@ const mockTargetArticles = [
     title: 'आत्मा भित्र अनन्त शक्তिको स्रोत छैन र हामीले यो पावर जाग्रत गर्न सक्छौं',
     image: thumbnailImage,
     excerpt: 'आपनो अन्दरको शक्तिलाई चिनेर सफलतार्थ अग्रसर हुनुहोस्।',
-    author: 'बिराजन प्याकुरेल',
+    author: 'बिराज प्याकुरेल',
     published_at: '२१ भदौ २०७९, मङ्गलबार'
   },
   {
@@ -91,7 +91,7 @@ const mockTargetArticles = [
     title: 'तपाईंको भविष्य तपाईंको सोचद्वारा तय हुन्छ, सकारात्मक सोच ग्रहण गर्नुहोस्',
     image: thumbnailImage,
     summary: 'जीवनमा सफलताको मुख्य कुञ्जी सकारात्मक सोचमा निहित छ।',
-    author: 'बिराजन प्याकुरेल',
+    author: 'बिराज प्याकुरेल',
     published_at: '२० भदौ २०७९, सोमबार'
   }
 ];
