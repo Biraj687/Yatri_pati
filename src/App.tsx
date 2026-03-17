@@ -1,12 +1,12 @@
-import { Header, Footer, GantavySection, BannerSection, NewsPackagesSection } from './components'
+import { Header, Footer, GantavySection, NewsPackagesSection } from './components'
 import { Home } from './pages'
+import './App.css'
 
 function App() {
   return (
     <div className="app">
       <Header />
       <Home />
-      <BannerSection />
       <GantavySection />
       <NewsPackagesSection />
       <Footer />

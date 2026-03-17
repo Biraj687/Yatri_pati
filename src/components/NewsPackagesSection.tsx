@@ -55,7 +55,7 @@ export default function NewsPackagesSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* News Column */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-red-600 pb-3">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-gray-400 pb-3 text-left">
               समाचार
             </h2>
             <div className="space-y-4">
@@ -70,7 +70,7 @@ export default function NewsPackagesSection() {
                       alt={item.title}
                       className="w-24 h-24 object-cover rounded flex-shrink-0"
                     />
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 text-left">
                       <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2">
                         {item.title}
                       </h3>
@@ -89,8 +89,8 @@ export default function NewsPackagesSection() {
 
           {/* Packages Column */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-blue-600 pb-3">
-              प्याकेज
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-blue-600 pb-3 text-left">
+              प्याकेज समाचार
             </h2>
             <div className="space-y-4">
               {packages.map((pkg) => (
@@ -104,7 +104,7 @@ export default function NewsPackagesSection() {
                       alt={pkg.title}
                       className="w-24 h-24 object-cover rounded flex-shrink-0"
                     />
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 text-left">
                       <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2">
                         {pkg.title}
                       </h3>

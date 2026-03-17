@@ -9,7 +9,7 @@ export function FeaturedArticle({ article }: { article: Article }) {
   return (
     <article 
       ref={featuredRef} 
-      className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 mb-5 opacity-0 translate-y-8 ${featuredVisible ? 'opacity-100 translate-y-0' : ''}`}
+      className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 mb-5 opacity-0 translate-y-8 text-left ${featuredVisible ? 'opacity-100 translate-y-0' : ''}`}
     >
       <a href="#" className="block overflow-hidden">
         <img src={article.image} alt="Featured Article" className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105" />

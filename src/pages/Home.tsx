@@ -69,7 +69,7 @@ export function Home() {
         color: '#fff',
         textAlign: 'center'
       }}>
-        <h2 style={{ color: '#ff6b6b', marginBottom: '20px' }}>❌ त्रुटि</h2>
+        <h2 style={{ color: '#fbbf24', marginBottom: '20px' }}>❌ त्रुटि</h2>
         <p style={{ marginBottom: '20px', fontSize: '16px' }}>{error}</p>
         <button
           onClick={handleRetry}
@@ -97,7 +97,7 @@ export function Home() {
       {/* Samachar Section */}
       <main className="max-w-7xl mx-auto px-5 py-10">
         <section>
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">समाचार</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-left">समाचार</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left: Large featured article */}

@@ -1,4 +1,5 @@
 import ppImage from '../assets/pp.jpg';
+import thumbnailImage from '../assets/thumbnail.jpg';
 
 interface QuoteItem {
   id: number;
@@ -48,10 +49,10 @@ const quotes: QuoteItem[] = [
 
 export function GantavySection() {
   return (
-    <section className="px-4 py-12">
+    <section className="px-4 py-12 text-left">
       <div className="bg-black rounded-lg p-8 mx-auto max-w-6xl">
         {/* Header */}
-        <h2 className="text-white text-3xl font-bold text-center mb-12">गन्तव्य</h2>
+        <h2 className="text-white text-3xl font-bold text-left mb-12">गन्तव्य</h2>
 
         {/* 2x3 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -60,7 +61,7 @@ export function GantavySection() {
               {/* Image */}
               <div className="mb-4 h-40 overflow-hidden rounded">
                 <img
-                  src={ppImage}
+                  src={thumbnailImage}
                   alt="Quote image"
                   className="w-full h-full object-cover"
                 />
@@ -71,9 +72,16 @@ export function GantavySection() {
                 {item.quote}
               </p>
 
-              {/* Author and Date */}
-              <div className="text-white text-xs opacity-75">
-                {item.author} — {item.date}
+              {/* Author with circular image */}
+              <div className="flex items-center gap-3">
+                <img
+                  src={ppImage}
+                  alt={item.author}
+                  className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                />
+                <div className="text-white text-xs opacity-75">
+                  {item.author} — {item.date}
+                </div>
               </div>
             </div>
           ))}

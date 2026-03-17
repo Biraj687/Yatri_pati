@@ -9,7 +9,7 @@ export function CompactArticle({ article, index, totalLength }: { article: Artic
   return (
     <article
       ref={ref}
-      className={`flex gap-4 py-4 hover:bg-gray-50 transition-colors duration-300 opacity-0 translate-y-4 ${isVisible ? 'opacity-100 translate-y-0' : ''} ${
+      className={`flex gap-4 py-4 hover:bg-gray-50 transition-colors duration-300 opacity-0 translate-y-4 text-left ${isVisible ? 'opacity-100 translate-y-0' : ''} ${
         index < totalLength - 1 ? 'border-b border-gray-200' : ''
       }`}
       style={{ animationDelay: `${index * 0.15}s`, transition: 'opacity 0.6s ease, transform 0.6s ease' }}
