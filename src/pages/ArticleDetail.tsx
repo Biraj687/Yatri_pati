@@ -42,7 +42,7 @@ export function ArticleDetail() {
 
   if (loading) return <SkeletonLoader type="detail" />;
   if (!article) return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center text-white px-5">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 min-h-[60vh] flex flex-col items-center justify-center text-white">
       <h2 className="text-2xl font-bold mb-4">समाचार फेला परेन।</h2>
       <Link to="/" className="text-blue-400 hover:underline flex items-center gap-2">
         <FiArrowLeft /> गृहपृष्ठमा फर्कनुहोस्
@@ -63,39 +63,39 @@ export function ArticleDetail() {
 
       {/* Hero Header Section */}
       <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
-        <img 
-          src={article.image} 
-          alt={article.title} 
+        <img
+          src={article.image}
+          alt={article.title}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-full p-6 md:p-12">
-          <div className="max-w-5xl mx-auto">
-            <Link to={`/category/${article.category?.toLowerCase() || 'news'}`} className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider mb-4 hover:bg-blue-700 transition-colors">
+        <div className="absolute bottom-0 left-0 w-full px-4 lg:px-6 py-6 md:py-8">
+          <div className="max-w-7xl mx-auto">
+            <Link to={`/category/${article.category?.toLowerCase() || 'news'}`} className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider mb-3 hover:bg-blue-700 transition-colors">
               {article.category || 'समाचार'}
             </Link>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white drop-shadow-xl">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white drop-shadow-xl">
               {article.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-6 text-sm md:text-base text-gray-200">
+            <div className="flex flex-wrap items-center gap-4 text-xs md:text-sm text-gray-200">
               <div className="flex items-center gap-2">
-                <FiUser className="text-blue-400" />
+                <FiUser className="text-blue-400 w-4 h-4" />
                 <span className="font-semibold text-white">{article.author}</span>
               </div>
               <div className="flex items-center gap-2">
-                <FiCalendar className="text-blue-400" />
+                <FiCalendar className="text-blue-400 w-4 h-4" />
                 <span>{article.date}</span>
               </div>
               <div className="flex items-center gap-2">
-                <FiClock className="text-blue-400" />
-                <span>५ मिनेट पढ्नुहोस्</span>
+                <FiClock className="text-blue-400 w-4 h-4" />
+                <span>{article.readTime || '५ मिनेट पढ्नुहोस्'}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-5 py-12 flex flex-col lg:flex-row gap-12 text-left">
+      <div className="max-w-5xl mx-auto px-6 lg:px-8 py-14 flex flex-col lg:flex-row gap-12 text-left">
         {/* Main Content */}
         <div className="flex-grow">
           <div className="prose prose-lg md:prose-xl max-w-none text-gray-800">
@@ -104,30 +104,44 @@ export function ArticleDetail() {
             </p>
             
             <div className="space-y-8 leading-relaxed text-lg text-gray-800">
-              <p>
-                यो समाचारको विस्तृत विवरण यहाँ राखिनेछ। अहिलेका लागि हामीले डेटाबेसबाट संकलन गरेको संक्षिप्त विवरण यहाँ देखाइएको छ। 
-                यस पोर्टलमा हामीले नेपाल र विश्वका पछिल्ला घटनाक्रमहरूलाई समेट्ने प्रयास गरेका छौं।
-              </p>
-              
-              <figure className="my-10">
-                <img 
-                  src={article.image} 
-                  alt="Contextual" 
-                  className="rounded-xl w-full h-auto shadow-xl"
-                />
-                <figcaption className="text-center text-sm text-gray-500 mt-4 italic">
-                  तस्बिर: {article.title} सम्बन्धी एक झलक
-                </figcaption>
-              </figure>
+              {article.content ? (
+                // Display real content from backend
+                <div className="prose prose-lg md:prose-xl max-w-none">
+                  {article.content.split('\n\n').map((paragraph, idx) => (
+                    <p key={idx} className="mb-6">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                // Fallback placeholder content
+                <>
+                  <p>
+                    यो समाचारको विस्तृत विवरण यहाँ राखिनेछ। अहिलेका लागि हामीले डेटाबेसबाट संकलन गरेको संक्षिप्त विवरण यहाँ देखाइएको छ।
+                    यस पोर्टलमा हामीले नेपाल र विश्वका पछिल्ला घटनाक्रमहरूलाई समेट्ने प्रयास गरेका छौं।
+                  </p>
 
-              <p>
-                पर्यटन, संस्कृति, र प्रविधिको क्षेत्रमा भइरहेका परिवर्तनहरूलाई हामीले नजिकबाट नियालिरहेका छौं। 
-                हाम्रो उद्देश्य पाठकहरूलाई सही र निष्पक्ष जानकारी प्रदान गर्नु हो। हामी विश्वास गर्छौं कि सूचनाले समाजलाई सुसूचित र सचेत बनाउन मद्दत गर्दछ।
-              </p>
-              
-              <p>
-                थप जानकारीका लागि हाम्रा अन्य लेखहरू पनि पढ्न सक्नुहुन्छ। हामी निरन्तर ताजा र गहन विश्लेषणहरू पाठकमाझ पुर्याउने वाचा गर्दछौं।
-              </p>
+                  <figure className="my-10">
+                    <img
+                      src={article.image}
+                      alt="Contextual"
+                      className="rounded-xl w-full h-auto shadow-xl"
+                    />
+                    <figcaption className="text-center text-sm text-gray-500 mt-4 italic">
+                      तस्बिर: {article.title} सम्बन्धी एक झलक
+                    </figcaption>
+                  </figure>
+
+                  <p>
+                    पर्यटन, संस्कृति, र प्रविधिको क्षेत्रमा भइरहेका परिवर्तनहरूलाई हामीले नजिकबाट नियालिरहेका छौं।
+                    हाम्रो उद्देश्य पाठकहरूलाई सही र निष्पक्ष जानकारी प्रदान गर्नु हो। हामी विश्वास गर्छौं कि सूचनाले समाजलाई सुसूचित र सचेत बनाउन मद्दत गर्दछ।
+                  </p>
+
+                  <p>
+                    थप जानकारीका लागि हाम्रा अन्य लेखहरू पनि पढ्न सक्नुहुन्छ। हामी निरन्तर ताजा र गहन विश्लेषणहरू पाठकमाझ पुर्याउने वाचा गर्दछौं।
+                  </p>
+                </>
+              )}
             </div>
           </div>
 

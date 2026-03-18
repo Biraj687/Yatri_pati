@@ -7,13 +7,13 @@ export function TopBar() {
     <div className="bg-white border-b border-gray-200 text-sm">
       {/* Top: Center aligned Breaking news */}
       <div className="py-1.5 border-b border-gray-100">
-      <div className="w-full text-center text-xs text-gray-800 px-5">
+      <div className="w-full text-center text-xs text-gray-800 px-6 lg:px-8">
           <span className="font-semibold text-blue-600">विशेष ब्रिफिङ:</span>{' '}
           प्रधानमन्त्री देउवासँग अध्यक्ष लिंखी शिवाचार भेटवार्ता
         </div>
       </div>
 
-      <div className="w-full px-5 py-2 flex flex-col md:flex-row items-center justify-between gap-2">
+      <div className="w-full px-6 lg:px-8 py-2 flex flex-col md:flex-row items-center justify-between gap-2">
         {/* Left: Nepali date */}
         <div className="text-gray-800 font-medium whitespace-nowrap text-[10px] md:text-xs">
           {nepaliDate}

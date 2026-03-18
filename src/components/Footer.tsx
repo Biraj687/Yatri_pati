@@ -15,7 +15,7 @@ export function Footer() {
 
   return (
     <footer className="bg-black text-white w-full">
-      <div className="w-full py-10 px-6">
+      <div className="w-full py-10 px-6 lg:px-8">
         {/* Top Section - Logo and Social Icons */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12 text-left">
           {/* Left: Logo and Nepali Text */}
@@ -82,7 +82,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Section - Copyright */}
-        <div className="border-t border-gray-700 pt-6 text-left">
+        <div className="border-t border-gray-700 pt-6 text-center">
           <p className="text-gray-400 text-sm">
             © {new Date().getFullYear()} Yatri Pati. All rights reserved.
           </p>

@@ -55,16 +55,18 @@ export function Home() {
           <title>Yatripati - Loading News...</title>
         </Helmet>
         <SkeletonLoader type="hero" />
-        <main className="max-w-7xl mx-auto px-5 py-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <SkeletonLoader type="featured" />
-            <div className="space-y-4">
-              <SkeletonLoader type="compact" />
-              <SkeletonLoader type="compact" />
-              <SkeletonLoader type="compact" />
-              <SkeletonLoader type="compact" />
+        <main className="w-full py-12">
+          <section className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              <SkeletonLoader type="featured" />
+              <div className="space-y-4">
+                <SkeletonLoader type="compact" />
+                <SkeletonLoader type="compact" />
+                <SkeletonLoader type="compact" />
+                <SkeletonLoader type="compact" />
+              </div>
             </div>
-          </div>
+          </section>
         </main>
       </>
     );
@@ -72,31 +74,33 @@ export function Home() {
 
   if (error) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column',
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '50vh', 
-        color: '#fff',
-        textAlign: 'center'
-      }}>
-        <h2 style={{ color: '#fbbf24', marginBottom: '20px' }}>❌ त्रुटि</h2>
-        <p style={{ marginBottom: '20px', fontSize: '16px' }}>{error}</p>
-        <button
-          onClick={handleRetry}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontSize: '16px'
-          }}
-        >
-          पुनः प्रयास गर्नुहोस्
-        </button>
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '50vh',
+          color: '#fff',
+          textAlign: 'center'
+        }}>
+          <h2 style={{ color: '#fbbf24', marginBottom: '20px' }}>❌ त्रुटि</h2>
+          <p style={{ marginBottom: '20px', fontSize: '16px' }}>{error}</p>
+          <button
+            onClick={handleRetry}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#4CAF50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '16px'
+            }}
+          >
+            पुनः प्रयास गर्नुहोस्
+          </button>
+        </div>
       </div>
     );
   }
@@ -111,23 +115,23 @@ export function Home() {
         <meta property="og:type" content="website" />
       </Helmet>
 
-      {/* Samachar Section */}
-      <main className="w-full px-5 py-10">
-        <section>
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-left uppercase border-b-2 border-blue-600 inline-block">समाचार</h2>
+      {/* Samachar Section - with breathing space */}
+      <main className="w-full py-12">
+        <section className="max-w-7xl mx-auto px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-10 text-left uppercase border-b-2 border-blue-600 inline-block pb-2">समाचार</h2>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Left: Large featured article */}
             {featured && <FeaturedArticle article={featured} />}
 
             {/* Right: List of compact articles */}
             <div className="space-y-0">
-              {articles.map((article, index) => (
+              {articles.slice(0, 4).map((article, index) => (
                 <CompactArticle
                   key={article.id}
                   article={article}
                   index={index}
-                  totalLength={articles.length}
+                  totalLength={Math.min(articles.length, 4)}
                 />
               ))}
             </div>

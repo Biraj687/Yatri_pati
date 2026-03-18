@@ -1,6 +1,8 @@
 import ppImage from '../assets/pp.jpg';
 import heroImage from '../assets/hero.jpg';
 import thumbnailImage from '../assets/thumbnail.jpg';
+import thumbnail2 from '../assets/thumbnail 2.jpg';
+import thumbnail3 from '../assets/thumbnail 3.jpg';
 import { apiClient } from './apiClient';
 import { sanitizeArticle } from './sanitizer';
 
@@ -13,6 +15,10 @@ export interface Article {
   date: string;
   category?: string;
   authorAvatar?: string;
+  content?: string; // Full article content
+  readTime?: string; // Estimated read time
+  views?: number; // View count
+  source?: string; // News source/publish
 }
 
 export interface ApiResponse {
@@ -24,15 +30,30 @@ export interface ApiResponse {
 // Normalization function to handle backend dataset variation
 export function normalizeArticle(rawArticle: any): Article {
   return {
-    id: rawArticle.id || rawArticle._id || Math.random(),
-    title: rawArticle.title || rawArticle.headline || '',
-    image: rawArticle.image || rawArticle.thumbnail || rawArticle.thumb || '',
-    excerpt: rawArticle.excerpt || rawArticle.summary || '',
-    author: rawArticle.author || rawArticle.writer || 'बिराज प्याकुरेल',
-    date: rawArticle.date || rawArticle.published_at || new Date().toLocaleDateString('ne-NP'),
-    category: rawArticle.category || 'समाचार',
-    authorAvatar: rawArticle.authorAvatar || ppImage
+    id: rawArticle.id || rawArticle._id || rawArticle.articleId || Math.random(),
+    title: rawArticle.title || rawArticle.headline || rawArticle.name || '',
+    image: rawArticle.image || rawArticle.thumbnail || rawArticle.thumb || rawArticle.imageUrl || '',
+    excerpt: rawArticle.excerpt || rawArticle.summary || rawArticle.description || rawArticle.intro || '',
+    author: rawArticle.author || rawArticle.writer || rawArticle.authorName || 'बिराज प्याकुरेल',
+    date: rawArticle.date || rawArticle.published_at || rawArticle.createdAt || rawArticle.publishedDate || new Date().toLocaleDateString('ne-NP'),
+    category: rawArticle.category || rawArticle.type || rawArticle.channel || rawArticle.section || 'समाचार',
+    authorAvatar: rawArticle.authorAvatar || rawArticle.avatar || rawArticle.profileImage || ppImage,
+    content: rawArticle.content || rawArticle.body || rawArticle.article || undefined,
+    readTime: rawArticle.readTime || rawArticle.estimatedReadTime || calculateReadTime(rawArticle.content || rawArticle.excerpt || ''),
+    views: rawArticle.views || rawArticle.viewCount || 0,
+    source: rawArticle.source || rawArticle.publisher || rawArticle.publication || undefined
   }
+}
+
+// Calculate estimated read time based on word count
+function calculateReadTime(text: string): string {
+  const wordsPerMinute = 200;
+  const words = text.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+
+  if (minutes < 1) return 'कम पढ्नु';
+  if (minutes === 1) return '१ मिनेट पढ्नु';
+  return `${minutes} मिनेट पढ्नु`;
 }
 
 // Mock backend data with fixed images and pp.jpg author avatars
@@ -67,7 +88,7 @@ const mockTargetArticles = [
   {
     id: 2,
     headline: 'कोही माथी निर्भर नहुनु, केही पनि आशा नराखु र केही पनि नमाग्रु नै स्वतन्त्रता हो।',
-    image: thumbnailImage,
+    image: thumbnail2,
     excerpt: 'यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडीरहन्छु ।',
     writer: 'बिराज प्याकुरेल',
     date: '२२ भदौ २०७९, बुधबार'
@@ -75,7 +96,7 @@ const mockTargetArticles = [
   {
     id: 3,
     title: 'संग्राममा हजारौं हजारलाई जिनेलाई भन्दा आफ्नो मनलाई जित सक्नेलाई संग्राम विजयी भनिन्छ',
-    image: thumbnailImage,
+    image: thumbnail3,
     summary: 'यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडीरहन्छु ।',
     author: 'बिराज प्याकुरेल',
     published_at: '२२ भदौ २०७९, बुधबार'
@@ -91,10 +112,130 @@ const mockTargetArticles = [
   {
     id: 5,
     title: 'तपाईंको भविष्य तपाईंको सोचद्वारा तय हुन्छ, सकारात्मक सोच ग्रहण गर्नुहोस्',
-    image: thumbnailImage,
+    image: thumbnail2,
     summary: 'जीवनमा सफलताको मुख्य कुञ्जी सकारात्मक सोचमा निहित छ।',
     author: 'बिराज प्याकुरेल',
     published_at: '२० भदौ २०७९, सोमबार'
+  },
+  {
+    id: 6,
+    title: 'होटल र रिसोर्ट: नेपालको पर्यटन उद्योगमा नयाँ आयाम',
+    image: thumbnail3,
+    excerpt: 'नेपालका प्रमुख पर्यटकीय स्थलहरूमा विलासी होटल र रिसोर्टहरूको विस्तार हुँदैछ।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '२० फाल्गुन २०८२'
+  },
+  {
+    id: 7,
+    title: 'हिमाली भेगमा ट्रेकिङका लागि उत्तम समय',
+    image: thumbnailImage,
+    excerpt: 'यस वर्षको वसन्त ऋतु ट्रेकिङका लागि निकै अनुकूल मानिएको छ।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '१९ फाल्गुन २०८२'
+  },
+  {
+    id: 8,
+    title: 'काठमाडौं भित्रका उत्कृष्ट रेस्टुरेन्टहरू',
+    image: thumbnail2,
+    excerpt: 'खानाका पारखीहरूका लागि यी हुन् काठमाडौंका ५ उत्कृष्ट रेस्टुरेन्ट।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '१८ फाल्गुन २०८२'
+  },
+  {
+    id: 9,
+    title: 'पोखरामा प्याराग्लाइडिङको नयाँ अनुभव',
+    image: thumbnail3,
+    excerpt: 'फेवा तालको सुन्दर दृश्य कैद गर्दै आकाशमा उड्नुको मज्जा बेग्लै छ।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '१७ फाल्गुन २०८२'
+  },
+  {
+    id: 10,
+    title: 'चितवन राष्ट्रिय निकुञ्जमा सफारी',
+    image: thumbnailImage,
+    excerpt: 'गैंडा र बाघ हेर्नका लागि चितवन अहिले उपयुक्त गन्तव्य बनेको छ।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '१६ फाल्गुन २०८२'
+  },
+  {
+    id: 11,
+    title: 'लुम्बिनी भ्रमणका लागि तयारी गर्दै हुनुहुन्छ?',
+    image: thumbnail2,
+    excerpt: 'शान्तिका अग्रदूत गौतम बुद्धको जन्मस्थल लुम्बिनी पुग्नुअघि यी कुराहरू थाहा पाउनुहोस्।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '१५ फाल्गुन २०८२'
+  },
+  {
+    id: 12,
+    title: 'नेपालमा होमस्टे पर्यटनको बढ्दो आकर्षण',
+    image: thumbnail3,
+    excerpt: 'गाउँले जीवन र स्थानीय संस्कृतिको अनुभवका लागि होमस्टे प्रभावकारी माध्यम बनेको छ।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '१४ फाल्गुन २०८२'
+  },
+  {
+    id: 13,
+    title: 'एभरेष्ट बेस क्याम्प ट्रेक: एक जीवन परिवर्तनकारी अनुभव',
+    image: thumbnailImage,
+    excerpt: 'विश्वको सर्वोच्च शिखरको फेदसम्म पुग्ने सपना अब साकार पार्नुहोस्।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '१३ फाल्गुन २०८२'
+  },
+  {
+    id: 14,
+    title: 'नेपाली मौलिक खानाको प्रवर्द्धनमा नयाँ प्रयास',
+    image: thumbnail2,
+    excerpt: 'परम्परागत स्वादलाई आधुनिक शैलीमा प्रस्तुत गर्दै युवा उद्यमीहरू।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '१२ फाल्गुन २०८२'
+  },
+  {
+    id: 15,
+    title: 'मुस्ताङको मरुभूमिमा बुलबुले साहसिक यात्रा',
+    image: thumbnail3,
+    excerpt: 'अफ-रोडिङका शौखिनहरूका लागि मुस्ताङको यात्रा सधैं विशेष रहन्छ।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '११ फाल्गुन २०८२'
+  },
+  {
+    id: 16,
+    title: 'गण्डकी नदीमा र्‍याफ्टिङको रोमाञ्च',
+    image: thumbnailImage,
+    excerpt: 'गर्मी मौसमको सुरुवातसँगै त्रिशुली र भोटेकोशीमा जलयात्रा गर्नेहरूको भीड।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '१० फाल्गुन २०८२'
+  },
+  {
+    id: 17,
+    title: 'नेपालमा साहसिक पर्यटनका नयाँ सम्भावना',
+    image: thumbnail2,
+    excerpt: 'बन्जी जम्पिङदेखि जिपलाइनसम्म, नेपाल अब साहसिक पर्यटनको हब बन्दैछ।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '०९ फाल्गुन २०८२'
+  },
+  {
+    id: 18,
+    title: 'कला र संस्कृति: पाटन दरबार क्षेत्रको भ्रमण',
+    image: thumbnail3,
+    excerpt: 'नेपाली वास्तुकलाको अनुपम उदाहरण हेर्न पाटन एक भ्रमणयोग्य ठाउँ हो।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '०८ फाल्गुन २०८२'
+  },
+  {
+    id: 19,
+    title: 'तिलिचो ताल: विश्वको सबैभन्दा उचाइमा रहेको ताल',
+    image: thumbnailImage,
+    excerpt: 'नीलो पानी र हिमालको काखमा रहेको तिलिचो पुग्न सजिलो छैन, तर सुन्दर छ।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '०७ फाल्गुन २०८२'
+  },
+  {
+    id: 20,
+    title: 'माउन्टेन फ्लाइट: सगरमाथालाई नजिकबाट नियाल्दा',
+    image: thumbnail2,
+    excerpt: 'काठमाडौंबाट हुने एक घण्टाको उडानले तपाईलाई हिमालको काखमा पुर्‍याउँछ।',
+    author: 'बिराज प्याकुरेल',
+    published_at: '०६ फाल्गुन २०८२'
   }
 ];
 
@@ -144,4 +285,67 @@ export const fetchNewsDataWithRetry = async (maxRetries: number = 3, delayMs: nu
     }
   }
   throw new Error('Failed to fetch news data');
+};
+
+// Fetch a specific article by ID
+export const fetchArticleById = async (id: string | number): Promise<Article | null> => {
+  try {
+    const response = await apiClient.get<any>(`/articles/${id}`);
+
+    if (!response.success) {
+      throw new Error(response.error || 'Failed to fetch article');
+    }
+
+    const data = response.data;
+    return sanitizeArticle(normalizeArticle(data)) as Article;
+  } catch (error) {
+    console.error("Failed to fetch article:", error);
+    return null;
+  }
+};
+
+// Fetch articles by category
+export const fetchArticlesByCategory = async (category: string, limit?: number): Promise<Article[]> => {
+  try {
+    const endpoint = limit
+      ? `/articles?category=${encodeURIComponent(category)}&limit=${limit}`
+      : `/articles?category=${encodeURIComponent(category)}`;
+
+    const response = await apiClient.get<any>(endpoint);
+
+    if (!response.success) {
+      throw new Error(response.error || 'Failed to fetch articles');
+    }
+
+    const data = response.data;
+    const articles = Array.isArray(data) ? data : data.articles || data.data || [];
+
+    return articles.map(normalizeArticle).map(sanitizeArticle) as Article[];
+  } catch (error) {
+    console.error("Failed to fetch articles by category:", error);
+    return [];
+  }
+};
+
+// Search articles
+export const searchArticles = async (query: string, limit?: number): Promise<Article[]> => {
+  try {
+    const endpoint = limit
+      ? `/search?q=${encodeURIComponent(query)}&limit=${limit}`
+      : `/search?q=${encodeURIComponent(query)}`;
+
+    const response = await apiClient.get<any>(endpoint);
+
+    if (!response.success) {
+      throw new Error(response.error || 'No results found');
+    }
+
+    const data = response.data;
+    const articles = Array.isArray(data) ? data : data.articles || data.results || [];
+
+    return articles.map(normalizeArticle).map(sanitizeArticle) as Article[];
+  } catch (error) {
+    console.error("Search failed:", error);
+    return [];
+  }
 };

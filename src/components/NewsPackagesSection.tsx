@@ -1,57 +1,70 @@
-import ppImage from '../assets/pp.jpg'
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { SkeletonLoader } from './SkeletonLoader';
+import { fetchNewsData } from '../services/newsService';
+import type { Article } from '../services/newsService';
 
 export default function NewsPackagesSection() {
-  const newsItems = [
-    {
-      id: 1,
-      title: 'काठमाडौंमा नयाँ सांस्कृतिक कार्यक्रम',
-      author: 'बिराज प्याकुरेल',
-      date: '२०२४-०१-१५',
-      description: 'काठमाडौंमा आयोजित नयाँ सांस्कृतिक कार्यक्रमले स्थानीय कलाकारहरूलाई प्रदर्शन गर्ने अवसर दिएको छ।'
-    },
-    {
-      id: 2,
-      title: 'पर्यटकों के लिए गन्तव्य की घोषणा',
-      author: 'बिराज प्याकुरेल',
-      date: '२०२४-०१-१४',
-      description: 'नेपाल सरकारले पर्यटन को विकास के लिए नए गन्तव्य की घोषणा की है।'
-    },
-    {
-      id: 3,
-      title: 'खेलकुद : राष्ट्रीय टोली की तैयारी',
-      author: 'बिराज प्याकुरेल',
-      date: '२०२४-०१-१३',
-      description: 'आगामी अन्तर्राष्ट्रीय प्रतियोगिता के लिए राष्ट्रीय टोली की तैयारी तेज हो गई है।'
-    }
-  ]
+  const [newsArticles, setNewsArticles] = useState<Article[]>([]);
+  const [packageArticles, setPackageArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const packages = [
-    {
-      id: 1,
-      title: 'हिमालय दर्शन पैकेज',
-      author: 'बिराज प्याकुरेल',
-      duration: '५ दिन',
-      description: 'हिमालयको सौंदर्य अनुभव गर्न विशेष पैकेज जसमा संचारा र नागरकोट समावेश छ।'
-    },
-    {
-      id: 2,
-      title: 'वन र वन्यजीव अन्वेषण',
-      author: 'बिराज प्याकुरेल',
-      duration: '७ दिन',
-      description: 'प्रकृतिको मध्यमा समय बिताउने अवसरको साथ वन्यजीव अभयारण्यको भ्रमण।'
-    },
-    {
-      id: 3,
-      title: 'सांस्कृतिक विरासत यात्रा',
-      author: 'बिराज प्याकुरेल',
-      duration: '६ दिन',
-      description: 'नेपालको समृद्ध सांस्कृतिक विरासत जान्न विशेष ट्यूर पैकेज।'
-    }
-  ]
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await fetchNewsData();
+        // Get first 3 articles for news column
+        const allArticles = [data.hero, data.featured, ...data.articles].filter(Boolean);
+        setNewsArticles(allArticles.slice(0, 3));
+        // Get next 3 articles for packages column
+        setPackageArticles(allArticles.slice(3, 6));
+      } catch (error) {
+        console.error("Failed to load articles", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="bg-gray-50 py-12 w-full">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* News Column */}
+            <div>
+              <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-gray-400 pb-3 text-left">
+                समाचार
+              </h2>
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <SkeletonLoader key={i} type="news-package" />
+                ))}
+              </div>
+            </div>
+
+            {/* Packages Column */}
+            <div>
+              <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-blue-600 pb-3 text-left">
+                प्याकेज समाचार
+              </h2>
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <SkeletonLoader key={i} type="news-package" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="bg-gray-50 py-12">
-      <div className="max-w-6xl mx-auto px-4">
+    <section className="bg-gray-50 py-12 w-full">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* News Column */}
           <div>
@@ -59,30 +72,31 @@ export default function NewsPackagesSection() {
               समाचार
             </h2>
             <div className="space-y-4">
-              {newsItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+              {newsArticles.map((article) => (
+                <Link
+                  key={article.id}
+                  to={`/article/${article.id}`}
+                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
                 >
                   <div className="flex gap-4 p-4">
                     <img
-                      src={ppImage}
-                      alt={item.title}
-                      className="w-24 h-24 object-cover rounded flex-shrink-0"
+                      src={article.image}
+                      alt={article.title}
+                      className="w-24 h-24 object-cover rounded flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="flex-1 min-w-0 text-left">
-                      <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2">
-                        {item.title}
+                      <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {article.title}
                       </h3>
                       <p className="text-xs text-gray-500 mb-2">
-                        {item.author} • {item.date}
+                        {article.author} • {article.date}
                       </p>
                       <p className="text-sm text-gray-600 line-clamp-2">
-                        {item.description}
+                        {article.excerpt}
                       </p>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -93,30 +107,31 @@ export default function NewsPackagesSection() {
               प्याकेज समाचार
             </h2>
             <div className="space-y-4">
-              {packages.map((pkg) => (
-                <div
-                  key={pkg.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+              {packageArticles.map((article) => (
+                <Link
+                  key={article.id}
+                  to={`/article/${article.id}`}
+                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
                 >
                   <div className="flex gap-4 p-4">
                     <img
-                      src={ppImage}
-                      alt={pkg.title}
-                      className="w-24 h-24 object-cover rounded flex-shrink-0"
+                      src={article.image}
+                      alt={article.title}
+                      className="w-24 h-24 object-cover rounded flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="flex-1 min-w-0 text-left">
-                      <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2">
-                        {pkg.title}
+                      <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {article.title}
                       </h3>
                       <p className="text-xs text-gray-500 mb-2">
-                        {pkg.author} • {pkg.duration}
+                        {article.author} • {article.date}
                       </p>
                       <p className="text-sm text-gray-600 line-clamp-2">
-                        {pkg.description}
+                        {article.excerpt}
                       </p>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
