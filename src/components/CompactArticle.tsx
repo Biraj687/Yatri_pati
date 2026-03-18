@@ -26,7 +26,7 @@ export function CompactArticle({ article, index, totalLength }: { article: Artic
           </div>
           <p className="text-gray-600 text-sm leading-relaxed">{article.excerpt}</p>
         </div>
-        <div className="overflow-hidden rounded flex-shrink-0 w-30 h-20">
+        <div className="overflow-hidden rounded flex-shrink-0 w-30 h-20 mb-auto">
           <img src={article.image} alt="Thumbnail" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
         </div>
       </Link>

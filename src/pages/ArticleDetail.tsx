@@ -6,7 +6,6 @@ import { SkeletonLoader } from '../components/SkeletonLoader';
 import { CompactArticle } from '../components/CompactArticle';
 import { fetchNewsData } from '../services/newsService';
 import type { Article } from '../services/newsService';
-
 export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
   const [article, setArticle] = useState<Article | null>(null);
@@ -95,7 +94,7 @@ export function ArticleDetail() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 lg:px-8 py-14 flex flex-col lg:flex-row gap-12 text-left">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 flex flex-col lg:flex-row gap-12 text-left">
         {/* Main Content */}
         <div className="flex-grow">
           <div className="prose prose-lg md:prose-xl max-w-none text-gray-800">
