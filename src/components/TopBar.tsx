@@ -19,12 +19,14 @@ export function TopBar() {
           {nepaliDate}
         </div>
 
-        {/* Right: Social media icons */}
-        <div className="flex gap-3">
-          <a href="#" className="text-gray-600 text-sm transition-colors duration-300 hover:text-blue-600" aria-label="Facebook"><FaFacebook /></a>
-          <a href="#" className="text-gray-600 text-sm transition-colors duration-300 hover:text-blue-600" aria-label="Instagram"><FaInstagram /></a>
-          <a href="#" className="text-gray-600 text-sm transition-colors duration-300 hover:text-blue-600" aria-label="Twitter"><FaTwitter /></a>
-          <a href="#" className="text-gray-600 text-sm transition-colors duration-300 hover:text-blue-600" aria-label="YouTube"><FaYoutube /></a>
+        {/* Right: Social media icons & Login */}
+        <div className="flex items-center gap-4">
+          <div className="flex gap-3">
+            <a href="#" className="text-gray-600 text-sm transition-colors duration-300 hover:text-blue-600" aria-label="Facebook"><FaFacebook /></a>
+            <a href="#" className="text-gray-600 text-sm transition-colors duration-300 hover:text-blue-600" aria-label="Instagram"><FaInstagram /></a>
+            <a href="#" className="text-gray-600 text-sm transition-colors duration-300 hover:text-blue-600" aria-label="Twitter"><FaTwitter /></a>
+            <a href="#" className="text-gray-600 text-sm transition-colors duration-300 hover:text-blue-600" aria-label="YouTube"><FaYoutube /></a>
+          </div>
         </div>
       </div>
     </div>

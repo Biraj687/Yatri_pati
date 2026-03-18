@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { HeroSection } from '../components/HeroSection';
 import { FeaturedArticle } from '../components/FeaturedArticle';
 import { CompactArticle } from '../components/CompactArticle';
+import { SkeletonLoader } from '../components/SkeletonLoader';
 import { fetchNewsDataWithRetry } from '../services/newsService';
 import type { Article } from '../services/newsService';
 
@@ -52,9 +54,23 @@ export function Home() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', color: '#fff' }}>
-        <h2>लोड हुँदैछ... (Loading...)</h2>
-      </div>
+      <>
+        <Helmet>
+          <title>Yatripati - Loading News...</title>
+        </Helmet>
+        <SkeletonLoader type="hero" />
+        <main className="max-w-7xl mx-auto px-5 py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <SkeletonLoader type="featured" />
+            <div className="space-y-4">
+              <SkeletonLoader type="compact" />
+              <SkeletonLoader type="compact" />
+              <SkeletonLoader type="compact" />
+              <SkeletonLoader type="compact" />
+            </div>
+          </div>
+        </main>
+      </>
     );
   }
 
@@ -91,6 +107,13 @@ export function Home() {
 
   return (
     <>
+      <Helmet>
+        <title>Yatripati - Latest News from Nepal</title>
+        <meta name="description" content="Stay updated with the latest news on politics, tourism, economy, and more from Yatripati." />
+        <meta property="og:title" content="Yatripati - Latest News from Nepal" />
+        <meta property="og:description" content="The ultimate portal for Nepali news, tourism, and culture." />
+        <meta property="og:type" content="website" />
+      </Helmet>
       {/* Hero Banner */}
       {hero && <HeroSection heroArticle={hero} />}
 

@@ -96,21 +96,46 @@ const mockTargetArticles = [
   }
 ];
 
+// Configuration from environment variables
+const API_URL = import.meta.env.VITE_API_URL;
+const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA === 'true';
+
 // Mock data function with simulated network delay
-export const fetchNewsData = async () => {
-  // Simulate network delay
-  return new Promise<ApiResponse>((resolve) => {
-    setTimeout(() => {
-      resolve({
-        hero: normalizeArticle(mockHeroArticle),
-        featured: normalizeArticle(mockFeaturedArticle),
-        articles: mockTargetArticles.map(normalizeArticle)
-      });
-    }, 800);
-  });
+export const fetchNewsData = async (): Promise<ApiResponse> => {
+  if (USE_MOCK) {
+    console.log("Using mock news data...");
+    return new Promise<ApiResponse>((resolve) => {
+      setTimeout(() => {
+        resolve({
+          hero: normalizeArticle(mockHeroArticle),
+          featured: normalizeArticle(mockFeaturedArticle),
+          articles: mockTargetArticles.map(normalizeArticle)
+        });
+      }, 800);
+    });
+  }
+
+  // Real API implementation
+  try {
+    const response = await fetch(`${API_URL}/news`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    
+    // Using your normalization logic ensures the UI doesn't break even if the backend structure changes slightly
+    return {
+      hero: normalizeArticle(data.hero),
+      featured: normalizeArticle(data.featured),
+      articles: data.articles.map(normalizeArticle)
+    };
+  } catch (error) {
+    console.error("API Fetch Error:", error);
+    throw error;
+  }
 };
 
-// Retry logic for consistent API (mock data doesn't need retry, but keeping for future API integration)
+// Retry logic for consistent API
 export const fetchNewsDataWithRetry = async (maxRetries: number = 3, delayMs: number = 1000): Promise<ApiResponse> => {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -118,7 +143,7 @@ export const fetchNewsDataWithRetry = async (maxRetries: number = 3, delayMs: nu
     } catch (error) {
       console.warn(`Attempt ${attempt} failed, retrying in ${delayMs}ms...`);
       if (attempt === maxRetries) {
-        throw new Error(`Failed to fetch news after ${maxRetries} attempts: ${error}`);
+        throw error;
       }
       await new Promise(resolve => setTimeout(resolve, delayMs));
     }

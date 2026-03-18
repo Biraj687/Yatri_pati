@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom';
 import type { Article } from '../services/newsService';
 
 export function HeroSection({ heroArticle }: { heroArticle: Article }) {
   return (
     <section className="py-2 px-4 group relative overflow-hidden">
-      <div className="relative w-full rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 1' }}>
+      <Link to={`/article/${heroArticle.id}`} className="block relative w-full rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 1' }}>
         <img 
           src={heroArticle.image} 
           alt="Featured" 
@@ -13,14 +14,14 @@ export function HeroSection({ heroArticle }: { heroArticle: Article }) {
           <span className="inline-block text-white text-sm font-semibold px-3 py-1 border border-white rounded">
             {heroArticle.category}
           </span>
-          <h1 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold leading-tight max-w-3xl drop-shadow-lg">
+          <h1 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold leading-tight max-w-3xl drop-shadow-lg transition-colors group-hover:text-blue-200">
             {heroArticle.title}
           </h1>
           <div className="text-white text-sm font-medium drop-shadow">
             {heroArticle.author} — {heroArticle.date}
           </div>
         </div>
-      </div>
+      </Link>
     </section>
   );
 }
