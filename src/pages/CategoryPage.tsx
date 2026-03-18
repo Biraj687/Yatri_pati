@@ -32,21 +32,10 @@ export function CategoryPage() {
           a.category?.toLowerCase() === categoryName?.toLowerCase() ||
           categoryName === 'all'
         );
-        setArticles(filtered.length > 0 ? filtered : all.slice(0, 5));
+        setArticles(filtered.length > 0 ? filtered : all.slice(0, 10));
       } catch (err) {
         console.error("Failed to load category", err);
-        // Fallback to fetch all and filter
-        try {
-          const data = await fetchNewsData();
-          const all = [data.hero, data.featured, ...data.articles];
-          const filtered = all.filter(a =>
-            a.category?.toLowerCase() === categoryName?.toLowerCase() ||
-            categoryName === 'all'
-          );
-          setArticles(filtered.length > 0 ? filtered : all.slice(0, 5));
-        } catch {
-          setArticles([]);
-        }
+        setArticles([]);
       } finally {
         setLoading(false);
       }

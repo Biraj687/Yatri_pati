@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { FiClock, FiShare2, FiArrowLeft, FiUser, FiCalendar } from 'react-icons/fi';
 import { SkeletonLoader } from '../components/SkeletonLoader';
 import { CompactArticle } from '../components/CompactArticle';
-import { fetchNewsData } from '../services/newsService';
+import { fetchNewsData, fetchArticleById } from '../services/newsService';
 import type { Article } from '../services/newsService';
 export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
@@ -16,13 +16,13 @@ export function ArticleDetail() {
     const loadArticle = async () => {
       setLoading(true);
       try {
-        const data = await fetchNewsData();
-        const allArticles = [data.hero, data.featured, ...data.articles];
-        const found = allArticles.find(a => String(a.id) === id);
+        const found = await fetchArticleById(id as string);
         
         if (found) {
           setArticle(found);
-          // Find related articles (same category or others)
+          // For related articles, we can still fetch the main news or use a dedicated related endpoint if available
+          const data = await fetchNewsData();
+          const allArticles = [data.hero, data.featured, ...data.articles];
           const related = allArticles
             .filter(a => String(a.id) !== id && a.category === found.category)
             .slice(0, 4);
