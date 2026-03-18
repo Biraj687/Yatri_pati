@@ -3,7 +3,7 @@ export function SkeletonLoader({ type }: { type: 'hero' | 'featured' | 'compact'
 
   if (type === 'detail') {
     return (
-      <div className="max-w-4xl mx-auto px-5 py-10 space-y-8">
+      <div className="w-full px-5 py-10 space-y-8">
         <div className={`h-4 w-32 ${baseClasses}`}></div>
         <div className="space-y-4">
           <div className={`h-12 w-full ${baseClasses}`}></div>

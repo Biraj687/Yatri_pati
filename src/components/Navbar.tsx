@@ -18,7 +18,7 @@ export function Navbar() {
   ]
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 px-5">
       <div className="w-full flex items-center justify-between h-15">
         {/* Left: Logo */}
         <Link to="/" className="flex items-center">
@@ -72,7 +72,7 @@ export function Navbar() {
 
       {/* Mobile Navigation Drawer */}
       <div 
-        className={`fixed top-0 right-0 h-full w-4/5 max-w-sm bg-white z-50 shadow-2xl transition-transform duration-300 ease-in-out transform md:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-full w-4/5 bg-white z-50 shadow-2xl transition-transform duration-300 ease-in-out transform md:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="p-6">
           <div className="flex justify-between items-center mb-10">

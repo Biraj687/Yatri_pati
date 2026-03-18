@@ -15,7 +15,7 @@ export function Footer() {
 
   return (
     <footer className="bg-black text-white w-full">
-      <div className="container mx-auto py-10 px-6">
+      <div className="w-full py-10 px-6">
         {/* Top Section - Logo and Social Icons */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12 text-left">
           {/* Left: Logo and Nepali Text */}

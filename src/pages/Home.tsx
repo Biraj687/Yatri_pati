@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { HeroSection } from '../components/HeroSection';
 import { FeaturedArticle } from '../components/FeaturedArticle';
 import { CompactArticle } from '../components/CompactArticle';
 import { SkeletonLoader } from '../components/SkeletonLoader';
@@ -8,7 +7,6 @@ import { fetchNewsDataWithRetry } from '../services/newsService';
 import type { Article } from '../services/newsService';
 
 export function Home() {
-  const [hero, setHero] = useState<Article | null>(null);
   const [featured, setFeatured] = useState<Article | null>(null);
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +16,6 @@ export function Home() {
     const loadData = async () => {
       try {
         const data = await fetchNewsDataWithRetry(3, 1000);
-        setHero(data.hero);
         setFeatured(data.featured);
         setArticles(data.articles);
         setError(null);
@@ -39,7 +36,6 @@ export function Home() {
     const loadData = async () => {
       try {
         const data = await fetchNewsDataWithRetry(3, 1000);
-        setHero(data.hero);
         setFeatured(data.featured);
         setArticles(data.articles);
       } catch (error) {
@@ -114,13 +110,11 @@ export function Home() {
         <meta property="og:description" content="The ultimate portal for Nepali news, tourism, and culture." />
         <meta property="og:type" content="website" />
       </Helmet>
-      {/* Hero Banner */}
-      {hero && <HeroSection heroArticle={hero} />}
 
       {/* Samachar Section */}
-      <main className="max-w-7xl mx-auto px-5 py-10">
+      <main className="w-full px-5 py-10">
         <section>
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-left">समाचार</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-left uppercase border-b-2 border-blue-600 inline-block">समाचार</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left: Large featured article */}

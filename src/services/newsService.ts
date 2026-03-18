@@ -1,6 +1,8 @@
 import ppImage from '../assets/pp.jpg';
 import heroImage from '../assets/hero.jpg';
 import thumbnailImage from '../assets/thumbnail.jpg';
+import { apiClient } from './apiClient';
+import { sanitizeArticle } from './sanitizer';
 
 export interface Article {
   id: string | number;
@@ -48,7 +50,7 @@ const mockFeaturedArticle = {
   id: 'featured-1',
   title: 'कोही माथी निर्भर नहुनु, केही पनि आशा नराखु र केही पनि नमाग्रु नै स्वतन्त्रता हो।',
   image: thumbnailImage,
-  excerpt: 'यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडीरहन्छु ।',
+  excerpt: 'यदि मलाई कसैले जहाजबाट समुद्रमा धकेलियिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडीरहन्छु ।',
   author: 'बिराज प्याकुरेल',
   date: '२२ भदौ २०७९, बुधबार'
 };
@@ -80,7 +82,7 @@ const mockTargetArticles = [
   },
   {
     id: 4,
-    title: 'आत्मा भित्र अनन्त शक्তिको स्रोत छैन र हामीले यो पावर जाग्रत गर्न सक्छौं',
+    title: 'आत्मा भित्र अनन्त शक्तिको स्रोत छैन र हामीले यो पावर जाग्रत गर्न सक्छौं',
     image: thumbnailImage,
     excerpt: 'आपनो अन्दरको शक्तिलाई चिनेर सफलतार्थ अग्रसर हुनुहोस्।',
     author: 'बिराज प्याकुरेल',
@@ -97,13 +99,10 @@ const mockTargetArticles = [
 ];
 
 // Configuration from environment variables
-const API_URL = import.meta.env.VITE_API_URL;
 const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA === 'true';
 
-// Mock data function with simulated network delay
 export const fetchNewsData = async (): Promise<ApiResponse> => {
   if (USE_MOCK) {
-    console.log("Using mock news data...");
     return new Promise<ApiResponse>((resolve) => {
       setTimeout(() => {
         resolve({
@@ -115,19 +114,19 @@ export const fetchNewsData = async (): Promise<ApiResponse> => {
     });
   }
 
-  // Real API implementation
   try {
-    const response = await fetch(`${API_URL}/news`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
+    const response = await apiClient.get<any>('/news');
     
-    // Using your normalization logic ensures the UI doesn't break even if the backend structure changes slightly
+    if (!response.success) {
+      throw new Error(response.error || 'Failed to fetch news');
+    }
+
+    const data = response.data;
+    
     return {
-      hero: normalizeArticle(data.hero),
-      featured: normalizeArticle(data.featured),
-      articles: data.articles.map(normalizeArticle)
+      hero: sanitizeArticle(normalizeArticle(data?.hero)) as Article,
+      featured: sanitizeArticle(normalizeArticle(data?.featured)) as Article,
+      articles: (data?.articles || []).map(normalizeArticle).map(sanitizeArticle) as Article[]
     };
   } catch (error) {
     console.error("API Fetch Error:", error);
@@ -135,16 +134,12 @@ export const fetchNewsData = async (): Promise<ApiResponse> => {
   }
 };
 
-// Retry logic for consistent API
 export const fetchNewsDataWithRetry = async (maxRetries: number = 3, delayMs: number = 1000): Promise<ApiResponse> => {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await fetchNewsData();
     } catch (error) {
-      console.warn(`Attempt ${attempt} failed, retrying in ${delayMs}ms...`);
-      if (attempt === maxRetries) {
-        throw error;
-      }
+      if (attempt === maxRetries) throw error;
       await new Promise(resolve => setTimeout(resolve, delayMs));
     }
   }

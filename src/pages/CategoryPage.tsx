@@ -51,7 +51,7 @@ export function CategoryPage() {
   }
 
   return (
-    <main className="max-w-4xl mx-auto px-5 py-10 min-h-[60vh]">
+    <main className="w-full px-5 py-10 min-h-[60vh]">
       <Helmet>
         <title>{`${displayName} - Yatripati News`}</title>
         <meta name="description" content={`Read the latest ${displayName} news and updates on Yatripati.`} />
