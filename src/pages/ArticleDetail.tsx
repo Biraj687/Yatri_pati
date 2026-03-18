@@ -51,7 +51,7 @@ export function ArticleDetail() {
   );
 
   return (
-    <article className="w-full text-white min-h-screen pb-20">
+    <article className="w-full text-gray-900 min-h-screen pb-20 bg-white">
       <Helmet>
         <title>{`${article.title} - Yatripati`}</title>
         <meta name="description" content={article.excerpt} />
@@ -68,16 +68,16 @@ export function ArticleDetail() {
           alt={article.title} 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-12">
           <div className="max-w-5xl mx-auto">
             <Link to={`/category/${article.category?.toLowerCase() || 'news'}`} className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider mb-4 hover:bg-blue-700 transition-colors">
               {article.category || 'समाचार'}
             </Link>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 drop-shadow-xl">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white drop-shadow-xl">
               {article.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-6 text-sm md:text-base text-gray-300">
+            <div className="flex flex-wrap items-center gap-6 text-sm md:text-base text-gray-200">
               <div className="flex items-center gap-2">
                 <FiUser className="text-blue-400" />
                 <span className="font-semibold text-white">{article.author}</span>
@@ -95,15 +95,15 @@ export function ArticleDetail() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-5 py-12 flex flex-col lg:flex-row gap-12">
+      <div className="max-w-5xl mx-auto px-5 py-12 flex flex-col lg:flex-row gap-12 text-left">
         {/* Main Content */}
         <div className="flex-grow">
-          <div className="prose prose-invert prose-lg md:prose-xl max-w-none">
-            <p className="text-xl md:text-2xl leading-relaxed text-blue-100 italic mb-10 border-l-4 border-blue-600 pl-6 py-2 bg-blue-900/10">
+          <div className="prose prose-lg md:prose-xl max-w-none text-gray-800">
+            <p className="text-xl md:text-2xl leading-relaxed text-blue-900 italic mb-10 border-l-4 border-blue-600 pl-6 py-4 bg-blue-50 rounded-r-lg font-medium">
               {article.excerpt}
             </p>
             
-            <div className="text-gray-200 space-y-8 leading-relaxed text-lg">
+            <div className="space-y-8 leading-relaxed text-lg text-gray-800">
               <p>
                 यो समाचारको विस्तृत विवरण यहाँ राखिनेछ। अहिलेका लागि हामीले डेटाबेसबाट संकलन गरेको संक्षिप्त विवरण यहाँ देखाइएको छ। 
                 यस पोर्टलमा हामीले नेपाल र विश्वका पछिल्ला घटनाक्रमहरूलाई समेट्ने प्रयास गरेका छौं।
@@ -113,9 +113,9 @@ export function ArticleDetail() {
                 <img 
                   src={article.image} 
                   alt="Contextual" 
-                  className="rounded-xl w-full h-auto shadow-2xl"
+                  className="rounded-xl w-full h-auto shadow-xl"
                 />
-                <figcaption className="text-center text-sm text-gray-400 mt-4 italic">
+                <figcaption className="text-center text-sm text-gray-500 mt-4 italic">
                   तस्बिर: {article.title} सम्बन्धी एक झलक
                 </figcaption>
               </figure>
@@ -132,18 +132,18 @@ export function ArticleDetail() {
           </div>
 
           {/* Bottom Actions */}
-          <div className="mt-12 pt-8 border-t border-gray-800 flex flex-wrap items-center justify-between gap-6">
+          <div className="mt-12 pt-8 border-t border-gray-200 flex flex-wrap items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <span className="text-gray-400 font-medium">साझेदारी गर्नुहोस्:</span>
-              <button className="p-3 bg-blue-600 rounded-full hover:bg-blue-700 transition-all hover:scale-110 active:scale-95 shadow-lg group">
+              <span className="text-gray-600 font-bold">साझेदारी गर्नुहोस्:</span>
+              <button className="p-3 bg-blue-600 rounded-full hover:bg-blue-700 transition-all hover:scale-110 active:scale-95 shadow-md group">
                 <FiShare2 className="text-white" />
               </button>
-              <button className="p-3 bg-sky-500 rounded-full hover:bg-sky-600 transition-all hover:scale-110 shadow-lg">
+              <button className="p-3 bg-sky-500 rounded-full hover:bg-sky-600 transition-all hover:scale-110 shadow-md">
                 <FiShare2 className="text-white transform rotate-12" />
               </button>
             </div>
             
-            <Link to="/" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-semibold">
+            <Link to="/" className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors font-bold">
               <FiArrowLeft /> सबै समाचारहरू हेर्नुहोस्
             </Link>
           </div>
@@ -153,8 +153,7 @@ export function ArticleDetail() {
         <aside className="w-full lg:w-80 flex-shrink-0">
           <div className="sticky top-24 space-y-10">
             <div>
-              <h3 className="text-xl font-bold mb-6 flex items-center gap-2 border-b border-gray-800 pb-3">
-                <span className="w-2 h-6 bg-blue-600 inline-block rounded-sm"></span>
+              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-b-2 border-blue-600 pb-3">
                 सम्बन्धित समाचार
               </h3>
               <div className="space-y-2">
@@ -169,20 +168,6 @@ export function ArticleDetail() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-900/40 to-black p-6 rounded-2xl border border-blue-900/30 shadow-xl">
-              <h4 className="font-bold text-lg mb-3">हाम्रो न्युजलेटर</h4>
-              <p className="text-sm text-gray-400 mb-4">ताजा अपडेटहरू सिधै तपाईंको इनबक्समा पाउनुहोस्।</p>
-              <div className="space-y-3">
-                <input 
-                  type="email" 
-                  placeholder="तपाईंको इमेल..." 
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                />
-                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors shadow-lg">
-                  Subscribe
-                </button>
-              </div>
-            </div>
           </div>
         </aside>
       </div>
