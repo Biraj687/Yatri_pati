@@ -175,7 +175,6 @@ export function ArticleDetail() {
                     key={rel.id} 
                     article={rel} 
                     index={index} 
-                    totalLength={relatedArticles.length} 
                   />
                 ))}
               </div>

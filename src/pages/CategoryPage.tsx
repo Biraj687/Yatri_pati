@@ -82,7 +82,6 @@ export function CategoryPage() {
                 key={`${article.id}-${index}`}
                 article={article}
                 index={index}
-                totalLength={articles.length}
               />
             ))
           ) : (

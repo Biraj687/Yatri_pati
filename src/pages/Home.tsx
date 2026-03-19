@@ -125,14 +125,14 @@ export function Home() {
             {featured && <FeaturedArticle article={featured} />}
 
             {/* Right: List of compact articles */}
-            <div className="space-y-0">
-              {articles.slice(0, 4).map((article, index) => (
-                <CompactArticle
-                  key={article.id}
-                  article={article}
-                  index={index}
-                  totalLength={Math.min(articles.length, 4)}
-                />
+            <div className="flex flex-col gap-4 h-full">
+              {articles.slice(0, 3).map((article, index) => (
+                <div key={article.id} className="flex-1">
+                  <CompactArticle
+                    article={article}
+                    index={index}
+                  />
+                </div>
               ))}
             </div>
           </div>

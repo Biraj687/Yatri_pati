@@ -88,9 +88,18 @@ export default function NewsPackagesSection() {
                       <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
                         {article.title}
                       </h3>
-                      <p className="text-xs text-gray-500 mb-2">
-                        {article.author} • {article.date}
-                      </p>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-6 h-6 rounded-full overflow-hidden border border-gray-100 flex-shrink-0">
+                          <img 
+                            src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
+                            alt={article.author} 
+                            className="w-full h-full object-cover" 
+                          />
+                        </div>
+                        <p className="text-xs font-medium text-gray-600 truncate">
+                          {article.author} <span className="mx-1 text-gray-300">•</span> {article.date}
+                        </p>
+                      </div>
                       <p className="text-sm text-gray-600 line-clamp-2">
                         {article.excerpt}
                       </p>
@@ -123,9 +132,18 @@ export default function NewsPackagesSection() {
                       <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
                         {article.title}
                       </h3>
-                      <p className="text-xs text-gray-500 mb-2">
-                        {article.author} • {article.date}
-                      </p>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-6 h-6 rounded-full overflow-hidden border border-gray-100 flex-shrink-0">
+                          <img 
+                            src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
+                            alt={article.author} 
+                            className="w-full h-full object-cover" 
+                          />
+                        </div>
+                        <p className="text-xs font-medium text-gray-600 truncate">
+                          {article.author} <span className="mx-1 text-gray-300">•</span> {article.date}
+                        </p>
+                      </div>
                       <p className="text-sm text-gray-600 line-clamp-2">
                         {article.excerpt}
                       </p>

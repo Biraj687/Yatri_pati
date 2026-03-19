@@ -17,8 +17,17 @@ export function HeroSection({ heroArticle }: { heroArticle: Article }) {
           <h1 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold leading-tight max-w-3xl drop-shadow-lg transition-colors group-hover:text-blue-200">
             {heroArticle.title}
           </h1>
-          <div className="text-white text-sm font-medium drop-shadow">
-            {heroArticle.author} — {heroArticle.date}
+          <div className="flex items-center justify-center gap-3 text-white text-sm font-medium drop-shadow-md bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10 mt-2">
+            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-white/30 flex-shrink-0 shadow-sm">
+              <img 
+                src={heroArticle.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(heroArticle.author)}&background=random`} 
+                alt={heroArticle.author} 
+                className="w-full h-full object-cover" 
+              />
+            </div>
+            <span className="font-bold tracking-wide">{heroArticle.author}</span>
+            <span className="mx-1 text-white/50">•</span>
+            <span className="font-noto text-white/90">{heroArticle.date}</span>
           </div>
         </div>
       </Link>

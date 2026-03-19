@@ -35,10 +35,19 @@ export const TopNewsBlock: React.FC<TopNewsBlockProps> = ({ article, loading }) 
             <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold text-white drop-shadow-2xl leading-tight md:leading-tight">
               {article.title}
             </h1>
-            <div className="flex items-center justify-center gap-4 text-white/90 text-sm md:text-base font-medium mt-6">
-              <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-md">{article.author}</span>
-              <span className="w-1 h-1 bg-white/50 rounded-full"></span>
-              <span>{article.date}</span>
+            <div className="flex items-center justify-center gap-4 text-white/95 text-sm md:text-base font-medium mt-6">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">
+                <div className="w-8 h-8 rounded-full overflow-hidden border border-white/40 shadow-inner flex-shrink-0">
+                  <img 
+                    src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
+                    alt={article.author} 
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
+                <span>{article.author}</span>
+              </div>
+              <span className="w-1.5 h-1.5 bg-white/40 rounded-full"></span>
+              <span className="font-noto bg-white/5 backdrop-blur-sm px-3 py-1 rounded-full text-white/80">{article.date}</span>
             </div>
             <p className="text-white/80 text-lg md:text-xl max-w-3xl mx-auto mt-6 hidden md:line-clamp-2">
               {article.excerpt}
