@@ -289,6 +289,17 @@ export const fetchNewsDataWithRetry = async (maxRetries: number = 3, delayMs: nu
 
 // Fetch a specific article by ID
 export const fetchArticleById = async (id: string | number): Promise<Article | null> => {
+  if (USE_MOCK) {
+    try {
+      const mockData = await fetchNewsData();
+      const allArticles = [mockData.hero, mockData.featured, ...mockData.articles];
+      const found = allArticles.find(a => String(a.id) === String(id));
+      return found || null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   try {
     const response = await apiClient.get<any>(`/articles/${id}`);
 
@@ -300,12 +311,32 @@ export const fetchArticleById = async (id: string | number): Promise<Article | n
     return sanitizeArticle(normalizeArticle(data)) as Article;
   } catch (error) {
     console.error("Failed to fetch article:", error);
-    return null;
+    // Dynamic fallback when API single endpoint fails
+    try {
+      const fallbackData = await fetchNewsData();
+      const allArticles = [fallbackData.hero, fallbackData.featured, ...fallbackData.articles];
+      const found = allArticles.find(a => String(a.id) === String(id));
+      return found || null;
+    } catch (fallbackError) {
+      return null;
+    }
   }
 };
 
 // Fetch articles by category
 export const fetchArticlesByCategory = async (category: string, limit?: number): Promise<Article[]> => {
+  if (USE_MOCK) {
+    try {
+      const mockData = await fetchNewsData();
+      const allArticles = [mockData.hero, mockData.featured, ...mockData.articles];
+      let filtered = allArticles.filter(a => a.category === category || a.category?.toLowerCase() === category.toLowerCase());
+      if (limit) filtered = filtered.slice(0, limit);
+      return filtered;
+    } catch (e) {
+      return [];
+    }
+  }
+
   try {
     const endpoint = limit
       ? `/articles?category=${encodeURIComponent(category)}&limit=${limit}`
@@ -323,12 +354,37 @@ export const fetchArticlesByCategory = async (category: string, limit?: number):
     return articles.map(normalizeArticle).map(sanitizeArticle) as Article[];
   } catch (error) {
     console.error("Failed to fetch articles by category:", error);
-    return [];
+    // Dynamic fallback
+    try {
+      const fallbackData = await fetchNewsData();
+      const allArticles = [fallbackData.hero, fallbackData.featured, ...fallbackData.articles];
+      let filtered = allArticles.filter(a => a.category === category || a.category?.toLowerCase() === category.toLowerCase());
+      if (limit) filtered = filtered.slice(0, limit);
+      return filtered;
+    } catch (fallbackError) {
+      return [];
+    }
   }
 };
 
 // Search articles
 export const searchArticles = async (query: string, limit?: number): Promise<Article[]> => {
+  if (USE_MOCK) {
+    try {
+      const mockData = await fetchNewsData();
+      const allArticles = [mockData.hero, mockData.featured, ...mockData.articles];
+      const lowerQuery = query.toLowerCase();
+      let filtered = allArticles.filter(a => 
+        a.title.toLowerCase().includes(lowerQuery) || 
+        a.excerpt.toLowerCase().includes(lowerQuery)
+      );
+      if (limit) filtered = filtered.slice(0, limit);
+      return filtered;
+    } catch (e) {
+      return [];
+    }
+  }
+
   try {
     const endpoint = limit
       ? `/search?q=${encodeURIComponent(query)}&limit=${limit}`
@@ -346,6 +402,19 @@ export const searchArticles = async (query: string, limit?: number): Promise<Art
     return articles.map(normalizeArticle).map(sanitizeArticle) as Article[];
   } catch (error) {
     console.error("Search failed:", error);
-    return [];
+    // Dynamic fallback
+    try {
+      const fallbackData = await fetchNewsData();
+      const allArticles = [fallbackData.hero, fallbackData.featured, ...fallbackData.articles];
+      const lowerQuery = query.toLowerCase();
+      let filtered = allArticles.filter(a => 
+        a.title.toLowerCase().includes(lowerQuery) || 
+        a.excerpt.toLowerCase().includes(lowerQuery)
+      );
+      if (limit) filtered = filtered.slice(0, limit);
+      return filtered;
+    } catch (fallbackError) {
+      return [];
+    }
   }
 };
