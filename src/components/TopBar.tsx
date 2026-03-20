@@ -27,7 +27,7 @@ export function TopBar() {
   const formattedBS = todayBS ? todayBS.format('d mmmm yyyy, dddd') : '';
 
   return (
-    <div className="bg-white border-b border-gray-100 py-1.5 px-[5rem]">
+    <div className="bg-white border-b border-gray-100 py-1.5 px-4 md:px-8 lg:px-[5rem]">
       <div className="w-full flex items-center justify-between">
         {/* Left: Nepali date */}
         <div className="text-gray-900 font-medium whitespace-nowrap text-[11px] md:text-sm font-noto">

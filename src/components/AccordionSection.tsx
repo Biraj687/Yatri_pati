@@ -35,12 +35,12 @@ export function AccordionSection({ title = 'विशेष सिफारि�
 
   return (
     <section className="w-full py-16 bg-gray-50 border-y border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-[5rem]">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
         <h2 className="text-3xl font-extrabold text-gray-900 mb-10 text-left font-noto tracking-tight">
           {title}
         </h2>
         
-        <div className="flex flex-col lg:flex-row gap-4 h-[500px] lg:h-[600px] w-full overflow-hidden">
+        <div className="flex flex-col lg:flex-row gap-4 h-[1000px] lg:h-[600px] w-full overflow-hidden">
           {articles.map((article) => {
             const isActive = activeId === article.id;
             

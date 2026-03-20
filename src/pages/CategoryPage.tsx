@@ -50,7 +50,7 @@ export function CategoryPage() {
   if (loading || configLoading) {
     return (
       <main className="w-full py-12">
-        <section className="max-w-7xl mx-auto px-6 lg:px-8">
+        <section className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
           <div className="h-10 w-48 bg-gray-200 animate-pulse mb-8 rounded"></div>
           <div className="space-y-6">
             <SkeletonLoader type="compact" />
@@ -65,14 +65,14 @@ export function CategoryPage() {
 
   return (
     <main className="w-full py-12 min-h-[60vh]">
-      <section className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
         <Helmet>
           <title>{`${displayName} - ${config?.siteName || 'Yatripati'}`}</title>
           <meta name="description" content={`Read the latest ${displayName} news and updates on ${config?.siteName || 'Yatripati'}.`} />
         </Helmet>
 
         <div className="border-b border-blue-500 mb-10 pb-4">
-          <h1 className="text-4xl font-bold text-gray-800 uppercase tracking-wider">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wider">
             {displayName}
           </h1>
         </div>

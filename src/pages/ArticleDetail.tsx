@@ -44,7 +44,7 @@ export function ArticleDetail() {
 
   if (loading || configLoading) return <SkeletonLoader type="detail" />;
   if (!article) return (
-    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 min-h-[60vh] flex flex-col items-center justify-center text-white">
+    <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-12 min-h-[60vh] flex flex-col items-center justify-center text-white">
       <h2 className="text-2xl font-bold mb-4">समाचार फेला परेन।</h2>
       <Link to="/" className="text-blue-400 hover:underline flex items-center gap-2">
         <FiArrowLeft /> गृहपृष्ठमा फर्कनुहोस्
@@ -71,12 +71,12 @@ export function ArticleDetail() {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-full px-4 lg:px-6 py-6 md:py-8">
+        <div className="absolute bottom-0 left-0 w-full px-4 md:px-8 lg:px-[5rem] py-6 md:py-10">
           <div className="max-w-7xl mx-auto">
             <Link to={`/category/${article.category?.toLowerCase() || 'news'}`} className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider mb-3 hover:bg-blue-700 transition-colors">
               {article.category || 'समाचार'}
             </Link>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white drop-shadow-xl">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white drop-shadow-xl">
               {article.title}
             </h1>
             <div className="flex flex-wrap items-center gap-4 text-xs md:text-sm text-gray-200">
@@ -97,7 +97,7 @@ export function ArticleDetail() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 flex flex-col lg:flex-row gap-16 text-left">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-14 flex flex-col lg:flex-row gap-16 text-left">
         {/* Main Content */}
         <div className="flex-grow min-w-0">
           <div className="prose prose-lg md:prose-xl max-w-none text-gray-800">

@@ -19,7 +19,7 @@ export const TopNewsBlock: React.FC<TopNewsBlockProps> = ({ article, loading }) 
   if (!article) return null;
 
   return (
-    <section className="py-8 px-[5rem] w-full max-w-[1600px] mx-auto group relative overflow-hidden">
+    <section className="py-4 md:py-8 px-4 md:px-8 lg:px-[5rem] w-full max-w-[1600px] mx-auto group relative overflow-hidden">
       <Link to={`/article/${article.id}`} className="block relative max-w-7xl mx-auto rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 h-[450px] md:h-[600px]">
         <img 
           src={article.image} 
@@ -38,7 +38,7 @@ export const TopNewsBlock: React.FC<TopNewsBlockProps> = ({ article, loading }) 
           </span>
 
           {/* Title */}
-          <h1 className="text-white text-2xl md:text-4xl lg:text-5xl font-extrabold leading-[1.2] max-w-4xl drop-shadow-2xl mb-8 font-noto px-4">
+          <h1 className="text-white text-xl sm:text-2xl md:text-4xl lg:text-5xl font-extrabold leading-[1.2] max-w-4xl drop-shadow-2xl mb-8 font-noto px-4">
             {article.title}
           </h1>
 

@@ -64,7 +64,7 @@ export function HospitalitySection({
   }
 
   return (
-    <section className="bg-white py-16 px-[5rem] text-left border-t border-gray-100">
+    <section className="bg-white py-16 px-4 md:px-8 lg:px-[5rem] text-left border-t border-gray-100">
       <div className="max-w-7xl mx-auto text-left">
         {sections.map((section, idx) => {
           const sectionArticles = allArticles.slice(section.startIndex, section.endIndex);

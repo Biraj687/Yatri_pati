@@ -60,7 +60,7 @@ export function Home() {
         </Helmet>
         <SkeletonLoader type="hero" />
         <main className="w-full py-12">
-          <section className="max-w-7xl mx-auto px-[5rem]">
+          <section className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
               <SkeletonLoader type="featured" />
               <div className="space-y-4">
@@ -78,7 +78,7 @@ export function Home() {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-12">
         <div style={{
           display: 'flex',
           flexDirection: 'column',
@@ -123,7 +123,7 @@ export function Home() {
 
       {/* Samachar Section - with breathing space */}
       <main className="w-full py-12">
-        <section className="max-w-7xl mx-auto px-[5rem]">
+        <section className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
           <h2 className="text-3xl font-bold text-gray-800 mb-10 text-left uppercase border-b-2 border-blue-600 inline-block pb-2">
             {sectionTitles.latest || 'समाचार'}
           </h2>
