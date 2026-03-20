@@ -9,7 +9,7 @@ interface AccordionSectionProps {
 
 export function AccordionSection({ title = 'विशेष सिफारिस' }: AccordionSectionProps) {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [hoveredId, setHoveredId] = useState<number | string | null>(null);
+  const [activeId, setActiveId] = useState<number | string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,7 +18,9 @@ export function AccordionSection({ title = 'विशेष सिफारि�
         const data = await fetchNewsData();
         // Use a subset of articles for the accordion
         const all = [data.hero, data.featured, ...data.articles].filter((a): a is Article => a !== null);
-        setArticles(all.slice(4, 7)); // Get exactly 3 articles
+        const sliced = all.slice(4, 7);
+        setArticles(sliced);
+        if (sliced.length > 0) setActiveId(sliced[0].id);
       } catch (error) {
         console.error("Failed to load accordion articles", error);
       } finally {
@@ -30,8 +32,8 @@ export function AccordionSection({ title = 'विशेष सिफारि�
 
   if (loading || articles.length === 0) return null;
 
-  // Determine the visually active item. Default to the first one if nothing is hovered.
-  const activeId = hoveredId !== null ? hoveredId : articles[0]?.id;
+  // Determine the visually active item. 
+  // activeId is managed by state now.
 
   return (
     <section className="w-full py-16 bg-gray-50 border-y border-gray-100">
@@ -48,8 +50,7 @@ export function AccordionSection({ title = 'विशेष सिफारि�
               <Link
                 key={article.id}
                 to={`/article/${article.id}`}
-                onMouseEnter={() => setHoveredId(article.id)}
-                onMouseLeave={() => setHoveredId(null)}
+                onMouseEnter={() => setActiveId(article.id)}
                 className={`relative overflow-hidden rounded-3xl transition-all duration-700 ease-in-out group shadow-md
                   ${isActive ? 'lg:w-[60%] flex-grow' : 'lg:w-[20%] flex-grow-0'}
                   flex-1 lg:flex-none h-full`}
@@ -99,7 +100,8 @@ export function AccordionSection({ title = 'विशेष सिफारि�
                 {/* Small horizontal title for COMPRESSED state */}
                 <div className={`absolute bottom-0 left-0 w-full p-4 lg:p-6 flex items-end pointer-events-none transition-all duration-500 z-10
                   ${isActive ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0 lg:opacity-100'}`}>
-                   <h3 className="text-white font-bold text-sm lg:text-[15px] leading-snug font-noto line-clamp-3 md:line-clamp-4 drop-shadow-lg">
+                  <div className="bg-gradient-to-t from-black/60 to-transparent absolute inset-0 transition-opacity duration-300" />
+                   <h3 className="text-white font-bold text-sm lg:text-[15px] leading-snug font-noto line-clamp-3 md:line-clamp-4 drop-shadow-lg relative z-10">
                      {article.title}
                    </h3>
                 </div>

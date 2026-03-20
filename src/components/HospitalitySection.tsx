@@ -80,9 +80,9 @@ export function HospitalitySection({
               
               {isHospitality ? (
                 /* HOSPITALITY SPLIT LAYOUT: 2 Large on Left, 4 horizontal on Right */
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:h-[630px]">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Left Column: 2 Large Cards */}
-                  <div className="lg:col-span-7 flex flex-col gap-4 h-full">
+                  <div className="flex flex-col gap-4 h-full">
                     {sectionArticles.slice(0, 2).map((article) => (
                       <Link
                         key={article.id}
@@ -96,11 +96,11 @@ export function HospitalitySection({
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
                         <div className="absolute bottom-0 left-0 w-full p-6 md:p-8">
-                          <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-3 drop-shadow-md">
+                          <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-3 drop-shadow-md group-hover:text-blue-200 transition-colors">
                             {article.title}
                           </h3>
                           <div className="text-white/90 text-sm font-medium flex items-center gap-3">
-                            <span className="hover:text-white transition-colors uppercase tracking-wider">{article.author}</span>
+                            <span className="hover:text-white transition-colors">{article.author}</span>
                             <span className="opacity-50">—</span>
                             <span className="opacity-80 font-noto">{article.date}</span>
                           </div>
@@ -110,39 +110,41 @@ export function HospitalitySection({
                   </div>
 
                   {/* Right Column: 4 Horizontal List Cards */}
-                  <div className="lg:col-span-5 flex flex-col gap-4 h-full">
+                  <div className="flex flex-col gap-4 h-full">
                     {sectionArticles.slice(2, 6).map((article) => (
                       <Link
                         key={article.id}
                         to={`/article/${article.id}`}
-                        className="group flex-1 flex gap-4 items-center bg-white rounded-xl transition-all duration-300 hover:bg-gray-50/50 p-2"
+                        className="group flex-1 flex gap-6 items-center bg-white border border-gray-100 shadow-sm rounded-2xl transition-all duration-300 hover:shadow-md hover:bg-gray-50/50 p-4"
                       >
-                        <div className="flex-1 space-y-2">
+                        <div className="w-32 h-32 md:w-48 md:h-40 rounded-xl overflow-hidden shadow-sm flex-shrink-0 group-hover:shadow-md transition-all duration-500">
+                          <img
+                            src={article.image}
+                            alt={article.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-3">
                           <h4 className="text-md md:text-lg font-bold text-gray-900 leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">
                             {article.title}
                           </h4>
                           <div className="flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
-                              <img 
-                                src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
-                                alt={article.author} 
-                                className="w-full h-full object-cover" 
-                              />
+                            <div className="w-7 h-7 rounded-full overflow-hidden border border-gray-100 flex-shrink-0">
+                                <img 
+                                  src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
+                                  alt={article.author} 
+                                  className="w-full h-full object-cover" 
+                                />
                             </div>
-                            <div className="text-xs md:text-sm font-medium text-gray-700">
-                              <span className="truncate">{article.author}</span> <span className="mx-1 text-gray-300">—</span> <span className="text-gray-500 font-noto">{article.date}</span>
+                            <div className="text-xs md:text-sm font-medium text-gray-700 flex items-center gap-2">
+                              <span className="font-bold">{article.author}</span>
+                              <span className="opacity-30">—</span>
+                              <span className="font-noto text-gray-500">{article.date}</span>
                             </div>
                           </div>
-                          <p className="text-xs text-gray-500 line-clamp-1 leading-relaxed font-noto opacity-70">
-                            {article.excerpt || "यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडिरहनेछु ।"}
+                          <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed font-noto opacity-70">
+                            {article.excerpt}
                           </p>
-                        </div>
-                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl overflow-hidden shadow-sm flex-shrink-0 group-hover:shadow-md transition-shadow">
-                          <img
-                            src={article.image}
-                            alt={article.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
                         </div>
                       </Link>
                     ))}
