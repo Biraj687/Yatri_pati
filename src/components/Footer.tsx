@@ -30,10 +30,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <div className="mb-6">
               <Link to="/" className="flex items-center gap-2">
-                <img src={logoSvg} alt="Logo" className="h-10 w-auto invert brightness-0" />
-                <span className="font-extrabold text-2xl text-white font-noto">
-                  {config.logo.text}
-                </span>
+                <img src={logoSvg} alt="Logo" className="h-10 w-auto invert brightness-100" />
               </Link>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed mb-6 max-w-sm font-noto">

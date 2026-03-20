@@ -3,31 +3,33 @@ import type { Article } from '../services/newsService';
 
 export function HeroSection({ heroArticle }: { heroArticle: Article }) {
   return (
-    <section className="py-2 px-4 group relative overflow-hidden">
-      <Link to={`/article/${heroArticle.id}`} className="block relative w-full rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 1' }}>
+    <section className="py-8 px-4 md:px-12 lg:px-20 w-full max-w-[1440px] mx-auto group relative overflow-hidden">
+      <Link to={`/article/${heroArticle.id}`} className="block relative max-w-6xl mx-auto rounded-sxl overflow-hidden shadow-2xl transition-all duration-300" style={{ aspectRatio: '16 / 7' }}>
         <img 
           src={heroArticle.image} 
           alt="Featured" 
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent flex flex-col items-center text-center gap-2">
-          <span className="inline-block text-white text-sm font-semibold px-3 py-1 border border-white rounded">
+        {/* Overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+        {/* Centered Content */}
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-12 px-6 text-center">
+          {/* Category Pill */}
+          <span className="inline-block bg-white/10 backdrop-blur-md text-white text-[12px] font-medium px-4 py-1.5 rounded-full border border-white/20 mb-6 uppercase tracking-widest">
             {heroArticle.category}
           </span>
-          <h1 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold leading-tight max-w-3xl drop-shadow-lg transition-colors group-hover:text-blue-200">
+
+          {/* Title */}
+          <h1 className="text-white text-3xl md:text-5xl lg:text-5xl font-extrabold leading-[1.2] max-w-4xl drop-shadow-2xl mb-8 font-noto">
             {heroArticle.title}
           </h1>
-          <div className="flex items-center justify-center gap-3 text-white text-sm font-medium drop-shadow-md bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10 mt-2">
-            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-white/30 flex-shrink-0 shadow-sm">
-              <img 
-                src={heroArticle.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(heroArticle.author)}&background=random`} 
-                alt={heroArticle.author} 
-                className="w-full h-full object-cover" 
-              />
-            </div>
-            <span className="font-bold tracking-wide">{heroArticle.author}</span>
-            <span className="mx-1 text-white/50">•</span>
-            <span className="font-noto text-white/90">{heroArticle.date}</span>
+
+          {/* Meta Info */}
+          <div className="flex items-center justify-center gap-3 text-white/80 text-[13px] md:text-base font-medium font-noto">
+            <span className="hover:text-white transition-colors">{heroArticle.author}</span>
+            <span className="opacity-50">—</span>
+            <span>{heroArticle.date}</span>
           </div>
         </div>
       </Link>

@@ -39,7 +39,7 @@ export default function NewsPackagesSection({
   if (loading) {
     return (
       <section className="bg-gray-50 py-12 w-full">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-[5rem]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* News Column */}
             <div>
@@ -72,7 +72,7 @@ export default function NewsPackagesSection({
 
   return (
     <section className="bg-gray-50 py-12 w-full">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-[5rem]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* News Column */}
           <div>

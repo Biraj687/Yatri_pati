@@ -20,44 +20,39 @@ export function Navbar() {
   }
 
   return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 px-6 lg:px-8">
-      <div className="w-full flex items-center justify-between h-16">
+    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 px-[5rem]">
+      <div className="w-full h-16 flex items-center justify-between">
         {/* Left: Logo */}
         <div className="flex-shrink-0">
           <Link to="/" className="flex items-center">
             {config.logo.image ? (
               <img src={config.logo.image} alt={config.logo.text} className="h-10 w-auto" />
             ) : (
-              <div className="flex items-center gap-2">
-                <img src={logoSvg} alt="Logo" className="h-10 w-auto" />
-                <span className="font-extrabold text-2xl text-red-600 font-noto hidden sm:block">
-                  {config.logo.text}
-                </span>
-              </div>
+              <img src={logoSvg} alt="Logo" className="h-10 w-auto" />
             )}
           </Link>
         </div>
 
         {/* Center: Desktop Navigation */}
-        <div className="hidden md:flex flex-1 justify-center items-center gap-1 lg:gap-2">
+        <div className="hidden md:flex flex-1 justify-center items-center gap-1 lg:gap-4">
           {config.navigation.map((item) => (
             <div key={item.label} className="relative group h-16 flex items-center">
               <Link 
                 to={item.path} 
-                className={`text-gray-900 font-bold px-3 py-1 text-sm lg:text-base transition-colors duration-300 flex items-center h-full border-b-2 whitespace-nowrap ${
-                  isActive(item.path) ? 'border-red-600' : 'border-transparent hover:border-red-600'
+                className={`text-gray-900 font-bold px-2 py-1 text-sm lg:text-[15px] transition-colors duration-300 flex items-center h-full border-b-2 whitespace-nowrap ${
+                  isActive(item.path) ? 'border-gray-900' : 'border-transparent hover:border-gray-900'
                 }`}
               >
                 {item.label}
-                {item.hasDropdown && <span className="ml-1 text-[10px]">▼</span>}
+                {item.hasDropdown && <span className="ml-1 text-[10px] opacity-50">▼</span>}
               </Link>
               {item.hasDropdown && item.dropdownItems && (
-                <div className="absolute top-full left-0 bg-white border border-gray-100 rounded-b shadow-xl min-w-[180px] z-50 hidden group-hover:block py-2">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 bg-white border border-gray-100 rounded-b shadow-xl min-w-[160px] z-50 hidden group-hover:block py-2">
                   {item.dropdownItems.map((sub) => (
                     <Link 
                       key={sub.label} 
                       to={sub.path} 
-                      className="block px-6 py-2.5 text-sm text-gray-800 hover:bg-gray-50 hover:text-red-600 transition-colors"
+                      className="block px-6 py-2.5 text-sm text-gray-800 hover:bg-gray-50 hover:text-black transition-colors"
                     >
                       {sub.label}
                     </Link>
@@ -70,16 +65,16 @@ export function Navbar() {
 
         {/* Right: Icons */}
         <div className="flex items-center gap-2 lg:gap-4 flex-shrink-0">
-          <button className="text-gray-800 p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Theme Toggle">
+          <button className="text-gray-800 p-2 hover:opacity-70 transition-opacity" aria-label="Theme Toggle">
             <FiSun size={20} />
           </button>
-          <button className="text-gray-800 p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Search">
-            <FiSearch size={20} />
+          <button className="text-gray-800 p-2 hover:opacity-70 transition-opacity" aria-label="Search">
+            <FiSearch size={22} />
           </button>
           
           {/* Mobile Toggle */}
           <button
-            className="md:hidden text-gray-800 p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="md:hidden text-gray-800 p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -102,7 +97,6 @@ export function Navbar() {
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-2">
               <img src={logoSvg} alt="Logo" className="h-8 w-auto" />
-              <span className="font-bold text-lg text-red-600 font-noto">{config.logo.text}</span>
             </div>
             <button onClick={() => setMobileMenuOpen(false)} className="text-gray-800 p-2 rounded-full hover:bg-gray-100 transition-colors">
               <FiX size={24} />

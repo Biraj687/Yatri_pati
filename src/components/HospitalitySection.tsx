@@ -64,7 +64,7 @@ export function HospitalitySection({
   }
 
   return (
-    <section className="bg-white py-16 px-4 md:px-6 lg:px-8 text-left border-t border-gray-100">
+    <section className="bg-white py-16 px-[5rem] text-left border-t border-gray-100">
       <div className="max-w-7xl mx-auto text-left">
         {sections.map((section, idx) => {
           const sectionArticles = allArticles.slice(section.startIndex, section.endIndex);
@@ -80,9 +80,9 @@ export function HospitalitySection({
               
               {isHospitality ? (
                 /* HOSPITALITY SPLIT LAYOUT: 2 Large on Left, 4 horizontal on Right */
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:h-[750px]">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:h-[630px]">
                   {/* Left Column: 2 Large Cards */}
-                  <div className="lg:col-span-7 flex flex-col gap-8 h-full">
+                  <div className="lg:col-span-7 flex flex-col gap-4 h-full">
                     {sectionArticles.slice(0, 2).map((article) => (
                       <Link
                         key={article.id}
@@ -110,12 +110,12 @@ export function HospitalitySection({
                   </div>
 
                   {/* Right Column: 4 Horizontal List Cards */}
-                  <div className="lg:col-span-5 flex flex-col gap-6 h-full">
+                  <div className="lg:col-span-5 flex flex-col gap-4 h-full">
                     {sectionArticles.slice(2, 6).map((article) => (
                       <Link
                         key={article.id}
                         to={`/article/${article.id}`}
-                        className="group flex-1 flex gap-4 items-center bg-white rounded-xl transition-all duration-300 hover:bg-gray-50/50 p-1"
+                        className="group flex-1 flex gap-4 items-center bg-white rounded-xl transition-all duration-300 hover:bg-gray-50/50 p-2"
                       >
                         <div className="flex-1 space-y-2">
                           <h4 className="text-md md:text-lg font-bold text-gray-900 leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">
@@ -137,7 +137,7 @@ export function HospitalitySection({
                             {article.excerpt || "यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडिरहनेछु ।"}
                           </p>
                         </div>
-                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden shadow-sm flex-shrink-0 group-hover:shadow-md transition-shadow">
+                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl overflow-hidden shadow-sm flex-shrink-0 group-hover:shadow-md transition-shadow">
                           <img
                             src={article.image}
                             alt={article.title}

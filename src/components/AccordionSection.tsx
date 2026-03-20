@@ -18,7 +18,7 @@ export function AccordionSection({ title = 'विशेष सिफारि�
         const data = await fetchNewsData();
         // Use a subset of articles for the accordion
         const all = [data.hero, data.featured, ...data.articles].filter((a): a is Article => a !== null);
-        setArticles(all.slice(4, 9)); // Get 5 articles
+        setArticles(all.slice(4, 7)); // Get exactly 3 articles
       } catch (error) {
         console.error("Failed to load accordion articles", error);
       } finally {
@@ -30,16 +30,19 @@ export function AccordionSection({ title = 'विशेष सिफारि�
 
   if (loading || articles.length === 0) return null;
 
+  // Determine the visually active item. Default to the first one if nothing is hovered.
+  const activeId = hoveredId !== null ? hoveredId : articles[0]?.id;
+
   return (
     <section className="w-full py-16 bg-gray-50 border-y border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-[5rem]">
         <h2 className="text-3xl font-extrabold text-gray-900 mb-10 text-left font-noto tracking-tight">
           {title}
         </h2>
         
-        <div className="flex flex-col lg:flex-row gap-4 h-[500px] w-full overflow-hidden">
+        <div className="flex flex-col lg:flex-row gap-4 h-[500px] lg:h-[600px] w-full overflow-hidden">
           {articles.map((article) => {
-            const isHovered = hoveredId === article.id;
+            const isActive = activeId === article.id;
             
             return (
               <Link
@@ -47,8 +50,9 @@ export function AccordionSection({ title = 'विशेष सिफारि�
                 to={`/article/${article.id}`}
                 onMouseEnter={() => setHoveredId(article.id)}
                 onMouseLeave={() => setHoveredId(null)}
-                className={`relative flex-grow overflow-hidden rounded-3xl transition-all duration-700 ease-in-out group shadow-md
-                  ${isHovered ? 'flex-[4] lg:flex-[4]' : 'flex-[1] lg:flex-[1]'}`}
+                className={`relative overflow-hidden rounded-3xl transition-all duration-700 ease-in-out group shadow-md
+                  ${isActive ? 'lg:w-[60%] flex-grow' : 'lg:w-[20%] flex-grow-0'}
+                  flex-1 lg:flex-none h-full`}
               >
                 {/* Background Image */}
                 <img
@@ -58,48 +62,46 @@ export function AccordionSection({ title = 'विशेष सिफारि�
                 />
                 
                 {/* Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-500
-                  ${isHovered ? 'opacity-100' : 'opacity-60 group-hover:opacity-80'}`} 
+                <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 transition-opacity duration-500
+                  ${isActive ? 'opacity-100' : 'opacity-80'}`} 
                 />
                 
-                {/* Content - Revealed on hover or always partially visible */}
-                <div className={`absolute bottom-0 left-0 w-full p-6 transition-all duration-500 
-                  ${isHovered ? 'translate-y-0 opacity-100' : 'lg:translate-y-4 lg:opacity-0'}`}>
+                {/* Content - Fully Revealed Strategy */}
+                <div className={`absolute bottom-0 left-0 w-full p-6 md:p-10 transition-all duration-500 flex flex-col justify-end h-full z-20
+                  ${isActive ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 lg:opacity-100 lg:translate-y-0'}`}>
                   
-                  <span className="inline-block bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter mb-2">
-                    {article.category}
-                  </span>
-                  
-                  <h3 className={`text-white font-bold leading-tight mb-2 font-noto 
-                    ${isHovered ? 'text-xl md:text-2xl' : 'text-sm md:text-base line-clamp-1'}`}>
-                    {article.title}
-                  </h3>
-                  
-                  {isHovered && (
-                    <div className="flex flex-col gap-3 animate-fadeIn">
-                       <p className="text-white/80 text-xs md:text-sm line-clamp-2 md:line-clamp-3 font-noto leading-relaxed max-w-lg">
-                        {article.excerpt}
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full overflow-hidden border border-white/30">
-                          <img src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} alt={article.author} className="w-full h-full object-cover" />
-                        </div>
-                        <div className="text-[11px] md:text-xs text-white/90">
-                          <span className="font-bold">{article.author}</span>
-                          <span className="mx-1">•</span>
-                          <span className="font-noto">{article.date}</span>
-                        </div>
+                  {/* Expanded Content */}
+                  <div className={`transition-all duration-500 ${isActive ? 'opacity-100 visible h-auto' : 'opacity-0 invisible h-0 overflow-hidden'}`}>
+                    <span className="inline-block bg-white/20 backdrop-blur-md text-white text-[12px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 border border-white/30">
+                      {article.category || 'समाचार'}
+                    </span>
+                    
+                    <h3 className="text-white font-extrabold leading-tight mb-4 font-noto text-2xl md:text-3xl lg:text-4xl drop-shadow-md">
+                      {article.title}
+                    </h3>
+                    
+                    <p className="text-white/90 text-sm md:text-base line-clamp-2 md:line-clamp-3 font-noto leading-relaxed max-w-2xl mb-6">
+                      {article.excerpt}
+                    </p>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/40 shadow-sm">
+                        <img src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} alt={article.author} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-bold text-white tracking-wide">{article.author}</span>
+                        <span className="text-xs text-white/70 font-noto">{article.date}</span>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
 
-                {/* Vertical title for collapsed state (desktop only) */}
-                <div className={`absolute top-0 right-0 h-full w-12 flex items-center justify-center pointer-events-none transition-opacity duration-500
-                  ${isHovered ? 'opacity-0' : 'opacity-0 lg:opacity-100'}`}>
-                   <span className="text-white/60 font-bold uppercase tracking-[0.3em] whitespace-nowrap rotate-90 text-xs">
-                    सविस्तार  पढ्नुहोस्
-                  </span>
+                {/* Small horizontal title for COMPRESSED state */}
+                <div className={`absolute bottom-0 left-0 w-full p-4 lg:p-6 flex items-end pointer-events-none transition-all duration-500 z-10
+                  ${isActive ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0 lg:opacity-100'}`}>
+                   <h3 className="text-white font-bold text-sm lg:text-[15px] leading-snug font-noto line-clamp-3 md:line-clamp-4 drop-shadow-lg">
+                     {article.title}
+                   </h3>
                 </div>
               </Link>
             );
