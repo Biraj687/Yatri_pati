@@ -6,11 +6,14 @@ import { SkeletonLoader } from '../components/SkeletonLoader';
 import { CompactArticle } from '../components/CompactArticle';
 import { fetchNewsData, fetchArticleById } from '../services/newsService';
 import type { Article } from '../services/newsService';
+import { useSiteConfig } from '../SiteConfigContext';
+
 export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
   const [article, setArticle] = useState<Article | null>(null);
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
+  const { config, loading: configLoading } = useSiteConfig();
 
   useEffect(() => {
     const loadArticle = async () => {
@@ -39,7 +42,7 @@ export function ArticleDetail() {
     loadArticle();
   }, [id]);
 
-  if (loading) return <SkeletonLoader type="detail" />;
+  if (loading || configLoading) return <SkeletonLoader type="detail" />;
   if (!article) return (
     <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 min-h-[60vh] flex flex-col items-center justify-center text-white">
       <h2 className="text-2xl font-bold mb-4">समाचार फेला परेन।</h2>
@@ -52,7 +55,7 @@ export function ArticleDetail() {
   return (
     <article className="w-full text-gray-900 min-h-screen pb-20 bg-white">
       <Helmet>
-        <title>{`${article.title} - Yatripati`}</title>
+        <title>{`${article.title} - ${config?.siteName || 'Yatripati'}`}</title>
         <meta name="description" content={article.excerpt} />
         <meta property="og:title" content={article.title} />
         <meta property="og:description" content={article.excerpt} />
@@ -94,9 +97,9 @@ export function ArticleDetail() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 flex flex-col lg:flex-row gap-12 text-left">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 flex flex-col lg:flex-row gap-16 text-left">
         {/* Main Content */}
-        <div className="flex-grow">
+        <div className="flex-grow min-w-0">
           <div className="prose prose-lg md:prose-xl max-w-none text-gray-800">
             <p className="text-xl md:text-2xl leading-relaxed text-blue-900 italic mb-10 border-l-4 border-blue-600 pl-6 py-4 bg-blue-50 rounded-r-lg font-medium">
               {article.excerpt}
@@ -163,23 +166,23 @@ export function ArticleDetail() {
         </div>
 
         {/* Sidebar / Related */}
-        <aside className="w-full lg:w-80 flex-shrink-0">
+        <aside className="w-full lg:w-96 flex-shrink-0">
           <div className="sticky top-24 space-y-10">
             <div>
               <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-b-2 border-blue-600 pb-3">
                 सम्बन्धित समाचार
               </h3>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {relatedArticles.map((rel, index) => (
                   <CompactArticle 
                     key={rel.id} 
                     article={rel} 
                     index={index} 
+                    minimal={true}
                   />
                 ))}
               </div>
             </div>
-
           </div>
         </aside>
       </div>

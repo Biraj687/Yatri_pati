@@ -5,11 +5,13 @@ import { SkeletonLoader } from '../components/SkeletonLoader';
 import { CompactArticle } from '../components/CompactArticle';
 import { fetchNewsData, fetchArticlesByCategory } from '../services/newsService';
 import type { Article } from '../services/newsService';
+import { useSiteConfig } from '../SiteConfigContext';
 
 export function CategoryPage() {
   const { categoryName } = useParams<{ categoryName: string }>();
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
+  const { config, loading: configLoading } = useSiteConfig();
 
   useEffect(() => {
     const loadCategoryData = async () => {
@@ -45,7 +47,7 @@ export function CategoryPage() {
 
   const displayName = categoryName ? categoryName.charAt(0).toUpperCase() + categoryName.slice(1) : 'समाचार';
 
-  if (loading) {
+  if (loading || configLoading) {
     return (
       <main className="w-full py-12">
         <section className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -65,12 +67,12 @@ export function CategoryPage() {
     <main className="w-full py-12 min-h-[60vh]">
       <section className="max-w-7xl mx-auto px-6 lg:px-8">
         <Helmet>
-          <title>{`${displayName} - Yatripati News`}</title>
-          <meta name="description" content={`Read the latest ${displayName} news and updates on Yatripati.`} />
+          <title>{`${displayName} - ${config?.siteName || 'Yatripati'}`}</title>
+          <meta name="description" content={`Read the latest ${displayName} news and updates on ${config?.siteName || 'Yatripati'}.`} />
         </Helmet>
 
         <div className="border-b border-blue-500 mb-10 pb-4">
-          <h1 className="text-4xl font-bold text-white uppercase tracking-wider">
+          <h1 className="text-4xl font-bold text-gray-800 uppercase tracking-wider">
             {displayName}
           </h1>
         </div>

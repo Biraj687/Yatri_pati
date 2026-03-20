@@ -5,12 +5,16 @@ import { CompactArticle } from '../components/CompactArticle';
 import { SkeletonLoader } from '../components/SkeletonLoader';
 import { fetchNewsDataWithRetry } from '../services/newsService';
 import type { Article } from '../services/newsService';
+import { useSiteConfig } from '../SiteConfigContext';
+
+import { AccordionSection } from '../components/AccordionSection';
 
 export function Home() {
   const [featured, setFeatured] = useState<Article | null>(null);
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { config, loading: configLoading } = useSiteConfig();
 
   useEffect(() => {
     const loadData = async () => {
@@ -48,11 +52,11 @@ export function Home() {
     loadData();
   };
 
-  if (loading) {
+  if (loading || configLoading) {
     return (
       <>
         <Helmet>
-          <title>Yatripati - Loading News...</title>
+          <title>{config?.siteName || 'Yatripati'} - Loading News...</title>
         </Helmet>
         <SkeletonLoader type="hero" />
         <main className="w-full py-12">
@@ -81,16 +85,16 @@ export function Home() {
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: '50vh',
-          color: '#fff',
+          color: '#333',
           textAlign: 'center'
         }}>
-          <h2 style={{ color: '#fbbf24', marginBottom: '20px' }}>❌ त्रुटि</h2>
+          <h2 style={{ color: '#ef4444', marginBottom: '20px' }}>❌ त्रुटि</h2>
           <p style={{ marginBottom: '20px', fontSize: '16px' }}>{error}</p>
           <button
             onClick={handleRetry}
             style={{
               padding: '10px 20px',
-              backgroundColor: '#4CAF50',
+              backgroundColor: '#3b82f6',
               color: 'white',
               border: 'none',
               borderRadius: '5px',
@@ -105,12 +109,14 @@ export function Home() {
     );
   }
 
+  const sectionTitles = config?.sectionTitles || {};
+
   return (
     <>
       <Helmet>
-        <title>Yatripati - Latest News from Nepal</title>
-        <meta name="description" content="Stay updated with the latest news on politics, tourism, economy, and more from Yatripati." />
-        <meta property="og:title" content="Yatripati - Latest News from Nepal" />
+        <title>{config?.siteName || 'Yatripati'} - Latest News from Nepal</title>
+        <meta name="description" content={`Stay updated with the latest news on politics, tourism, economy, and more from ${config?.siteName}.`} />
+        <meta property="og:title" content={`${config?.siteName} - Latest News from Nepal`} />
         <meta property="og:description" content="The ultimate portal for Nepali news, tourism, and culture." />
         <meta property="og:type" content="website" />
       </Helmet>
@@ -118,7 +124,9 @@ export function Home() {
       {/* Samachar Section - with breathing space */}
       <main className="w-full py-12">
         <section className="max-w-7xl mx-auto px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-10 text-left uppercase border-b-2 border-blue-600 inline-block pb-2">समाचार</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-10 text-left uppercase border-b-2 border-blue-600 inline-block pb-2">
+            {sectionTitles.latest || 'समाचार'}
+          </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Left: Large featured article */}
@@ -137,6 +145,8 @@ export function Home() {
             </div>
           </div>
         </section>
+
+        <AccordionSection title={sectionTitles.trending} />
       </main>
     </>
   );

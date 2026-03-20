@@ -1,17 +1,25 @@
 import { Link } from 'react-router-dom'
-import { FiFacebook, FiInstagram, FiTwitter, FiGithub } from 'react-icons/fi'
+import { FiFacebook, FiInstagram, FiTwitter, FiGithub, FiYoutube } from 'react-icons/fi'
 import { SiDribbble } from 'react-icons/si'
-import logoImg from '../assets/logo.png'
+import { useSiteConfig } from '../SiteConfigContext'
+import logoSvg from '../assets/logo.svg'
 
 export function Footer() {
-  const categories = [
-    { label: 'समाज', slug: 'samaj' },
-    { label: 'विचार/कलम', slug: 'vichar' },
-    { label: 'साहित्य', slug: 'sahitya' },
-    { label: 'अन्तरवार्ता', slug: 'interview' },
-    { label: 'खेलकुद', slug: 'khel' },
-    { label: 'जीवनशैली/स्वास्थ्य', slug: 'swasthya' },
-  ];
+  const { config } = useSiteConfig()
+
+  const getSocialIcon = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'facebook': return FiFacebook;
+      case 'instagram': return FiInstagram;
+      case 'twitter': return FiTwitter;
+      case 'github': return FiGithub;
+      case 'youtube': return FiYoutube;
+      case 'dribbble': return SiDribbble;
+      default: return FiGithub;
+    }
+  };
+
+  if (!config) return null;
 
   return (
     <footer className="bg-black text-white w-full">
@@ -21,70 +29,72 @@ export function Footer() {
           {/* Left: Logo and Nepali Text */}
           <div className="md:col-span-2">
             <div className="mb-6">
-              <Link to="/">
-                <img src={logoImg} alt="Yatri Pati Logo" className="h-10 w-auto" />
+              <Link to="/" className="flex items-center gap-2">
+                <img src={logoSvg} alt="Logo" className="h-10 w-auto invert brightness-0" />
+                <span className="font-extrabold text-2xl text-white font-noto">
+                  {config.logo.text}
+                </span>
               </Link>
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed mb-6 max-w-sm">
-              प्रत्येक मानिसले अर्को व्यक्तिलाई प्राकृतिक रूपमा आफू सरह सम्झनुपर्दछ । थोमस हब्स...
+            <p className="text-gray-300 text-sm leading-relaxed mb-6 max-w-sm font-noto">
+              {config.footer.aboutText}
             </p>
             {/* Social Icons */}
             <div className="flex gap-5">
-              {[FiFacebook, FiInstagram, FiTwitter, FiGithub, SiDribbble].map((Icon, idx) => (
-                <a key={idx} href="#" className="text-white hover:text-blue-500 transition-colors duration-300">
-                  <Icon size={20} />
-                </a>
-              ))}
+              {config.socialLinks.map((link) => {
+                const Icon = getSocialIcon(link.platform);
+                return (
+                  <a 
+                    key={link.platform} 
+                    href={link.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-red-500 transition-colors duration-300"
+                  >
+                    <Icon size={20} />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
-          {/* Column 1: स्थान (Categories) */}
-          <div>
-            <h3 className="text-white font-bold mb-4 border-b border-gray-700 pb-2 uppercase tracking-wider text-sm">स्थान</h3>
-            <ul className="space-y-3">
-              {categories.map((cat) => (
-                <li key={cat.label}>
-                  <Link to={`/category/${cat.slug}`} className="text-gray-300 text-sm hover:text-white transition-colors">
-                    {cat.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 2: महत्त्वपूर्ण लिंकहरू */}
-          <div>
-            <h3 className="text-white font-bold mb-4 border-b border-gray-700 pb-2 uppercase tracking-wider text-sm">महत्त्वपूर्ण</h3>
-            <ul className="space-y-3">
-              {['लोकसेवा आयोग', 'राष्ट्रिय योजना आयोग', 'सञ्चार तथा सूचना प्रविधि', 'गृह मन्त्रालय', 'नेपाल सरकार'].map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-gray-300 text-sm hover:text-white transition-colors">
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 3: यात्रीपाटी */}
-          <div>
-            <h3 className="text-white font-bold mb-4 border-b border-gray-700 pb-2 uppercase tracking-wider text-sm">यात्रीपाटी</h3>
-            <ul className="space-y-3">
-              {['हाम्रो टिम', 'प्रयोगका सर्त', 'विज्ञापन', 'प्राइभेसी पोलिसी', 'सम्पर्क'].map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-gray-300 text-sm hover:text-white transition-colors">
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Dynamic Columns */}
+          {config.footer.columns.map((column) => (
+            <div key={column.title}>
+              <h3 className="text-white font-bold mb-4 border-b border-gray-700 pb-2 uppercase tracking-wider text-sm font-noto">
+                {column.title}
+              </h3>
+              <ul className="space-y-3">
+                {column.links.map((link) => (
+                  <li key={link.label}>
+                    {link.isExternal ? (
+                      <a 
+                        href={link.path} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-gray-300 text-sm hover:text-white transition-colors font-noto"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link 
+                        to={link.path} 
+                        className="text-gray-300 text-sm hover:text-white transition-colors font-noto"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* Bottom Section - Copyright */}
         <div className="border-t border-gray-700 pt-6 text-center">
-          <p className="text-gray-400 text-sm">
-            © {new Date().getFullYear()} Yatri Pati. All rights reserved.
+          <p className="text-gray-400 text-sm font-noto">
+            {config.footer.copyright}
           </p>
         </div>
       </div>

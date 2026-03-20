@@ -3,13 +3,21 @@ import { Link } from 'react-router-dom';
 import { fetchNewsData } from '../services/newsService';
 import type { Article } from '../services/newsService';
 
-export function HospitalitySection() {
+interface HospitalitySectionProps {
+  hospitalityTitle?: string;
+  hotelsTitle?: string;
+}
+
+export function HospitalitySection({ 
+  hospitalityTitle = 'हस्पिटालिटि', 
+  hotelsTitle = 'होटल र रिसोर्ट' 
+}: HospitalitySectionProps) {
   const [allArticles, setAllArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
 
   const sections = [
-    { title: 'हस्पिटालिटि', startIndex: 6, endIndex: 12 },
-    { title: 'होटल र रिसोर्ट', startIndex: 12, endIndex: 16 },
+    { title: hospitalityTitle, startIndex: 6, endIndex: 12 },
+    { title: hotelsTitle, startIndex: 12, endIndex: 16 },
   ];
 
   useEffect(() => {
@@ -33,10 +41,12 @@ export function HospitalitySection() {
     return (
       <section className="bg-white py-16 px-4 md:px-6 lg:px-8 text-left border-t border-gray-100">
         <div className="max-w-7xl mx-auto text-left">
-          {sections.map((_, idx) => (
+          {sections.map((section, idx) => (
             <div key={idx} className={idx > 0 ? "mt-20" : ""}>
               <div className="mb-10">
-                <div className="h-10 w-64 bg-gray-100 rounded animate-pulse"></div>
+                <h2 className="text-4xl font-extrabold text-gray-900 mb-12 font-noto tracking-tight opacity-50">
+                  {section.title}
+                </h2>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-[600px] w-full">
                 <div className="bg-gray-100 rounded-3xl animate-pulse"></div>
@@ -60,7 +70,7 @@ export function HospitalitySection() {
           const sectionArticles = allArticles.slice(section.startIndex, section.endIndex);
           if (sectionArticles.length === 0) return null;
 
-          const isHospitality = section.title === 'हस्पिटालिटि';
+          const isHospitality = section.title === hospitalityTitle;
 
           return (
             <div key={idx} className={idx > 0 ? "mt-24 border-t border-gray-50 pt-20" : ""}>
@@ -145,7 +155,7 @@ export function HospitalitySection() {
                     <Link
                       key={article.id}
                       to={`/article/${article.id}`}
-                      className="flex flex-col group h-full"
+                      className="flex flex-col group h-full bg-white rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-300"
                     >
                       <div className="h-52 overflow-hidden rounded-2xl mb-5 shadow-sm border border-gray-100 group-hover:shadow-md transition-all duration-300">
                         <img
@@ -154,23 +164,25 @@ export function HospitalitySection() {
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                       </div>
-                      <h3 className="text-lg font-bold text-gray-900 leading-snug mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-                        {article.title}
-                      </h3>
-                      <p className="text-sm text-gray-500 font-noto line-clamp-2 mb-4 leading-relaxed opacity-80">
-                        {article.excerpt || "यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडिरहनेछु ।"}
-                      </p>
-                      <div className="mt-auto flex items-center gap-2 text-sm text-gray-700 font-medium border-t border-gray-50 pt-4">
-                        <div className="w-7 h-7 rounded-full overflow-hidden border border-gray-100 flex-shrink-0">
-                          <img 
-                            src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
-                            alt={article.author} 
-                            className="w-full h-full object-cover" 
-                          />
+                      <div className="flex-grow flex flex-col">
+                        <h3 className="text-lg font-bold text-gray-900 leading-snug mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 h-[3.5rem] flex items-center">
+                          {article.title}
+                        </h3>
+                        <p className="text-sm text-gray-500 font-noto line-clamp-2 mb-4 leading-relaxed opacity-70 h-10 overflow-hidden">
+                          {article.excerpt || "यदि मलाई कसैले जहाजबाट समुद्रमा धकेलिदियो र जमिन हजार माइल टाढा भएको बतायो भने पनि म पौडिरहनेछु ।"}
+                        </p>
+                        <div className="mt-auto flex items-center gap-2 text-xs md:text-sm text-gray-700 font-medium pt-3 border-t border-gray-50">
+                          <div className="w-6 h-6 rounded-full overflow-hidden border border-gray-100 flex-shrink-0">
+                            <img 
+                              src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
+                              alt={article.author} 
+                              className="w-full h-full object-cover" 
+                            />
+                          </div>
+                          <span className="truncate">{article.author}</span>
+                          <span className="opacity-30">|</span>
+                          <span className="font-noto truncate text-gray-400">{article.date}</span>
                         </div>
-                        <span className="truncate">{article.author}</span>
-                        <span className="opacity-30">|</span>
-                        <span className="font-noto truncate text-gray-500">{article.date}</span>
                       </div>
                     </Link>
                   ))}

@@ -3,19 +3,30 @@ import { Link } from 'react-router-dom';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import type { Article } from '../services/newsService';
 
-export function CompactArticle({ article, index }: { article: Article, index: number }) {
+export function CompactArticle({ 
+  article, 
+  index, 
+  minimal = false 
+}: { 
+  article: Article, 
+  index: number,
+  minimal?: boolean 
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(ref as import('react').RefObject<Element>, { threshold: 0.1, rootMargin: '-50px 0px' });
   
   return (
     <article
       ref={ref}
-      className={`relative bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 opacity-0 translate-y-4 text-left h-full group ${isVisible ? 'opacity-100 translate-y-0' : ''}`}
-      style={{ animationDelay: `${index * 0.15}s`, transition: 'opacity 0.6s ease, transform 0.6s ease' }}
+      className={`relative bg-white border border-gray-100 rounded-xl transition-all duration-300 opacity-0 translate-y-4 text-left group
+        ${minimal ? 'p-2 hover:bg-gray-50' : 'p-4 border-gray-200 hover:shadow-lg'}
+        ${isVisible ? 'opacity-100 translate-y-0' : ''}`}
+      style={{ animationDelay: `${index * 0.1}s`, transition: 'opacity 0.6s ease, transform 0.6s ease' }}
     >
-      <Link to={`/article/${article.id}`} className="flex gap-5 h-full items-center">
-        {/* Thumbnail on the LEFT */}
-        <div className="overflow-hidden rounded-lg flex-shrink-0 w-32 h-24 md:w-40 md:h-28">
+      <Link to={`/article/${article.id}`} className={`flex gap-4 items-center ${minimal ? 'h-auto' : 'h-full'}`}>
+        {/* Thumbnail */}
+        <div className={`overflow-hidden rounded-lg flex-shrink-0 transition-all duration-300
+          ${minimal ? 'w-24 h-20 md:w-28 md:h-24' : 'w-32 h-24 md:w-40 md:h-28'}`}>
           <img 
             src={article.image} 
             alt="Thumbnail" 
@@ -23,18 +34,27 @@ export function CompactArticle({ article, index }: { article: Article, index: nu
           />
         </div>
         
-        {/* News content on the RIGHT */}
-        <div className="flex-1 flex flex-col justify-center">
-          <h3 className="text-base md:text-lg font-bold text-gray-800 mb-2 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
+        {/* Content */}
+        <div className="flex-1 flex flex-col justify-center min-w-0">
+          <h3 className={`font-bold text-gray-800 mb-1.5 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2
+            ${minimal ? 'text-sm md:text-base' : 'text-base md:text-lg'}`}>
             {article.title}
           </h3>
-          <div className="flex items-center mb-2 text-xs md:text-sm text-gray-600">
-            <img src={article.authorAvatar || ''} alt="Author" className="w-5 h-5 rounded-full mr-2" />
-            <span className="font-semibold text-gray-700">{article.author}</span>
-            <span className="mx-2 text-gray-400">—</span>
-            <span className="text-gray-500">{article.date}</span>
+          <div className={`flex items-center text-gray-600 ${minimal ? 'mb-0.5 text-[10px] md:text-xs' : 'mb-2 text-xs md:text-sm'}`}>
+            <div className="w-5 h-5 rounded-full overflow-hidden mr-2 border border-gray-100 flex-shrink-0">
+               <img 
+                src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
+                alt="Author" 
+                className="w-full h-full object-cover" 
+              />
+            </div>
+            <span className="font-semibold text-gray-700 truncate">{article.author}</span>
+            <span className="mx-1.5 text-gray-300">•</span>
+            <span className="text-gray-500 font-noto truncate">{article.date}</span>
           </div>
-          <p className="text-gray-600 text-xs md:text-sm leading-relaxed line-clamp-2">{article.excerpt}</p>
+          {!minimal && (
+            <p className="text-gray-600 text-xs md:text-sm leading-relaxed line-clamp-2 font-noto opacity-80">{article.excerpt}</p>
+          )}
         </div>
       </Link>
     </article>

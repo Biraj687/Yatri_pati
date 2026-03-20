@@ -4,7 +4,15 @@ import { SkeletonLoader } from './SkeletonLoader';
 import { fetchNewsData } from '../services/newsService';
 import type { Article } from '../services/newsService';
 
-export default function NewsPackagesSection() {
+interface NewsPackagesSectionProps {
+  newsTitle?: string;
+  packageTitle?: string;
+}
+
+export default function NewsPackagesSection({ 
+  newsTitle = 'समाचार', 
+  packageTitle = 'प्याकेज समाचार' 
+}: NewsPackagesSectionProps) {
   const [newsArticles, setNewsArticles] = useState<Article[]>([]);
   const [packageArticles, setPackageArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,7 +44,7 @@ export default function NewsPackagesSection() {
             {/* News Column */}
             <div>
               <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-gray-400 pb-3 text-left">
-                समाचार
+                {newsTitle}
               </h2>
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
@@ -48,7 +56,7 @@ export default function NewsPackagesSection() {
             {/* Packages Column */}
             <div>
               <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-blue-600 pb-3 text-left">
-                प्याकेज समाचार
+                {packageTitle}
               </h2>
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
@@ -69,7 +77,7 @@ export default function NewsPackagesSection() {
           {/* News Column */}
           <div>
             <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-gray-400 pb-3 text-left">
-              समाचार
+              {newsTitle}
             </h2>
             <div className="space-y-4">
               {newsArticles.map((article) => (
@@ -113,7 +121,7 @@ export default function NewsPackagesSection() {
           {/* Packages Column */}
           <div>
             <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-blue-600 pb-3 text-left">
-              प्याकेज समाचार
+              {packageTitle}
             </h2>
             <div className="space-y-4">
               {packageArticles.map((article) => (

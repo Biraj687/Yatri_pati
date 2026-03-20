@@ -15,10 +15,41 @@ export interface Article {
   date: string;
   category?: string;
   authorAvatar?: string;
-  content?: string; // Full article content
-  readTime?: string; // Estimated read time
-  views?: number; // View count
-  source?: string; // News source/publish
+  content?: string;
+  readTime?: string;
+  views?: number;
+  source?: string;
+}
+
+export interface SiteConfig {
+  siteName: string;
+  logo: {
+    text: string;
+    image?: string;
+  };
+  navigation: {
+    label: string;
+    path: string;
+    isCategory: boolean;
+    hasDropdown?: boolean;
+    dropdownItems?: { label: string; path: string }[];
+  }[];
+  socialLinks: {
+    platform: string;
+    url: string;
+  }[];
+  footer: {
+    aboutText: string;
+    copyright: string;
+    columns: {
+      title: string;
+      links: { label: string; path: string; isExternal?: boolean }[];
+    }[];
+  };
+  sectionTitles: {
+    [key: string]: string;
+  };
+  tickerNews: string[];
 }
 
 export interface ApiResponse {
@@ -416,5 +447,111 @@ export const searchArticles = async (query: string, limit?: number): Promise<Art
     } catch (fallbackError) {
       return [];
     }
+  }
+};
+
+// Mock Site Configuration
+const mockSiteConfig: SiteConfig = {
+  siteName: 'यात्रीपाटी',
+  logo: {
+    text: 'यात्रीपाटी',
+    image: undefined // Use SVG logo by default
+  },
+  navigation: [
+    { label: 'होमपेज', path: '/', isCategory: false },
+    { 
+      label: 'प्रदेश', 
+      path: '/category/pradesh', 
+      isCategory: true, 
+      hasDropdown: true,
+      dropdownItems: [
+        { label: 'प्रदेश १', path: '/category/pradesh-1' },
+        { label: 'प्रदेश २', path: '/category/pradesh-2' },
+        { label: 'प्रदेश ३', path: '/category/pradesh-3' },
+        { label: 'प्रदेश ४', path: '/category/pradesh-4' },
+        { label: 'प्रदेश ५', path: '/category/pradesh-5' },
+        { label: 'प्रदेश ६', path: '/category/pradesh-6' },
+        { label: 'प्रदेश ७', path: '/category/pradesh-7' },
+      ]
+    },
+    { label: 'विचार', path: '/category/vichar', isCategory: true },
+    { label: 'शिक्षा', path: '/category/shiksha', isCategory: true },
+    { label: 'स्वास्थ्य', path: '/category/swasthya', isCategory: true },
+    { label: 'खेलकुद', path: '/category/khel', isCategory: true },
+    { label: 'अर्थतन्त्र', path: '/category/arthatantra', isCategory: true },
+    { label: 'पर्यटन', path: '/category/tourism', isCategory: true },
+    { label: 'प्रविधि', path: '/category/technology', isCategory: true },
+  ],
+  socialLinks: [
+    { platform: 'Facebook', url: 'https://facebook.com' },
+    { platform: 'Instagram', url: 'https://instagram.com' },
+    { platform: 'Twitter', url: 'https://twitter.com' },
+    { platform: 'Youtube', url: 'https://youtube.com' },
+  ],
+  footer: {
+    aboutText: 'प्रत्येक मानिसले अर्को व्यक्तिलाई प्राकृतिक रूपमा आफू सरह सम्झनुपर्दछ । थोमस हब्स। यात्रीपाटी नेपालको एक अग्रणी न्युज पोर्टल हो जसले सत्य, तथ्य र निष्पक्ष समाचार सम्प्रेषण गर्दछ।',
+    copyright: `© ${new Date().getFullYear()} Yatri Pati. All rights reserved.`,
+    columns: [
+      {
+        title: 'स्थान',
+        links: [
+          { label: 'समाज', path: '/category/samaj' },
+          { label: 'विचार/कलम', path: '/category/vichar' },
+          { label: 'साहित्य', path: '/category/sahitya' },
+          { label: 'अन्तरवार्ता', path: '/category/interview' },
+          { label: 'खेलकुद', path: '/category/khel' },
+        ]
+      },
+      {
+        title: 'महत्त्वपूर्ण',
+        links: [
+          { label: 'लोकसेवा आयोग', path: 'https://psc.gov.np', isExternal: true },
+          { label: 'राष्ट्रिय योजना आयोग', path: 'https://npc.gov.np', isExternal: true },
+          { label: 'सञ्चार तथा सूचना प्रविधि', path: 'https://moic.gov.np', isExternal: true },
+          { label: 'गृह मन्त्रालय', path: 'https://moha.gov.np', isExternal: true },
+        ]
+      },
+      {
+        title: 'यात्रीपाटी',
+        links: [
+          { label: 'हाम्रो टिम', path: '/about/team' },
+          { label: 'प्रयोगका सर्त', path: '/terms' },
+          { label: 'विज्ञापन', path: '/ads' },
+          { label: 'प्राइभेसी पोलिसी', path: '/privacy' },
+          { label: 'सम्पर्क', path: '/contact' },
+        ]
+      }
+    ]
+  },
+  sectionTitles: {
+    latest: 'ताजा समाचार',
+    hospitality: 'हस्पिटालिटि',
+    hotels: 'होटल र रिसोर्ट',
+    destination: 'गन्तव्य',
+    trending: 'विशेष सिफारिस',
+    packages: 'प्याकेज समाचार'
+  },
+  tickerNews: [
+    'प्रधानमन्त्री देउवासँग अध्यक्ष लीको शिष्टाचार भेटवार्ता',
+    'नेपालमा पर्यटन उद्योगको पुनरुत्थान: नयाँ योजनाहरू सार्वजनिक',
+    'खेलकुदमा नेपाली खेलाडीहरूको उत्कृष्ट प्रदर्शन',
+    'विश्वभरका प्रमुख घटनाक्रमहरू एकै ठाउँमा'
+  ]
+};
+
+export const fetchSiteConfig = async (): Promise<SiteConfig> => {
+  if (USE_MOCK) {
+    return new Promise<SiteConfig>((resolve) => {
+      setTimeout(() => resolve(mockSiteConfig), 500);
+    });
+  }
+
+  try {
+    const response = await apiClient.get<any>('/config');
+    if (!response.success) throw new Error('Failed to fetch config');
+    return response.data;
+  } catch (err) {
+    console.warn("Config fetch failed, using mock fallback", err);
+    return mockSiteConfig;
   }
 };
