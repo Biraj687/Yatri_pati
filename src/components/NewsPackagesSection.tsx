@@ -55,7 +55,7 @@ export default function NewsPackagesSection({
 
             {/* Packages Column */}
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-blue-600 pb-3 text-left">
+              <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-primary-600 pb-3 text-left">
                 {packageTitle}
               </h2>
               <div className="space-y-4">
@@ -93,7 +93,7 @@ export default function NewsPackagesSection({
                       className="w-24 h-24 object-cover rounded flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="flex-1 min-w-0 text-left">
-                      <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 group-hover:text-primary-600 transition-colors">
                         {article.title}
                       </h3>
                       <div className="flex items-center gap-2 mb-2">
@@ -120,7 +120,7 @@ export default function NewsPackagesSection({
 
           {/* Packages Column */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-blue-600 pb-3 text-left">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-primary-600 pb-3 text-left">
               {packageTitle}
             </h2>
             <div className="space-y-4">
@@ -137,7 +137,7 @@ export default function NewsPackagesSection({
                       className="w-24 h-24 object-cover rounded flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="flex-1 min-w-0 text-left">
-                      <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 group-hover:text-primary-600 transition-colors">
                         {article.title}
                       </h3>
                       <div className="flex items-center gap-2 mb-2">

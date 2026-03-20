@@ -96,7 +96,7 @@ export function HospitalitySection({
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
                         <div className="absolute bottom-0 left-0 w-full p-6 md:p-8">
-                          <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-3 drop-shadow-md group-hover:text-blue-200 transition-colors">
+                          <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-3 drop-shadow-md group-hover:text-primary-200 transition-colors">
                             {article.title}
                           </h3>
                           <div className="text-white/90 text-sm font-medium flex items-center gap-3">
@@ -125,7 +125,7 @@ export function HospitalitySection({
                           />
                         </div>
                         <div className="flex-1 min-w-0 space-y-3">
-                          <h4 className="text-md md:text-lg font-bold text-gray-900 leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">
+                          <h4 className="text-md md:text-lg font-bold text-gray-900 leading-snug group-hover:text-primary-600 transition-colors line-clamp-2">
                             {article.title}
                           </h4>
                           <div className="flex items-center gap-2">
@@ -167,7 +167,7 @@ export function HospitalitySection({
                         />
                       </div>
                       <div className="flex-grow flex flex-col">
-                        <h3 className="text-lg font-bold text-gray-900 leading-snug mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 h-[3.5rem] flex items-center">
+                        <h3 className="text-lg font-bold text-gray-900 leading-snug mb-2 group-hover:text-primary-600 transition-colors line-clamp-2 h-[3.5rem] flex items-center">
                           {article.title}
                         </h3>
                         <p className="text-sm text-gray-500 font-noto line-clamp-2 mb-4 leading-relaxed opacity-70 h-10 overflow-hidden">

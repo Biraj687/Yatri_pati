@@ -13,13 +13,15 @@ export function FeaturedArticle({ article }: { article: Article }) {
       className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 opacity-0 translate-y-8 text-left h-full ${featuredVisible ? 'opacity-100 translate-y-0' : ''}`}
     >
       <Link to={`/article/${article.id}`} className="flex flex-col h-full overflow-hidden group">
-        <img 
-          src={article.image} 
-          alt="Featured Article" 
-          className="w-full h-[320px] object-cover transition-transform duration-500 group-hover:scale-110" 
-        />
+        <div className="w-full h-[300px] overflow-hidden flex-shrink-0">
+          <img 
+            src={article.image} 
+            alt="Featured Article" 
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+          />
+        </div>
         <div className="p-6 flex flex-col flex-grow">
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
+          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight group-hover:text-primary-600 transition-colors line-clamp-2">
             {article.title}
           </h3>
           <div className="flex items-center mb-4 text-sm text-gray-700">

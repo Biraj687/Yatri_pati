@@ -46,7 +46,7 @@ export function ArticleDetail() {
   if (!article) return (
     <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-12 min-h-[60vh] flex flex-col items-center justify-center text-white">
       <h2 className="text-2xl font-bold mb-4">समाचार फेला परेन।</h2>
-      <Link to="/" className="text-blue-400 hover:underline flex items-center gap-2">
+      <Link to="/" className="text-primary-400 hover:underline flex items-center gap-2">
         <FiArrowLeft /> गृहपृष्ठमा फर्कनुहोस्
       </Link>
     </div>
@@ -73,7 +73,7 @@ export function ArticleDetail() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
         <div className="absolute bottom-0 left-0 w-full px-4 md:px-8 lg:px-[5rem] py-6 md:py-10">
           <div className="max-w-7xl mx-auto">
-            <Link to={`/category/${article.category?.toLowerCase() || 'news'}`} className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider mb-3 hover:bg-blue-700 transition-colors">
+            <Link to={`/category/${article.category?.toLowerCase() || 'news'}`} className="inline-block bg-primary-600 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider mb-3 hover:bg-primary-700 transition-colors">
               {article.category || 'समाचार'}
             </Link>
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white drop-shadow-xl">
@@ -81,15 +81,15 @@ export function ArticleDetail() {
             </h1>
             <div className="flex flex-wrap items-center gap-4 text-xs md:text-sm text-gray-200">
               <div className="flex items-center gap-2">
-                <FiUser className="text-blue-400 w-4 h-4" />
+                <FiUser className="text-primary-400 w-4 h-4" />
                 <span className="font-semibold text-white">{article.author}</span>
               </div>
               <div className="flex items-center gap-2">
-                <FiCalendar className="text-blue-400 w-4 h-4" />
+                <FiCalendar className="text-primary-400 w-4 h-4" />
                 <span>{article.date}</span>
               </div>
               <div className="flex items-center gap-2">
-                <FiClock className="text-blue-400 w-4 h-4" />
+                <FiClock className="text-primary-400 w-4 h-4" />
                 <span>{article.readTime || '५ मिनेट पढ्नुहोस्'}</span>
               </div>
             </div>
@@ -101,7 +101,7 @@ export function ArticleDetail() {
         {/* Main Content */}
         <div className="flex-grow min-w-0">
           <div className="prose prose-lg md:prose-xl max-w-none text-gray-800">
-            <p className="text-xl md:text-2xl leading-relaxed text-blue-900 italic mb-10 border-l-4 border-blue-600 pl-6 py-4 bg-blue-50 rounded-r-lg font-medium">
+            <p className="text-xl md:text-2xl leading-relaxed text-primary-900 italic mb-10 border-l-4 border-primary-600 pl-6 py-4 bg-blue-50 rounded-r-lg font-medium">
               {article.excerpt}
             </p>
             
@@ -151,7 +151,7 @@ export function ArticleDetail() {
           <div className="mt-12 pt-8 border-t border-gray-200 flex flex-wrap items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <span className="text-gray-600 font-bold">साझेदारी गर्नुहोस्:</span>
-              <button className="p-3 bg-blue-600 rounded-full hover:bg-blue-700 transition-all hover:scale-110 active:scale-95 shadow-md group">
+              <button className="p-3 bg-primary-600 rounded-full hover:bg-primary-700 transition-all hover:scale-110 active:scale-95 shadow-md group">
                 <FiShare2 className="text-white" />
               </button>
               <button className="p-3 bg-sky-500 rounded-full hover:bg-sky-600 transition-all hover:scale-110 shadow-md">
@@ -159,7 +159,7 @@ export function ArticleDetail() {
               </button>
             </div>
             
-            <Link to="/" className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors font-bold">
+            <Link to="/" className="flex items-center gap-2 text-primary-600 hover:text-primary-700 transition-colors font-bold">
               <FiArrowLeft /> सबै समाचारहरू हेर्नुहोस्
             </Link>
           </div>
@@ -169,7 +169,7 @@ export function ArticleDetail() {
         <aside className="w-full lg:w-96 flex-shrink-0">
           <div className="sticky top-24 space-y-10">
             <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-b-2 border-blue-600 pb-3">
+              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-b-2 border-primary-600 pb-3">
                 सम्बन्धित समाचार
               </h3>
               <div className="space-y-3">

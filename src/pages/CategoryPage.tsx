@@ -71,7 +71,7 @@ export function CategoryPage() {
           <meta name="description" content={`Read the latest ${displayName} news and updates on ${config?.siteName || 'Yatripati'}.`} />
         </Helmet>
 
-        <div className="border-b border-blue-500 mb-10 pb-4">
+        <div className="border-b border-primary-500 mb-10 pb-4">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wider">
             {displayName}
           </h1>
