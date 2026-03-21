@@ -38,12 +38,12 @@ export default function NewsPackagesSection({
 
   if (loading) {
     return (
-      <section className="bg-gray-50 py-12 w-full">
+      <section className="py-12 w-full transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* News Column */}
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-gray-400 pb-3 text-left">
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-gray-400 dark:border-gray-600 pb-3 text-left">
                 {newsTitle}
               </h2>
               <div className="space-y-4">
@@ -55,7 +55,7 @@ export default function NewsPackagesSection({
 
             {/* Packages Column */}
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-primary-600 pb-3 text-left">
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-primary-600 pb-3 text-left">
                 {packageTitle}
               </h2>
               <div className="space-y-4">
@@ -71,12 +71,12 @@ export default function NewsPackagesSection({
   }
 
   return (
-    <section className="bg-gray-50 py-12 w-full">
+    <section className="py-12 w-full transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* News Column */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-gray-400 pb-3 text-left">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-gray-400 dark:border-gray-600 pb-3 text-left">
               {newsTitle}
             </h2>
             <div className="space-y-4">
@@ -84,7 +84,7 @@ export default function NewsPackagesSection({
                 <Link
                   key={article.id}
                   to={`/article/${article.id}`}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
                 >
                   <div className="flex gap-4 p-4">
                     <img
@@ -93,7 +93,7 @@ export default function NewsPackagesSection({
                       className="w-24 h-24 object-cover rounded flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="flex-1 min-w-0 text-left">
-                      <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                      <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                         {article.title}
                       </h3>
                       <div className="flex items-center gap-2 mb-2">
@@ -104,11 +104,11 @@ export default function NewsPackagesSection({
                             className="w-full h-full object-cover" 
                           />
                         </div>
-                        <p className="text-xs font-medium text-gray-600 truncate">
-                          {article.author} <span className="mx-1 text-gray-300">•</span> {article.date}
+                        <p className="text-xs font-medium text-gray-600 dark:text-gray-400 truncate">
+                          {article.author} <span className="mx-1 text-gray-300 dark:text-gray-600">•</span> {article.date}
                         </p>
                       </div>
-                      <p className="text-sm text-gray-600 line-clamp-2">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                         {article.excerpt}
                       </p>
                     </div>
@@ -120,7 +120,7 @@ export default function NewsPackagesSection({
 
           {/* Packages Column */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-primary-600 pb-3 text-left">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-primary-600 pb-3 text-left">
               {packageTitle}
             </h2>
             <div className="space-y-4">
@@ -128,7 +128,7 @@ export default function NewsPackagesSection({
                 <Link
                   key={article.id}
                   to={`/article/${article.id}`}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
                 >
                   <div className="flex gap-4 p-4">
                     <img
@@ -137,7 +137,7 @@ export default function NewsPackagesSection({
                       className="w-24 h-24 object-cover rounded flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="flex-1 min-w-0 text-left">
-                      <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                      <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                         {article.title}
                       </h3>
                       <div className="flex items-center gap-2 mb-2">
@@ -148,11 +148,11 @@ export default function NewsPackagesSection({
                             className="w-full h-full object-cover" 
                           />
                         </div>
-                        <p className="text-xs font-medium text-gray-600 truncate">
-                          {article.author} <span className="mx-1 text-gray-300">•</span> {article.date}
+                        <p className="text-xs font-medium text-gray-600 dark:text-gray-400 truncate">
+                          {article.author} <span className="mx-1 text-gray-300 dark:text-gray-600">•</span> {article.date}
                         </p>
                       </div>
-                      <p className="text-sm text-gray-600 line-clamp-2">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                         {article.excerpt}
                       </p>
                     </div>

@@ -1,5 +1,5 @@
 export function SkeletonLoader({ type }: { type: 'hero' | 'featured' | 'compact' | 'detail' | 'card' | 'news-package' }) {
-  const baseClasses = "bg-gray-200 animate-pulse rounded";
+  const baseClasses = "bg-gray-200 dark:bg-gray-700 animate-pulse rounded";
 
   if (type === 'detail') {
     return (
@@ -29,14 +29,14 @@ export function SkeletonLoader({ type }: { type: 'hero' | 'featured' | 'compact'
   if (type === 'hero') {
     return (
       <div className="py-2 px-4 w-full">
-        <div className="w-full rounded-lg bg-gray-300 animate-pulse" style={{ aspectRatio: '2 / 1' }}></div>
+        <div className="w-full rounded-lg bg-gray-300 dark:bg-gray-800 animate-pulse" style={{ aspectRatio: '2 / 1' }}></div>
       </div>
     );
   }
 
-  if (type === 'featured') {
-    return (
-      <div className="bg-white rounded-lg shadow-md overflow-hidden mb-5">
+    if (type === 'featured') {
+      return (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-5">
         <div className={`w-full h-48 ${baseClasses}`}></div>
         <div className="p-4 space-y-3">
           <div className={`h-6 w-3/4 ${baseClasses}`}></div>
@@ -76,9 +76,9 @@ export function SkeletonLoader({ type }: { type: 'hero' | 'featured' | 'compact'
     );
   }
 
-  if (type === 'news-package') {
-    return (
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    if (type === 'news-package') {
+      return (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
         <div className="flex gap-4 p-4">
           {/* Image skeleton */}
           <div className={`w-24 h-24 rounded ${baseClasses} flex-shrink-0`}></div>

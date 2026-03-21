@@ -3,8 +3,6 @@ import { PortalLayout } from './layouts/PortalLayout'
 import { GantavySection, NewsPackagesSection, HospitalitySection } from './components'
 import { Home, ArticleDetail, CategoryPage } from './pages'
 import { SiteConfigProvider, useSiteConfig } from './SiteConfigContext'
-import './App.css'
-
 function App() {
   return (
     <SiteConfigProvider>

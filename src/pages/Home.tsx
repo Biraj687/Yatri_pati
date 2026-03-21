@@ -61,7 +61,7 @@ export function Home() {
         <SkeletonLoader type="hero" />
         <main className="w-full py-12">
           <section className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
               <SkeletonLoader type="featured" />
               <div className="space-y-4">
                 <SkeletonLoader type="compact" />
@@ -122,18 +122,18 @@ export function Home() {
       </Helmet>
 
       {/* Samachar Section - with breathing space */}
-      <main className="w-full py-12">
+      <main className="w-full py-12 dark:bg-gray-900 transition-colors duration-300">
         <section className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
-          <h2 className="text-3xl font-bold text-gray-800 mb-10 text-left uppercase border-b-2 border-primary-600 inline-block pb-2">
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-10 text-left uppercase border-b-2 border-primary-600 inline-block pb-2">
             {sectionTitles.latest || 'समाचार'}
           </h2>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
             {/* Left: Large featured article */}
             {featured && <FeaturedArticle article={featured} />}
 
             {/* Right: List of compact articles */}
-            <div className="flex flex-col gap-4 h-full">
+            <div className="flex flex-col gap-4 h-full bg-white dark:bg-gray-800 rounded-xl p-4 md:p-8">
               {articles.slice(0, 3).map((article, index) => (
                 <div key={article.id} className="flex-1">
                   <CompactArticle

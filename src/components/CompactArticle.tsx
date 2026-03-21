@@ -18,8 +18,8 @@ export function CompactArticle({
   return (
     <article
       ref={ref}
-      className={`relative bg-white border border-gray-100 rounded-xl transition-all duration-300 opacity-0 translate-y-4 text-left group
-        ${minimal ? 'p-2 hover:bg-gray-50' : 'p-4 border-gray-200 hover:shadow-lg'}
+      className={`relative rounded-xl transition-all duration-300 opacity-0 translate-y-4 text-left group
+        ${minimal ? 'p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50' : 'p-4 hover:bg-gray-50 dark:hover:bg-gray-700/30'}
         ${isVisible ? 'opacity-100 translate-y-0' : ''}`}
       style={{ animationDelay: `${index * 0.1}s`, transition: 'opacity 0.6s ease, transform 0.6s ease' }}
     >
@@ -36,11 +36,11 @@ export function CompactArticle({
         
         {/* Content */}
         <div className="flex-1 flex flex-col justify-center min-w-0">
-          <h3 className={`font-bold text-gray-800 mb-1.5 leading-tight group-hover:text-primary-600 transition-colors line-clamp-2
+          <h3 className={`font-bold text-gray-800 dark:text-gray-100 mb-1.5 leading-tight group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2
             ${minimal ? 'text-sm md:text-base' : 'text-base md:text-lg'}`}>
             {article.title}
           </h3>
-          <div className={`flex items-center text-gray-600 ${minimal ? 'mb-0.5 text-[10px] md:text-xs' : 'mb-2 text-xs md:text-sm'}`}>
+          <div className={`flex items-center text-gray-600 dark:text-gray-400 ${minimal ? 'mb-0.5 text-[10px] md:text-xs' : 'mb-2 text-xs md:text-sm'}`}>
             <div className="w-5 h-5 rounded-full overflow-hidden mr-2 border border-gray-100 flex-shrink-0">
                <img 
                 src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
@@ -48,12 +48,12 @@ export function CompactArticle({
                 className="w-full h-full object-cover" 
               />
             </div>
-            <span className="font-semibold text-gray-700 truncate">{article.author}</span>
-            <span className="mx-1.5 text-gray-300">•</span>
-            <span className="text-gray-500 font-noto truncate">{article.date}</span>
+            <span className="font-semibold text-gray-700 dark:text-gray-300 truncate">{article.author}</span>
+            <span className="mx-1.5 text-gray-300 dark:text-gray-600">•</span>
+            <span className="text-gray-500 dark:text-gray-400 font-noto truncate">{article.date}</span>
           </div>
           {!minimal && (
-            <p className="text-gray-600 text-xs md:text-sm leading-relaxed line-clamp-2 font-noto opacity-80">{article.excerpt}</p>
+            <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm leading-relaxed line-clamp-2 font-noto opacity-80">{article.excerpt}</p>
           )}
         </div>
       </Link>

@@ -10,8 +10,8 @@ interface TopNewsBlockProps {
 export const TopNewsBlock: React.FC<TopNewsBlockProps> = ({ article, loading }) => {
   if (loading) {
     return (
-      <div className="w-full bg-gray-100 animate-pulse h-[400px] md:h-[500px] flex items-center justify-center">
-        <div className="text-gray-400 font-medium whitespace-nowrap">समाचार लोड हुँदैछ...</div>
+      <div className="w-full bg-gray-100 dark:bg-gray-800 animate-pulse h-[400px] md:h-[500px] flex items-center justify-center">
+        <div className="text-gray-400 dark:text-gray-500 font-medium whitespace-nowrap">समाचार लोड हुँदैछ...</div>
       </div>
     );
   }

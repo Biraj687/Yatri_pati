@@ -45,7 +45,15 @@ export function CategoryPage() {
     loadCategoryData();
   }, [categoryName]);
 
-  const displayName = categoryName ? categoryName.charAt(0).toUpperCase() + categoryName.slice(1) : 'समाचार';
+  const currentNav = config?.navigation.find(item => item.path === `/category/${categoryName}`) ||
+    config?.navigation.flatMap(item => item.dropdownItems || []).find(sub => sub.path === `/category/${categoryName}`);
+    
+  let displayName = 'समाचार';
+  if (currentNav) {
+    displayName = currentNav.label;
+  } else if (categoryName) {
+    displayName = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+  }
 
   if (loading || configLoading) {
     return (

@@ -1,13 +1,47 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { FiSearch, FiMenu, FiX, FiSun } from 'react-icons/fi'
+import { FiSearch, FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi'
+import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa'
 import { useSiteConfig } from '../SiteConfigContext'
+import { NepaliDate } from 'nepali-date-library'
 import logoSvg from '../assets/logo.svg'
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
   const { config, loading } = useSiteConfig()
+  
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light')
+  const [todayBS, setTodayBS] = useState<NepaliDate | null>(null)
+
+  useEffect(() => {
+    setTodayBS(new NepaliDate())
+  }, [])
+
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
+
+  const getSocialIcon = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'facebook': return <FaFacebook />;
+      case 'instagram': return <FaInstagram />;
+      case 'twitter': return <FaTwitter />;
+      case 'youtube': return <FaYoutube />;
+      case 'github': return <FaGithub />;
+      default: return null;
+    }
+  };
 
   const isActive = (path: string) => location.pathname === path
 
@@ -19,40 +53,89 @@ export function Navbar() {
     )
   }
 
+  const formattedBS = todayBS ? todayBS.format('d mmmm yyyy, dddd') : '';
+
   return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 px-4 md:px-8 lg:px-[5rem]">
-      <div className="w-full h-16 flex items-center justify-between">
-        {/* Left: Logo */}
-        <div className="flex-shrink-0">
-          <Link to="/" className="flex items-center">
-            {config.logo.image ? (
-              <img src={config.logo.image} alt={config.logo.text} className="h-8 md:h-10 w-auto" />
-            ) : (
-              <img src={logoSvg} alt="Logo" className="h-8 md:h-10 w-auto" />
-            )}
-          </Link>
+    <nav className="bg-white dark:bg-gray-900 sticky top-0 z-50 transition-colors duration-300 flex flex-col items-center w-full border-b-4 border-double border-gray-900 dark:border-gray-100">
+      {/* Very Top Row: Date | Ticker | Socials */}
+      <div className="hidden md:flex w-full items-center justify-between px-4 md:px-8 lg:px-[5rem] py-2 border-b border-gray-100 dark:border-gray-800">
+        <div className="flex-1 text-[11px] md:text-sm font-noto font-bold text-gray-900 dark:text-gray-100">
+          {formattedBS}
+        </div>
+        
+        <div className="flex-[2] flex justify-center items-center gap-2 text-[11px] md:text-sm text-gray-800 dark:text-gray-300 overflow-hidden">
+          <span className="font-bold text-gray-900 dark:text-gray-100 whitespace-nowrap lg:text-base">आजको विशेषांक:</span>
+          <span className="truncate max-w-[400px] hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer lg:text-base">
+            {config.tickerNews[0]}
+          </span>
         </div>
 
-        {/* Center: Desktop Navigation */}
-        <div className="hidden md:flex flex-1 justify-center items-center gap-1 lg:gap-4">
+        <div className="flex-1 flex items-center justify-end gap-3 md:gap-4">
+           {config.socialLinks.map((link) => (
+              <a 
+                key={link.platform}
+                href={link.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-800 dark:text-gray-300 hover:opacity-70 transition-opacity" 
+                aria-label={link.platform}
+              >
+                {getSocialIcon(link.platform)}
+              </a>
+           ))}
+        </div>
+      </div>
+
+      {/* Middle Row: Logo and Tools */}
+      <div className="w-full relative flex items-center justify-between md:justify-center px-4 md:px-8 lg:px-[5rem] py-4 border-b border-gray-50 dark:border-gray-800 md:border-b-0">
+        {/* Mobile menu toggle */}
+        <button
+          className="md:hidden text-gray-800 dark:text-gray-200"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+        </button>
+
+        {/* Center: Smaller Logo */}
+        <Link to="/" className="flex items-center">
+          <img src={logoSvg} alt="Logo" className="h-8 md:h-10 lg:h-12 w-auto dark:invert dark:brightness-200" />
+        </Link>
+
+        {/* Right tools (Search, Theme) */}
+        <div className="flex items-center gap-4 md:absolute md:right-8 lg:right-[5rem]">
+          <button 
+            onClick={toggleTheme}
+            className="text-gray-800 dark:text-gray-200 hover:opacity-70 transition-opacity" 
+            aria-label="Theme Toggle"
+          >
+            {theme === 'dark' ? <FiMoon size={20} /> : <FiSun size={20} />}
+          </button>
+          <button className="text-gray-800 dark:text-gray-200 hover:opacity-70 transition-opacity" aria-label="Search">
+            <FiSearch size={20} />
+          </button>
+        </div>
+      </div>
+
+      {/* Bottom Row: Centered Navigation Links */}
+      <div className="hidden md:flex w-full justify-center items-center px-4 mb-2">
+        <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-8 max-w-7xl">
           {config.navigation.map((item) => (
-            <div key={item.label} className="relative group h-16 flex items-center">
+            <div key={item.label} className="relative group flex items-center h-12">
               <Link 
                 to={item.path} 
-                className={`text-gray-900 font-bold px-2 py-1 text-sm lg:text-[15px] transition-colors duration-300 flex items-center h-full border-b-2 whitespace-nowrap ${
-                  isActive(item.path) ? 'border-gray-900' : 'border-transparent hover:border-gray-900'
-                }`}
+                className={`text-gray-900 dark:text-gray-100 font-bold px-2 text-base lg:text-lg transition-colors duration-300 flex items-center h-full hover:text-black dark:hover:text-white`}
               >
                 {item.label}
-                {item.hasDropdown && <span className="ml-1 text-[10px] opacity-50">▼</span>}
+                {item.hasDropdown && <span className="ml-1 text-xs opacity-50">▼</span>}
               </Link>
               {item.hasDropdown && item.dropdownItems && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 bg-white border border-gray-100 rounded-b shadow-xl min-w-[160px] z-50 hidden group-hover:block py-2">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-b shadow-xl min-w-[160px] z-50 hidden group-hover:block py-2">
                   {item.dropdownItems.map((sub) => (
                     <Link 
                       key={sub.label} 
                       to={sub.path} 
-                      className="block px-6 py-2.5 text-sm text-gray-800 hover:bg-gray-50 hover:text-black transition-colors"
+                      className="block px-6 py-2.5 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     >
                       {sub.label}
                     </Link>
@@ -61,25 +144,6 @@ export function Navbar() {
               )}
             </div>
           ))}
-        </div>
-
-        {/* Right: Icons */}
-        <div className="flex items-center gap-2 lg:gap-4 flex-shrink-0">
-          <button className="text-gray-800 p-2 hover:opacity-70 transition-opacity" aria-label="Theme Toggle">
-            <FiSun size={20} />
-          </button>
-          <button className="text-gray-800 p-2 hover:opacity-70 transition-opacity" aria-label="Search">
-            <FiSearch size={22} />
-          </button>
-          
-          {/* Mobile Toggle */}
-          <button
-            className="md:hidden text-gray-800 p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-          </button>
         </div>
       </div>
 
@@ -91,14 +155,14 @@ export function Navbar() {
 
       {/* Mobile Navigation Drawer */}
       <div 
-        className={`fixed top-0 right-0 h-full w-[280px] bg-white z-50 shadow-2xl transition-transform duration-300 ease-in-out transform md:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-full w-[280px] bg-white dark:bg-gray-900 z-50 shadow-2xl transition-transform duration-300 ease-in-out transform md:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="p-6 h-full flex flex-col">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-2">
-              <img src={logoSvg} alt="Logo" className="h-8 w-auto" />
+              <img src={logoSvg} alt="Logo" className="h-8 w-auto dark:invert dark:brightness-200" />
             </div>
-            <button onClick={() => setMobileMenuOpen(false)} className="text-gray-800 p-2 rounded-full hover:bg-gray-100 transition-colors">
+            <button onClick={() => setMobileMenuOpen(false)} className="text-gray-800 dark:text-gray-200 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
               <FiX size={24} />
             </button>
           </div>
@@ -110,7 +174,7 @@ export function Navbar() {
                   <Link
                     to={item.path}
                     className={`block py-3 px-2 text-lg font-bold transition-colors ${
-                      isActive(item.path) ? 'text-red-600' : 'text-gray-800 hover:text-red-600'
+                      isActive(item.path) ? 'text-red-600 dark:text-red-400' : 'text-gray-800 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400'
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
