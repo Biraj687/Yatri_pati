@@ -25,12 +25,8 @@ export function ThemeProvider({ children, defaultTheme = 'light' }: ThemeProvide
       if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
         return savedTheme;
       }
-      
-      // Check system preference
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-      }
     }
+    // Always default to light theme, ignoring system preference
     return defaultTheme;
   });
 
@@ -56,16 +52,13 @@ export function ThemeProvider({ children, defaultTheme = 'light' }: ThemeProvide
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // Listen for system theme changes
+  // Listen for system theme changes (kept for compatibility but no longer auto-switches)
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     
-    const handleChange = (e: MediaQueryListEvent) => {
-      // Only auto-switch if user hasn't explicitly set a preference
-      const savedTheme = localStorage.getItem('theme');
-      if (!savedTheme) {
-        setThemeState(e.matches ? 'dark' : 'light');
-      }
+    const handleChange = (_e: MediaQueryListEvent) => {
+      // No longer auto-switching based on system preference
+      // Theme is now always light by default unless user explicitly changes it
     };
     
     mediaQuery.addEventListener('change', handleChange);
