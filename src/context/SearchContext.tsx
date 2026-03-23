@@ -36,31 +36,48 @@ export function SearchProvider({ children, debounceDelay = 300 }: SearchProvider
   const [searchError, setSearchError] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchTimeoutRef = useRef<number | null>(null);
+  const currentSearchIdRef = useRef<number>(0);
 
-  // Debounced search function
+  // Debounced search function with stable loading state
   const performSearch = useCallback(async (query: string) => {
     if (!query.trim()) {
       setSearchResults([]);
       setSearchError(null);
+      setIsSearching(false);
       return;
     }
 
+    // Generate a unique ID for this search
+    const searchId = ++currentSearchIdRef.current;
+    
+    // Set searching to true only for this specific search
     setIsSearching(true);
     setSearchError(null);
 
     try {
       const results = await searchArticles(query, 10);
-      setSearchResults(results);
+      
+      // Only update if this is still the most recent search
+      // (prevents race conditions with rapid typing)
+      if (searchId === currentSearchIdRef.current) {
+        setSearchResults(results);
+      }
     } catch (error) {
       console.error('Search failed:', error);
-      setSearchError('Failed to perform search. Please try again.');
-      setSearchResults([]);
+      // Only update error if this is still the most recent search
+      if (searchId === currentSearchIdRef.current) {
+        setSearchError('Failed to perform search. Please try again.');
+        setSearchResults([]);
+      }
     } finally {
-      setIsSearching(false);
+      // Only stop searching if this is still the most recent search
+      if (searchId === currentSearchIdRef.current) {
+        setIsSearching(false);
+      }
     }
   }, []);
 
-  // Debounced setSearchQuery
+  // Debounced setSearchQuery - only trigger search after delay, don't clear results immediately
   const setSearchQuery = useCallback((query: string) => {
     setSearchQueryState(query);
 
@@ -76,8 +93,12 @@ export function SearchProvider({ children, debounceDelay = 300 }: SearchProvider
       }, debounceDelay);
       searchTimeoutRef.current = timeout;
     } else {
-      setSearchResults([]);
-      setSearchError(null);
+      // Only clear results if query is empty for more than a short delay
+      const clearTimeoutId = setTimeout(() => {
+        setSearchResults([]);
+        setSearchError(null);
+      }, 100);
+      searchTimeoutRef.current = clearTimeoutId;
     }
   }, [debounceDelay, performSearch]);
 
@@ -86,6 +107,9 @@ export function SearchProvider({ children, debounceDelay = 300 }: SearchProvider
     setSearchResults([]);
     setSearchError(null);
     setIsSearching(false);
+    
+    // Increment search ID to cancel any pending searches
+    currentSearchIdRef.current++;
     
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);

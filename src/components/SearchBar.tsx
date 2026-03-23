@@ -1,11 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { FiSearch, FiX } from 'react-icons/fi';
 import { useSearch } from '../context/SearchContext';
 
 interface SearchBarProps {
   placeholder?: string;
-  debounceMs?: number;
   onSearch?: (query: string) => void;
   className?: string;
   autoFocus?: boolean;
@@ -15,7 +14,6 @@ interface SearchBarProps {
 
 export function SearchBar({
   placeholder = 'समाचार खोज्नुहोस्...',
-  debounceMs = 300,
   onSearch,
   className = '',
   autoFocus = false,
@@ -23,53 +21,26 @@ export function SearchBar({
   useContext = true
 }: SearchBarProps) {
   const [query, setQuery] = useState(initialValue);
-  const [isTyping, setIsTyping] = useState(false);
   const searchContext = useContext ? useSearch() : null;
 
-  // Debounced search function
-  const debouncedSearch = useCallback(
-    (searchQuery: string) => {
-      if (searchContext) {
-        searchContext.setSearchQuery(searchQuery);
-      }
-      
-      if (onSearch) {
-        onSearch(searchQuery);
-      }
-      
-      // Don't navigate to /search page - results will be shown inline
-      // if (searchQuery.trim()) {
-      //   const searchParams = new URLSearchParams(window.location.search);
-      //   searchParams.set('q', searchQuery);
-      //   navigate(`/search?${searchParams.toString()}`, { replace: true });
-      // }
-    },
-    [onSearch, searchContext]
-  );
-
-  useEffect(() => {
-    if (query === initialValue) return;
-
-    const handler = setTimeout(() => {
-      debouncedSearch(query);
-      setIsTyping(false);
-    }, debounceMs);
-
-    return () => {
-      clearTimeout(handler);
-      setIsTyping(false);
-    };
-  }, [query, debounceMs, debouncedSearch, initialValue]);
-
+  // Handle search query changes - directly use context's debounced search
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
-    setIsTyping(true);
+    
+    // Use context's debounced search if available
+    if (searchContext) {
+      searchContext.setSearchQuery(value);
+    }
+    
+    // Call onSearch callback if provided
+    if (onSearch) {
+      onSearch(value);
+    }
   };
 
   const handleClear = () => {
     setQuery('');
-    setIsTyping(false);
     
     if (searchContext) {
       searchContext.clearSearch();
@@ -78,16 +49,20 @@ export function SearchBar({
     if (onSearch) {
       onSearch('');
     }
-    
-    // Don't navigate to /search page - results are shown inline
-    // navigate('/search', { replace: true });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      debouncedSearch(query);
-      setIsTyping(false);
+      // Use context's search if available
+      if (searchContext) {
+        searchContext.setSearchQuery(query);
+      }
+      
+      // Call onSearch callback if provided
+      if (onSearch) {
+        onSearch(query);
+      }
     }
   };
 
@@ -118,15 +93,6 @@ export function SearchBar({
           </button>
         )}
       </div>
-      
-      {/* Typing indicator */}
-      {isTyping && (
-        <div className="absolute top-full left-0 right-0 mt-1 flex justify-center">
-          <div className="text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-1 rounded">
-            टाइप गर्दैछु...
-          </div>
-        </div>
-      )}
       
       {/* Search tips */}
       {!query && (
