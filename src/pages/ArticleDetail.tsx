@@ -77,7 +77,7 @@ export function ArticleDetail() {
   const displayedRelatedArticles = relatedError ? fallbackRelatedArticles : relatedArticles;
   // Clean date by removing trailing " 0" if present
   const cleanedDate = article.date ? article.date.replace(/ 0$/, '') : article.date;
-  const siteName = config?.siteName || 'यात्रिपति';
+  const siteName = config?.siteName || 'यत्रिपाटि';
   const pageTitle = `${article.title} - ${siteName}`;
 
   return (
@@ -149,11 +149,7 @@ export function ArticleDetail() {
                   </div>
                 )} */}
                 
-                {article.views && article.views > 0 && (
-                  <div className="flex items-center gap-2">
-                    <span>👁️ {article.views.toLocaleString()} पटक हेरियो</span>
-                  </div>
-                )}
+                {/* Views counter removed */}
               </div>
             </header>
 

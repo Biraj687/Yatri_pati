@@ -60,13 +60,19 @@ export interface ApiResponse {
 
 // Normalization function to handle backend dataset variation
 export function normalizeArticle(rawArticle: any): Article {
+  // Clean date by removing trailing " 0" if present
+  let cleanedDate = rawArticle.date || rawArticle.published_at || rawArticle.createdAt || rawArticle.publishedDate || new Date().toLocaleDateString('ne-NP');
+  if (cleanedDate) {
+    cleanedDate = cleanedDate.replace(/ 0$/, '');
+  }
+  
   return {
     id: rawArticle.id || rawArticle._id || rawArticle.articleId || Math.random(),
     title: rawArticle.title || rawArticle.headline || rawArticle.name || '',
     image: rawArticle.image || rawArticle.thumbnail || rawArticle.thumb || rawArticle.imageUrl || '',
     excerpt: rawArticle.excerpt || rawArticle.summary || rawArticle.description || rawArticle.intro || '',
     author: rawArticle.author || rawArticle.writer || rawArticle.authorName || 'बिराज प्याकुरेल',
-    date: rawArticle.date || rawArticle.published_at || rawArticle.createdAt || rawArticle.publishedDate || new Date().toLocaleDateString('ne-NP'),
+    date: cleanedDate,
     category: rawArticle.category || rawArticle.type || rawArticle.channel || rawArticle.section || 'समाचार',
     authorAvatar: rawArticle.authorAvatar || rawArticle.avatar || rawArticle.profileImage || ppImage,
     content: rawArticle.content || rawArticle.body || rawArticle.article || undefined,
