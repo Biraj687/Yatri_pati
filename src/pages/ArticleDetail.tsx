@@ -149,7 +149,7 @@ export function ArticleDetail() {
                   </div>
                 )} */}
                 
-                {article.views && (
+                {article.views && article.views > 0 && (
                   <div className="flex items-center gap-2">
                     <span>👁️ {article.views.toLocaleString()} पटक हेरियो</span>
                   </div>
