@@ -5,7 +5,7 @@ import { CompactArticle } from '../components/CompactArticle';
 import { SkeletonLoader } from '../components/SkeletonLoader';
 import { fetchNewsDataWithRetry } from '../services/newsService';
 import type { Article } from '../services/newsService';
-import { useSiteConfig } from '../SiteConfigContext';
+import { useSiteConfig } from '../context/SiteConfigContext';
 
 import { AccordionSection } from '../components/AccordionSection';
 

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { fetchSiteConfig } from './services/newsService';
-import type { SiteConfig } from './services/newsService';
+import { fetchSiteConfig } from '../services/newsService';
+import type { SiteConfig } from '../services/newsService';
 
 interface SiteConfigContextType {
   config: SiteConfig | null;

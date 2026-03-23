@@ -18,7 +18,7 @@ export function AccordionSection({ title = 'विशेष सिफारि�
         const data = await fetchNewsData();
         // Use a subset of articles for the accordion
         const all = [data.hero, data.featured, ...data.articles].filter((a): a is Article => a !== null);
-        const sliced = all.slice(4, 7);
+        const sliced = all.slice(4, 9);
         setArticles(sliced);
         if (sliced.length > 0) setActiveId(sliced[0].id);
       } catch (error) {
@@ -42,7 +42,7 @@ export function AccordionSection({ title = 'विशेष सिफारि�
           {title}
         </h2>
         
-        <div className="flex flex-col lg:flex-row gap-4 h-[1000px] lg:h-[600px] w-full overflow-hidden">
+        <div className="flex flex-col lg:flex-row gap-4 h-auto lg:h-[600px] w-full overflow-hidden">
           {articles.map((article) => {
             const isActive = activeId === article.id;
             
@@ -53,7 +53,7 @@ export function AccordionSection({ title = 'विशेष सिफारि�
                 onMouseEnter={() => setActiveId(article.id)}
                 className={`relative overflow-hidden rounded-3xl transition-all duration-700 ease-in-out group shadow-md
                   ${isActive ? 'lg:w-[60%] flex-grow' : 'lg:w-[20%] flex-grow-0'}
-                  flex-1 lg:flex-none h-full`}
+                  w-full lg:flex-none h-64 lg:h-full`}
               >
                 {/* Background Image */}
                 <img

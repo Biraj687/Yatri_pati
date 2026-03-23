@@ -87,7 +87,7 @@ export function HospitalitySection({
                       <Link
                         key={article.id}
                         to={`/article/${article.id}`}
-                        className="relative flex-1 overflow-hidden rounded-3xl group shadow-lg transition-all duration-500 hover:shadow-xl"
+                        className="relative flex-1 overflow-hidden rounded-3xl group shadow-lg transition-all duration-500 hover:shadow-xl min-h-[300px] md:min-h-0"
                       >
                         <img
                           src={article.image}
@@ -115,9 +115,9 @@ export function HospitalitySection({
                       <Link
                         key={article.id}
                         to={`/article/${article.id}`}
-                        className="group flex-1 flex gap-6 items-center bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-2xl transition-all duration-300 hover:shadow-md hover:bg-gray-50/50 dark:hover:bg-gray-700/50 p-4"
+                        className="group flex-1 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-2xl transition-all duration-300 hover:shadow-md hover:bg-gray-50/50 dark:hover:bg-gray-700/50 p-4"
                       >
-                        <div className="w-32 h-32 md:w-48 md:h-40 rounded-xl overflow-hidden shadow-sm flex-shrink-0 group-hover:shadow-md transition-all duration-500">
+                        <div className="w-full sm:w-32 h-48 sm:h-32 md:w-48 md:h-40 rounded-xl overflow-hidden shadow-sm flex-shrink-0 group-hover:shadow-md transition-all duration-500">
                           <img
                             src={article.image}
                             alt={article.title}
@@ -130,10 +130,10 @@ export function HospitalitySection({
                           </h4>
                           <div className="flex items-center gap-2">
                             <div className="w-7 h-7 rounded-full overflow-hidden border border-gray-100 dark:border-gray-700 flex-shrink-0">
-                                <img 
-                                  src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
-                                  alt={article.author} 
-                                  className="w-full h-full object-cover" 
+                                <img
+                                  src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`}
+                                  alt={article.author}
+                                  className="w-full h-full object-cover"
                                 />
                             </div>
                             <div className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">

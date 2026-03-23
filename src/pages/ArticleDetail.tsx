@@ -1,191 +1,262 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiClock, FiShare2, FiArrowLeft, FiUser, FiCalendar } from 'react-icons/fi';
 import { SkeletonLoader } from '../components/SkeletonLoader';
 import { CompactArticle } from '../components/CompactArticle';
-import { fetchNewsData, fetchArticleById } from '../services/newsService';
-import type { Article } from '../services/newsService';
-import { useSiteConfig } from '../SiteConfigContext';
+import { ErrorState } from '../components/ErrorState';
+import { OptimizedImage } from '../components/OptimizedImage';
+import { useArticle, useNews } from '../hooks/useNews';
+import { useSiteConfig } from '../context/SiteConfigContext';
+import { generateSlug } from '../utils/stringUtils';
 
 export function ArticleDetail() {
-  const { id } = useParams<{ id: string }>();
-  const [article, setArticle] = useState<Article | null>(null);
-  const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const { config, loading: configLoading } = useSiteConfig();
 
-  useEffect(() => {
-    const loadArticle = async () => {
-      setLoading(true);
-      try {
-        const found = await fetchArticleById(id as string);
-        
-        if (found) {
-          setArticle(found);
-          // For related articles, we can still fetch the main news or use a dedicated related endpoint if available
-          const data = await fetchNewsData();
-          const allArticles = [data.hero, data.featured, ...data.articles];
-          const related = allArticles
-            .filter(a => String(a.id) !== id && a.category === found.category)
-            .slice(0, 4);
-          
-          setRelatedArticles(related.length > 0 ? related : allArticles.filter(a => String(a.id) !== id).slice(0, 4));
-        }
-      } catch (err) {
-        console.error("Failed to load article", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    window.scrollTo(0, 0);
-    loadArticle();
-  }, [id]);
+  const {
+    article,
+    isLoading: articleLoading,
+    error: articleError,
+    refetch: refetchArticle
+  } = useArticle({
+    slug: slug || '',
+    enabled: !!slug
+  });
 
-  if (loading || configLoading) return <SkeletonLoader type="detail" />;
-  if (!article) return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-12 min-h-[60vh] flex flex-col items-center justify-center text-white">
-      <h2 className="text-2xl font-bold mb-4">समाचार फेला परेन।</h2>
-      <Link to="/" className="text-primary-400 hover:underline flex items-center gap-2">
-        <FiArrowLeft /> गृहपृष्ठमा फर्कनुहोस्
-      </Link>
-    </div>
-  );
+  const {
+    data: relatedData,
+    isLoading: relatedLoading,
+    error: relatedError
+  } = useNews({
+    category: article?.category,
+    limit: 4,
+    enabled: !!article?.category
+  });
+
+  const handleShare = () => {
+    if (navigator.share && article) {
+      navigator.share({
+        title: article.title,
+        text: article.excerpt,
+        url: window.location.href
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('लिङ्क क्लिपबोर्डमा कपी गरियो!');
+    }
+  };
+
+  if (articleLoading || configLoading) {
+    return <SkeletonLoader type="detail" />;
+  }
+
+  if (articleError) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-12 min-h-[60vh]">
+        <ErrorState
+          title="समाचार लोड गर्न असफल"
+          message="यो समाचार लोड गर्न असफल भयो। कृपया पुनः प्रयास गर्नुहोस्।"
+          onRetry={refetchArticle}
+        />
+      </div>
+    );
+  }
+
+  if (!article) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-12 min-h-[60vh] flex flex-col items-center justify-center">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">समाचार फेला परेन।</h2>
+        <Link to="/" className="text-primary-600 hover:underline flex items-center gap-2">
+          <FiArrowLeft /> गृहपृष्ठमा फर्कनुहोस्
+        </Link>
+      </div>
+    );
+  }
+
+  const relatedArticles = relatedData?.data || [];
+  const siteName = config?.siteName || 'यात्रिपति';
+  const pageTitle = `${article.title} - ${siteName}`;
 
   return (
-    <article className="w-full text-gray-900 min-h-screen pb-20 bg-white">
+    <>
       <Helmet>
-        <title>{`${article.title} - ${config?.siteName || 'Yatripati'}`}</title>
+        <title>{pageTitle}</title>
         <meta name="description" content={article.excerpt} />
         <meta property="og:title" content={article.title} />
         <meta property="og:description" content={article.excerpt} />
         <meta property="og:image" content={article.image} />
         <meta property="og:type" content="article" />
+        <meta property="og:url" content={window.location.href} />
       </Helmet>
 
-      {/* Hero Header Section */}
-      <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
-        <img
-          src={article.image}
-          alt={article.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-full px-4 md:px-8 lg:px-[5rem] py-6 md:py-10">
-          <div className="max-w-7xl mx-auto">
-            <Link to={`/category/${article.category?.toLowerCase() || 'news'}`} className="inline-block bg-primary-600 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider mb-3 hover:bg-primary-700 transition-colors">
-              {article.category || 'समाचार'}
-            </Link>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white drop-shadow-xl">
-              {article.title}
-            </h1>
-            <div className="flex flex-wrap items-center gap-4 text-xs md:text-sm text-gray-200">
-              <div className="flex items-center gap-2">
-                <FiUser className="text-primary-400 w-4 h-4" />
-                <span className="font-semibold text-white">{article.author}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FiCalendar className="text-primary-400 w-4 h-4" />
-                <span>{article.date}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FiClock className="text-primary-400 w-4 h-4" />
-                <span>{article.readTime || '५ मिनेट पढ्नुहोस्'}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <article className="w-full text-gray-900 dark:text-gray-100 min-h-screen pb-20 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-14 flex flex-col lg:flex-row gap-16 text-left">
+          {/* Main Content */}
+          <div className="flex-1">
+            {/* Breadcrumb */}
+            <nav className="mb-8">
+              <ol className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <li>
+                  <Link to="/" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                    गृहपृष्ठ
+                  </Link>
+                </li>
+                <li>/</li>
+                {article.category && (
+                  <>
+                    <li>
+                      <Link 
+                        to={`/category/${generateSlug(article.category)}`}
+                        className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      >
+                        {article.category}
+                      </Link>
+                    </li>
+                    <li>/</li>
+                  </>
+                )}
+                <li className="text-gray-900 dark:text-gray-300 font-medium truncate">
+                  {article.title}
+                </li>
+              </ol>
+            </nav>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-14 flex flex-col lg:flex-row gap-16 text-left">
-        {/* Main Content */}
-        <div className="flex-grow min-w-0">
-          <div className="prose prose-lg md:prose-xl max-w-none text-gray-800">
-            <p className="text-xl md:text-2xl leading-relaxed text-primary-900 italic mb-10 border-l-4 border-primary-600 pl-6 py-4 bg-blue-50 rounded-r-lg font-medium">
-              {article.excerpt}
-            </p>
-            
-            <div className="space-y-8 leading-relaxed text-lg text-gray-800">
+            {/* Article Header */}
+            <header className="mb-10">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+                {article.title}
+              </h1>
+              
+              <div className="flex flex-wrap items-center gap-4 md:gap-6 text-sm md:text-base text-gray-600 dark:text-gray-400 mb-8">
+                <div className="flex items-center gap-2">
+                  <FiUser className="w-4 h-4" />
+                  <span className="font-medium">{article.author}</span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <FiCalendar className="w-4 h-4" />
+                  <span>{article.date}</span>
+                </div>
+                
+                {article.readTime && (
+                  <div className="flex items-center gap-2">
+                    <FiClock className="w-4 h-4" />
+                    <span>{article.readTime}</span>
+                  </div>
+                )}
+                
+                {article.views && (
+                  <div className="flex items-center gap-2">
+                    <span>👁️ {article.views.toLocaleString()} पटक हेरियो</span>
+                  </div>
+                )}
+              </div>
+            </header>
+
+            {/* Featured Image */}
+            {article.image && (
+              <figure className="my-10">
+                <OptimizedImage
+                  src={article.image}
+                  alt={article.title}
+                  className="w-full h-auto rounded-2xl shadow-lg"
+                  width={800}
+                  height={450}
+                  lazy={true}
+                  priority={true}
+                  fallbackSrc="https://via.placeholder.com/800x450?text=Image+Not+Available"
+                />
+                {article.source && (
+                  <figcaption className="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">
+                    स्रोत: {article.source}
+                  </figcaption>
+                )}
+              </figure>
+            )}
+
+            {/* Article Content */}
+            <div className="prose prose-lg dark:prose-invert max-w-none">
               {article.content ? (
-                // Display real content from backend
-                <div className="prose prose-lg md:prose-xl max-w-none">
+                <div className="space-y-6">
                   {article.content.split('\n\n').map((paragraph, idx) => (
-                    <p key={idx} className="mb-6">
+                    <p key={idx} className="leading-relaxed">
                       {paragraph}
                     </p>
                   ))}
                 </div>
               ) : (
-                // Fallback placeholder content
-                <>
-                  <p>
-                    यो समाचारको विस्तृत विवरण यहाँ राखिनेछ। अहिलेका लागि हामीले डेटाबेसबाट संकलन गरेको संक्षिप्त विवरण यहाँ देखाइएको छ।
-                    यस पोर्टलमा हामीले नेपाल र विश्वका पछिल्ला घटनाक्रमहरूलाई समेट्ने प्रयास गरेका छौं।
+                <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 rounded-xl p-6">
+                  <p className="text-blue-800 dark:text-blue-200">
+                    यस समाचारको पूर्ण विवरण उपलब्ध छैन। थप विवरणका लागि मूल स्रोत हेर्नुहोस्।
                   </p>
-
-                  <figure className="my-10">
-                    <img
-                      src={article.image}
-                      alt="Contextual"
-                      className="rounded-xl w-full h-auto shadow-xl"
-                    />
-                    <figcaption className="text-center text-sm text-gray-500 mt-4 italic">
-                      तस्बिर: {article.title} सम्बन्धी एक झलक
-                    </figcaption>
-                  </figure>
-
-                  <p>
-                    पर्यटन, संस्कृति, र प्रविधिको क्षेत्रमा भइरहेका परिवर्तनहरूलाई हामीले नजिकबाट नियालिरहेका छौं।
-                    हाम्रो उद्देश्य पाठकहरूलाई सही र निष्पक्ष जानकारी प्रदान गर्नु हो। हामी विश्वास गर्छौं कि सूचनाले समाजलाई सुसूचित र सचेत बनाउन मद्दत गर्दछ।
-                  </p>
-
-                  <p>
-                    थप जानकारीका लागि हाम्रा अन्य लेखहरू पनि पढ्न सक्नुहुन्छ। हामी निरन्तर ताजा र गहन विश्लेषणहरू पाठकमाझ पुर्याउने वाचा गर्दछौं।
-                  </p>
-                </>
+                </div>
               )}
             </div>
-          </div>
 
-          {/* Bottom Actions */}
-          <div className="mt-12 pt-8 border-t border-gray-200 flex flex-wrap items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <span className="text-gray-600 font-bold">साझेदारी गर्नुहोस्:</span>
-              <button className="p-3 bg-primary-600 rounded-full hover:bg-primary-700 transition-all hover:scale-110 active:scale-95 shadow-md group">
-                <FiShare2 className="text-white" />
+            {/* Article Actions */}
+            <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <FiArrowLeft />
+                फिर्ता जानुहोस्
               </button>
-              <button className="p-3 bg-sky-500 rounded-full hover:bg-sky-600 transition-all hover:scale-110 shadow-md">
-                <FiShare2 className="text-white transform rotate-12" />
-              </button>
-            </div>
-            
-            <Link to="/" className="flex items-center gap-2 text-primary-600 hover:text-primary-700 transition-colors font-bold">
-              <FiArrowLeft /> सबै समाचारहरू हेर्नुहोस्
-            </Link>
-          </div>
-        </div>
-
-        {/* Sidebar / Related */}
-        <aside className="w-full lg:w-96 flex-shrink-0">
-          <div className="sticky top-24 space-y-10">
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-b-2 border-primary-600 pb-3">
-                सम्बन्धित समाचार
-              </h3>
-              <div className="space-y-3">
-                {relatedArticles.map((rel, index) => (
-                  <CompactArticle 
-                    key={rel.id} 
-                    article={rel} 
-                    index={index} 
-                    minimal={true}
-                  />
-                ))}
+              
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={handleShare}
+                  className="inline-flex items-center gap-2 px-5 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
+                >
+                  <FiShare2 />
+                  सेयर गर्नुहोस्
+                </button>
               </div>
             </div>
           </div>
-        </aside>
-      </div>
-    </article>
+
+          {/* Sidebar */}
+          <aside className="w-full lg:w-96 flex-shrink-0">
+            <div className="sticky top-24">
+              <h3 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+                सम्बन्धित समाचार
+              </h3>
+              
+              {relatedLoading ? (
+                <div className="space-y-4">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className="h-32 bg-gray-100 dark:bg-gray-800 rounded-xl animate-pulse"></div>
+                  ))}
+                </div>
+              ) : relatedError ? (
+                <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
+                  <p className="text-red-600 dark:text-red-400">
+                    सम्बन्धित समाचार लोड गर्न असफल
+                  </p>
+                </div>
+              ) : relatedArticles.length > 0 ? (
+                <div className="space-y-6">
+                  {relatedArticles.map((relatedArticle, index) => (
+                    <CompactArticle 
+                      key={relatedArticle.id} 
+                      article={relatedArticle}
+                      minimal={false}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl text-center">
+                  <p className="text-gray-600 dark:text-gray-400">
+                    यस श्रेणीमा अरू समाचार उपलब्ध छैन।
+                  </p>
+                </div>
+              )}
+            </div>
+          </aside>
+        </div>
+      </article>
+    </>
   );
 }

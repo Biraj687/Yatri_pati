@@ -5,7 +5,7 @@ import { SkeletonLoader } from '../components/SkeletonLoader';
 import { CompactArticle } from '../components/CompactArticle';
 import { fetchNewsData, fetchArticlesByCategory } from '../services/newsService';
 import type { Article } from '../services/newsService';
-import { useSiteConfig } from '../SiteConfigContext';
+import { useSiteConfig } from '../context/SiteConfigContext';
 
 export function CategoryPage() {
   const { categoryName } = useParams<{ categoryName: string }>();

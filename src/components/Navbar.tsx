@@ -2,34 +2,35 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FiSearch, FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi'
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa'
-import { useSiteConfig } from '../SiteConfigContext'
+import { useSiteConfig } from '../context/SiteConfigContext'
+import { useTheme } from '../context/ThemeContext'
+import { useSearch } from '../context/SearchContext'
+import { SearchBar } from './SearchBar'
 import { NepaliDate } from 'nepali-date-library'
 import logoSvg from '../assets/logo.svg'
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [searchModalOpen, setSearchModalOpen] = useState(false)
   const location = useLocation()
   const { config, loading } = useSiteConfig()
+  const { toggleTheme, isDark } = useTheme()
+  const { openSearch, closeSearch } = useSearch()
   
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light')
   const [todayBS, setTodayBS] = useState<NepaliDate | null>(null)
 
   useEffect(() => {
     setTodayBS(new NepaliDate())
   }, [])
 
+  const handleSearchClick = () => {
+    setSearchModalOpen(true)
+    openSearch()
+  }
 
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-    localStorage.setItem('theme', theme)
-  }, [theme])
-
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark')
+  const handleCloseSearch = () => {
+    setSearchModalOpen(false)
+    closeSearch()
   }
 
   const getSocialIcon = (platform: string) => {
@@ -104,14 +105,18 @@ export function Navbar() {
 
         {/* Right tools (Search, Theme) */}
         <div className="flex items-center gap-4 md:absolute md:right-8 lg:right-[5rem]">
-          <button 
+          <button
             onClick={toggleTheme}
-            className="text-gray-800 dark:text-gray-200 hover:opacity-70 transition-opacity" 
+            className="text-gray-800 dark:text-gray-200 hover:opacity-70 transition-opacity"
             aria-label="Theme Toggle"
           >
-            {theme === 'dark' ? <FiMoon size={20} /> : <FiSun size={20} />}
+            {isDark ? <FiMoon size={20} /> : <FiSun size={20} />}
           </button>
-          <button className="text-gray-800 dark:text-gray-200 hover:opacity-70 transition-opacity" aria-label="Search">
+          <button
+            onClick={handleSearchClick}
+            className="text-gray-800 dark:text-gray-200 hover:opacity-70 transition-opacity"
+            aria-label="Search"
+          >
             <FiSearch size={20} />
           </button>
         </div>
@@ -200,6 +205,36 @@ export function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Search Modal */}
+      {searchModalOpen && (
+        <div className="fixed inset-0 bg-black/60 z-[60] flex items-start justify-center pt-20 md:pt-32 px-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-2xl p-6 relative">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">समाचार खोज्नुहोस्</h3>
+              <button
+                onClick={handleCloseSearch}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                aria-label="Close search"
+              >
+                <FiX size={24} />
+              </button>
+            </div>
+            
+            <SearchBar
+              autoFocus={true}
+              useContext={true}
+              className="mb-6"
+            />
+            
+            {/* Search results would go here */}
+            <div className="text-center text-gray-500 dark:text-gray-400 py-8">
+              <FiSearch size={48} className="mx-auto mb-4 opacity-30" />
+              <p>खोज्नको लागि टाइप गर्नुहोस्...</p>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   )
 }

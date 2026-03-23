@@ -2,18 +2,22 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import type { Article } from '../services/newsService';
+import { generateSlug } from '../utils/stringUtils';
+import { OptimizedImage } from './OptimizedImage';
 
-export function CompactArticle({ 
-  article, 
-  index, 
-  minimal = false 
-}: { 
-  article: Article, 
+export function CompactArticle({
+  article,
+  index,
+  minimal = false
+}: {
+  article: Article,
   index: number,
-  minimal?: boolean 
+  minimal?: boolean
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(ref as import('react').RefObject<Element>, { threshold: 0.1, rootMargin: '-50px 0px' });
+  const slug = generateSlug(article.title);
+  const articleUrl = `/news/${slug}`;
   
   return (
     <article
@@ -23,14 +27,18 @@ export function CompactArticle({
         ${isVisible ? 'opacity-100 translate-y-0' : ''}`}
       style={{ animationDelay: `${index * 0.1}s`, transition: 'opacity 0.6s ease, transform 0.6s ease' }}
     >
-      <Link to={`/article/${article.id}`} className={`flex gap-4 items-center ${minimal ? 'h-auto' : 'h-full'}`}>
+      <Link to={articleUrl} className={`flex gap-4 items-center ${minimal ? 'h-auto' : 'h-full'}`}>
         {/* Thumbnail */}
         <div className={`overflow-hidden rounded-lg flex-shrink-0 transition-all duration-300
           ${minimal ? 'w-24 h-20 md:w-28 md:h-24' : 'w-32 h-24 md:w-40 md:h-28'}`}>
-          <img 
-            src={article.image} 
-            alt="Thumbnail" 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+          <OptimizedImage
+            src={article.image}
+            alt={article.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            width={minimal ? 112 : 160}
+            height={minimal ? 96 : 112}
+            lazy={true}
+            fallbackSrc="https://via.placeholder.com/200x150?text=Image+Not+Available"
           />
         </div>
         
@@ -42,10 +50,14 @@ export function CompactArticle({
           </h3>
           <div className={`flex items-center text-gray-600 dark:text-gray-400 ${minimal ? 'mb-0.5 text-[10px] md:text-xs' : 'mb-2 text-xs md:text-sm'}`}>
             <div className="w-5 h-5 rounded-full overflow-hidden mr-2 border border-gray-100 flex-shrink-0">
-               <img 
-                src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
-                alt="Author" 
-                className="w-full h-full object-cover" 
+              <OptimizedImage
+                src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`}
+                alt={article.author}
+                className="w-full h-full object-cover"
+                width={20}
+                height={20}
+                lazy={true}
+                fallbackSrc="https://ui-avatars.com/api/?name=Author&background=random"
               />
             </div>
             <span className="font-semibold text-gray-700 dark:text-gray-300 truncate">{article.author}</span>
