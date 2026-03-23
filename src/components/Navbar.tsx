@@ -1,21 +1,30 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FiSearch, FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi'
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa'
 import { useSiteConfig } from '../context/SiteConfigContext'
 import { useTheme } from '../context/ThemeContext'
 import { useSearch } from '../context/SearchContext'
-import { SearchBar } from './SearchBar'
+import { SearchBar, SearchResults } from './SearchBar'
 import { NepaliDate } from 'nepali-date-library'
 import logoSvg from '../assets/logo.svg'
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchModalOpen, setSearchModalOpen] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const location = useLocation()
   const { config, loading } = useSiteConfig()
   const { toggleTheme, isDark } = useTheme()
-  const { openSearch, closeSearch } = useSearch()
+  const {
+    openSearch,
+    closeSearch,
+    searchQuery,
+    searchResults,
+    isSearching,
+    searchError
+  } = useSearch()
+  const navigate = useNavigate()
   
   const [todayBS, setTodayBS] = useState<NepaliDate | null>(null)
 
@@ -31,6 +40,14 @@ export function Navbar() {
   const handleCloseSearch = () => {
     setSearchModalOpen(false)
     closeSearch()
+  }
+
+  const handleSearchResultClick = (result: any) => {
+    // Navigate to the article detail page
+    if (result.id) {
+      navigate(`/news/${result.id}`)
+      handleCloseSearch()
+    }
   }
 
   const getSocialIcon = (platform: string) => {
@@ -57,7 +74,7 @@ export function Navbar() {
   const formattedBS = todayBS ? todayBS.format('d mmmm yyyy, dddd') : '';
 
   return (
-    <nav className="bg-white dark:bg-gray-900 sticky top-0 z-50 transition-colors duration-300 flex flex-col items-center w-full border-b-4 border-double border-gray-900 dark:border-gray-100">
+    <nav className="bg-white dark:bg-gray-900 sticky top-0 z-50 transition-colors duration-300 flex flex-col items-center w-full border-b-8 border-double border-gray-900 dark:border-gray-100">
       {/* Very Top Row: Date | Ticker | Socials */}
       <div className="hidden md:flex w-full items-center justify-between px-4 md:px-8 lg:px-[5rem] py-2 border-b border-gray-100 dark:border-gray-800">
         <div className="flex-1 text-[11px] md:text-sm font-noto font-bold text-gray-900 dark:text-gray-100">
@@ -174,33 +191,51 @@ export function Navbar() {
 
           <div className="flex-1 overflow-y-auto pb-8">
             <div className="space-y-1">
-              {config.navigation.map((item) => (
-                <div key={item.label}>
-                  <Link
-                    to={item.path}
-                    className={`block py-3 px-2 text-lg font-bold transition-colors ${
-                      isActive(item.path) ? 'text-red-600 dark:text-red-400' : 'text-gray-800 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400'
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                  {item.hasDropdown && item.dropdownItems && (
-                    <div className="pl-4 space-y-2 mb-4 border-l-2 border-gray-100 ml-2">
-                      {item.dropdownItems.map((sub) => (
-                        <Link 
-                          key={sub.label} 
-                          to={sub.path} 
-                          className="block py-2 text-gray-600 hover:text-red-600 text-sm"
-                          onClick={() => setMobileMenuOpen(false)}
+              {config.navigation.map((item) => {
+                const isDropdownOpen = openDropdown === item.label;
+                return (
+                  <div key={item.label}>
+                    <div className="flex items-center justify-between">
+                      <Link
+                        to={item.path}
+                        className={`block py-3 px-2 text-lg font-bold transition-colors flex-1 ${
+                          isActive(item.path) ? 'text-black dark:text-white' : 'text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white'
+                        }`}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                      {item.hasDropdown && item.dropdownItems && (
+                        <button
+                          type="button"
+                          className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                          onClick={() => setOpenDropdown(isDropdownOpen ? null : item.label)}
+                          aria-label={isDropdownOpen ? 'Close dropdown' : 'Open dropdown'}
                         >
-                          {sub.label}
-                        </Link>
-                      ))}
+                          {isDropdownOpen ? '−' : '+'}
+                        </button>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))}
+                    {item.hasDropdown && item.dropdownItems && isDropdownOpen && (
+                      <div className="pl-4 space-y-2 mb-4 border-l-2 border-gray-100 ml-2">
+                        {item.dropdownItems.map((sub) => (
+                          <Link
+                            key={sub.label}
+                            to={sub.path}
+                            className="block py-2 text-gray-600 hover:text-gray-900 dark:hover:text-gray-100 text-sm"
+                            onClick={() => {
+                              setMobileMenuOpen(false);
+                              setOpenDropdown(null);
+                            }}
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -227,11 +262,25 @@ export function Navbar() {
               className="mb-6"
             />
             
-            {/* Search results would go here */}
-            <div className="text-center text-gray-500 dark:text-gray-400 py-8">
-              <FiSearch size={48} className="mx-auto mb-4 opacity-30" />
-              <p>खोज्नको लागि टाइप गर्नुहोस्...</p>
-            </div>
+            {/* Search results - only show when there's a query or results */}
+            {(searchQuery.trim() || searchResults.length > 0 || isSearching || searchError) && (
+              <SearchResults
+                query={searchQuery}
+                results={searchResults}
+                isLoading={isSearching}
+                error={searchError ? new Error(searchError) : null}
+                onResultClick={handleSearchResultClick}
+                className="max-h-[60vh] overflow-y-auto"
+              />
+            )}
+            
+            {/* Show placeholder only when no query, not searching, no results, and no error */}
+            {!searchQuery.trim() && !isSearching && searchResults.length === 0 && !searchError && (
+              <div className="text-center text-gray-500 dark:text-gray-400 py-8">
+                <FiSearch size={48} className="mx-auto mb-4 opacity-30" />
+                <p>खोज्नको लागि टाइप गर्नुहोस्...</p>
+              </div>
+            )}
           </div>
         </div>
       )}

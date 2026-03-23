@@ -405,9 +405,11 @@ export const searchArticles = async (query: string, limit?: number): Promise<Art
       const mockData = await fetchNewsData();
       const allArticles = [mockData.hero, mockData.featured, ...mockData.articles];
       const lowerQuery = query.toLowerCase();
-      let filtered = allArticles.filter(a => 
-        a.title.toLowerCase().includes(lowerQuery) || 
-        a.excerpt.toLowerCase().includes(lowerQuery)
+      let filtered = allArticles.filter(a =>
+        a.title.toLowerCase().includes(lowerQuery) ||
+        a.excerpt.toLowerCase().includes(lowerQuery) ||
+        (a.author && a.author.toLowerCase().includes(lowerQuery)) ||
+        (a.category && a.category.toLowerCase().includes(lowerQuery))
       );
       if (limit) filtered = filtered.slice(0, limit);
       return filtered;
@@ -438,9 +440,11 @@ export const searchArticles = async (query: string, limit?: number): Promise<Art
       const fallbackData = await fetchNewsData();
       const allArticles = [fallbackData.hero, fallbackData.featured, ...fallbackData.articles];
       const lowerQuery = query.toLowerCase();
-      let filtered = allArticles.filter(a => 
-        a.title.toLowerCase().includes(lowerQuery) || 
-        a.excerpt.toLowerCase().includes(lowerQuery)
+      let filtered = allArticles.filter(a =>
+        a.title.toLowerCase().includes(lowerQuery) ||
+        a.excerpt.toLowerCase().includes(lowerQuery) ||
+        (a.author && a.author.toLowerCase().includes(lowerQuery)) ||
+        (a.category && a.category.toLowerCase().includes(lowerQuery))
       );
       if (limit) filtered = filtered.slice(0, limit);
       return filtered;

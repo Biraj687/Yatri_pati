@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FiUser, FiCalendar, FiClock, FiEye } from 'react-icons/fi';
+import { FiUser, FiCalendar, FiEye } from 'react-icons/fi';
 import type { Article } from '../services/newsService';
 import { OptimizedImage } from './OptimizedImage';
 
@@ -140,12 +140,13 @@ export function NewsCard({
               <span>{article.date}</span>
             </div>
             
-            {article.readTime && (
+            {/* Read time removed as per user request */}
+            {/* {article.readTime && (
               <div className="flex items-center gap-1">
                 <FiClock className="w-3 h-3" />
                 <span>{article.readTime}</span>
               </div>
-            )}
+            )} */}
             
             {article.views && (
               <div className="flex items-center gap-1">

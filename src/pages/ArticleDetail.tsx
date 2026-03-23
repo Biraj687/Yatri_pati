@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { FiClock, FiShare2, FiArrowLeft, FiUser, FiCalendar } from 'react-icons/fi';
+import { FiShare2, FiArrowLeft, FiUser, FiCalendar } from 'react-icons/fi';
 import { SkeletonLoader } from '../components/SkeletonLoader';
 import { CompactArticle } from '../components/CompactArticle';
 import { OptimizedImage } from '../components/OptimizedImage';
@@ -139,12 +139,13 @@ export function ArticleDetail() {
                   <span>{article.date}</span>
                 </div>
                 
-                {article.readTime && (
+                {/* Read time removed as per user request */}
+                {/* {article.readTime && (
                   <div className="flex items-center gap-2">
                     <FiClock className="w-4 h-4" />
                     <span>{article.readTime}</span>
                   </div>
-                )}
+                )} */}
                 
                 {article.views && (
                   <div className="flex items-center gap-2">

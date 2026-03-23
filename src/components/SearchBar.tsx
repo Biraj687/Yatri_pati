@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { ChangeEvent } from 'react';
 import { FiSearch, FiX } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
 import { useSearch } from '../context/SearchContext';
 
 interface SearchBarProps {
@@ -25,7 +24,6 @@ export function SearchBar({
 }: SearchBarProps) {
   const [query, setQuery] = useState(initialValue);
   const [isTyping, setIsTyping] = useState(false);
-  const navigate = useNavigate();
   const searchContext = useContext ? useSearch() : null;
 
   // Debounced search function
@@ -39,14 +37,14 @@ export function SearchBar({
         onSearch(searchQuery);
       }
       
-      // Update URL if on search page
-      if (searchQuery.trim()) {
-        const searchParams = new URLSearchParams(window.location.search);
-        searchParams.set('q', searchQuery);
-        navigate(`/search?${searchParams.toString()}`, { replace: true });
-      }
+      // Don't navigate to /search page - results will be shown inline
+      // if (searchQuery.trim()) {
+      //   const searchParams = new URLSearchParams(window.location.search);
+      //   searchParams.set('q', searchQuery);
+      //   navigate(`/search?${searchParams.toString()}`, { replace: true });
+      // }
     },
-    [onSearch, navigate, searchContext]
+    [onSearch, searchContext]
   );
 
   useEffect(() => {
@@ -81,8 +79,8 @@ export function SearchBar({
       onSearch('');
     }
     
-    // Clear search from URL
-    navigate('/search', { replace: true });
+    // Don't navigate to /search page - results are shown inline
+    // navigate('/search', { replace: true });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
