@@ -49,7 +49,7 @@ export function AccordionSection({ title = 'विशेष सिफारि�
             return (
               <Link
                 key={article.id}
-                to={`/article/${article.id}`}
+                to={`/news/${article.id}`}
                 onMouseEnter={() => setActiveId(article.id)}
                 className={`relative overflow-hidden rounded-3xl transition-all duration-700 ease-in-out group shadow-md
                   ${isActive ? 'lg:w-[60%] flex-grow' : 'lg:w-[20%] flex-grow-0'}

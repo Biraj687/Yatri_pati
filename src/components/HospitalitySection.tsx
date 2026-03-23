@@ -86,7 +86,7 @@ export function HospitalitySection({
                     {sectionArticles.slice(0, 2).map((article) => (
                       <Link
                         key={article.id}
-                        to={`/article/${article.id}`}
+                        to={`/news/${article.id}`}
                         className="relative flex-1 overflow-hidden rounded-3xl group shadow-lg transition-all duration-500 hover:shadow-xl min-h-[300px] md:min-h-0"
                       >
                         <img
@@ -114,7 +114,7 @@ export function HospitalitySection({
                     {sectionArticles.slice(2, 6).map((article) => (
                       <Link
                         key={article.id}
-                        to={`/article/${article.id}`}
+                        to={`/news/${article.id}`}
                         className="group flex-1 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-2xl transition-all duration-300 hover:shadow-md hover:bg-gray-50/50 dark:hover:bg-gray-700/50 p-4"
                       >
                         <div className="w-full sm:w-32 h-48 sm:h-32 md:w-48 md:h-40 rounded-xl overflow-hidden shadow-sm flex-shrink-0 group-hover:shadow-md transition-all duration-500">
@@ -156,7 +156,7 @@ export function HospitalitySection({
                   {sectionArticles.map((article) => (
                     <Link
                       key={article.id}
-                      to={`/article/${article.id}`}
+                      to={`/news/${article.id}`}
                       className="flex flex-col group h-full bg-white dark:bg-gray-800 rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-300"
                     >
                       <div className="h-52 overflow-hidden rounded-2xl mb-5 shadow-sm group-hover:shadow-md transition-all duration-300">

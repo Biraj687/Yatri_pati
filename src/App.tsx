@@ -48,7 +48,7 @@ function AppContent() {
           </PortalLayout>
         } />
         
-        <Route path="/news/:slug" element={
+        <Route path="/news/:id" element={
           <PortalLayout>
             <Suspense fallback={<SkeletonLoader type="detail" />}>
               <ArticleDetail />

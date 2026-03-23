@@ -53,7 +53,7 @@ export function GantavySection({ title = 'गन्तव्य' }: GantavySecti
         {/* 2x3 Grid - Equal Width */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {articles.map((article) => (
-            <Link key={article.id} to={`/article/${article.id}`} className="flex flex-col group transition-all duration-300">
+            <Link key={article.id} to={`/news/${article.id}`} className="flex flex-col group transition-all duration-300">
               {/* Image */}
               <div className="mb-5 aspect-[3/2] overflow-hidden rounded-xl group-hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-300">
                 <img

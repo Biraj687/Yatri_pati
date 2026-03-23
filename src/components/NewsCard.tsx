@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FiUser, FiCalendar, FiClock, FiEye } from 'react-icons/fi';
 import type { Article } from '../services/newsService';
-import { generateSlug } from '../utils/stringUtils';
 import { OptimizedImage } from './OptimizedImage';
 
 interface NewsCardProps {
@@ -21,8 +20,7 @@ export function NewsCard({
   showMeta = true,
   className = ''
 }: NewsCardProps) {
-  const slug = generateSlug(article.title);
-  const articleUrl = `/news/${slug}`;
+  const articleUrl = `/news/${article.id}`;
   
   const getVariantClasses = () => {
     switch (variant) {

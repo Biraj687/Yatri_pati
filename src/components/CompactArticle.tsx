@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import type { Article } from '../services/newsService';
-import { generateSlug } from '../utils/stringUtils';
 import { OptimizedImage } from './OptimizedImage';
 
 export function CompactArticle({
@@ -16,8 +15,7 @@ export function CompactArticle({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(ref as import('react').RefObject<Element>, { threshold: 0.1, rootMargin: '-50px 0px' });
-  const slug = generateSlug(article.title);
-  const articleUrl = `/news/${slug}`;
+  const articleUrl = `/news/${article.id}`;
   
   return (
     <article

@@ -83,7 +83,7 @@ export default function NewsPackagesSection({
               {newsArticles.map((article) => (
                 <Link
                   key={article.id}
-                  to={`/article/${article.id}`}
+                  to={`/news/${article.id}`}
                   className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
                 >
                   <div className="flex gap-4 p-4">
@@ -127,7 +127,7 @@ export default function NewsPackagesSection({
               {packageArticles.map((article) => (
                 <Link
                   key={article.id}
-                  to={`/article/${article.id}`}
+                  to={`/news/${article.id}`}
                   className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
                 >
                   <div className="flex gap-4 p-4">

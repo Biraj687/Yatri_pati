@@ -98,9 +98,10 @@ export function useNews(options: UseNewsOptions = {}): UseNewsReturn {
   };
 }
 
-// Hook for fetching a single article by slug
+// Hook for fetching a single article by ID
 interface UseArticleOptions {
-  slug: string;
+  id?: string | number;
+  slug?: string;
   enabled?: boolean;
   onSuccess?: (article: Article | null) => void;
   onError?: (error: Error) => void;
@@ -114,30 +115,37 @@ interface UseArticleReturn {
 }
 
 export function useArticle(options: UseArticleOptions): UseArticleReturn {
-  const { slug, enabled = true, onSuccess, onError } = options;
+  const { id, slug, enabled = true, onSuccess, onError } = options;
 
   const [article, setArticle] = useState<Article | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchArticle = useCallback(async () => {
-    if (!enabled || !slug) return;
+    if (!enabled || (!id && !slug)) return;
 
     setIsLoading(true);
     setError(null);
 
     try {
-      const result = await newsApi.getArticleBySlug(slug);
+      let result: Article | null = null;
+      
+      if (id) {
+        result = await newsApi.getArticleById(id);
+      } else if (slug) {
+        result = await newsApi.getArticleBySlug(slug);
+      }
+      
       setArticle(result);
       onSuccess?.(result);
     } catch (err) {
-      const error = err instanceof Error ? err : new Error(`Failed to fetch article: ${slug}`);
+      const error = err instanceof Error ? err : new Error(`Failed to fetch article: ${id || slug}`);
       setError(error);
       onError?.(error);
     } finally {
       setIsLoading(false);
     }
-  }, [slug, enabled, onSuccess, onError]);
+  }, [id, slug, enabled, onSuccess, onError]);
 
   const refetch = useCallback(async () => {
     await fetchArticle();

@@ -107,7 +107,7 @@ const mockFeaturedArticle = {
   date: '२२ भदौ २०७९, बुधबार'
 };
 
-const mockTargetArticles = [
+export const mockTargetArticles = [
   {
     id: 1,
     title: 'प्रत्येक मानिसले अर्को व्यक्तिलाई प्राकृतिक रूपमा आफू सरह सम्झनुपर्दछ',

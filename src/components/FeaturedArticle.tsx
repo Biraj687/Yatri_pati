@@ -12,7 +12,7 @@ export function FeaturedArticle({ article }: { article: Article }) {
       ref={featuredRef} 
       className={`transition-all duration-300 opacity-0 translate-y-8 text-left h-full ${featuredVisible ? 'opacity-100 translate-y-0' : ''}`}
     >
-      <Link to={`/article/${article.id}`} className="flex flex-col h-full group">
+      <Link to={`/news/${article.id}`} className="flex flex-col h-full group">
         <div className="w-full h-[250px] md:h-[280px] overflow-hidden flex-shrink-0 rounded-xl">
           <img 
             src={article.image} 

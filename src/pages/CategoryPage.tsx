@@ -57,9 +57,9 @@ export function CategoryPage() {
 
   if (loading || configLoading) {
     return (
-      <main className="w-full py-12">
+      <main className="w-full py-12 bg-white dark:bg-gray-900">
         <section className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
-          <div className="h-10 w-48 bg-gray-200 animate-pulse mb-8 rounded"></div>
+          <div className="h-10 w-48 bg-gray-200 dark:bg-gray-700 animate-pulse mb-8 rounded"></div>
           <div className="space-y-6">
             <SkeletonLoader type="compact" />
             <SkeletonLoader type="compact" />
@@ -72,7 +72,7 @@ export function CategoryPage() {
   }
 
   return (
-    <main className="w-full py-12 min-h-[60vh]">
+    <main className="w-full py-12 min-h-[60vh] bg-white dark:bg-gray-900">
       <section className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
         <Helmet>
           <title>{`${displayName} - ${config?.siteName || 'Yatripati'}`}</title>
@@ -80,7 +80,7 @@ export function CategoryPage() {
         </Helmet>
 
         <div className="border-b border-primary-500 mb-10 pb-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wider">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 uppercase tracking-wider">
             {displayName}
           </h1>
         </div>
@@ -95,7 +95,7 @@ export function CategoryPage() {
               />
             ))
           ) : (
-            <p className="text-gray-400 text-center py-20">यस विधामा कुनै समाचार फेला परेन।</p>
+            <p className="text-gray-400 dark:text-gray-500 text-center py-20">यस विधामा कुनै समाचार फेला परेन।</p>
           )}
         </div>
       </section>

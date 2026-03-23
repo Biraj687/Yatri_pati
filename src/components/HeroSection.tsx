@@ -4,7 +4,7 @@ import type { Article } from '../services/newsService';
 export function HeroSection({ heroArticle }: { heroArticle: Article }) {
   return (
     <section className="py-8 px-4 md:px-12 lg:px-20 w-full max-w-[1440px] mx-auto group relative overflow-hidden">
-      <Link to={`/article/${heroArticle.id}`} className="block relative max-w-6xl mx-auto rounded-sxl overflow-hidden shadow-2xl transition-all duration-300" style={{ aspectRatio: '16 / 7' }}>
+      <Link to={`/news/${heroArticle.id}`} className="block relative max-w-6xl mx-auto rounded-sxl overflow-hidden shadow-2xl transition-all duration-300" style={{ aspectRatio: '16 / 7' }}>
         <img 
           src={heroArticle.image} 
           alt="Featured" 

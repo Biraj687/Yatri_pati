@@ -27,7 +27,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children }) => {
   }, []);
 
   // Don't show the big news block on article detail pages to avoid redundancy
-  const showTopBlock = !location.pathname.startsWith('/article/');
+  const showTopBlock = !location.pathname.startsWith('/news/');
 
   return (
     <div className="portal-layout w-full min-h-screen flex flex-col">
