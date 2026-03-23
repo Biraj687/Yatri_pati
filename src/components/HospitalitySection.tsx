@@ -44,7 +44,7 @@ export function HospitalitySection({
           {sections.map((section, idx) => (
             <div key={idx} className={idx > 0 ? "mt-20" : ""}>
               <div className="mb-10">
-                <h2 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-12 font-noto tracking-tight opacity-50">
+                <h2 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-12 font-noto opacity-50">
                   {section.title}
                 </h2>
               </div>
@@ -74,7 +74,7 @@ export function HospitalitySection({
 
           return (
             <div key={idx} className={idx > 0 ? "mt-24 pt-20" : ""}>
-              <h2 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-12 font-noto tracking-tight">
+              <h2 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-12 font-noto">
                 {section.title}
               </h2>
               

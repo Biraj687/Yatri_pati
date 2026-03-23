@@ -80,7 +80,7 @@ export function CategoryPage() {
         </Helmet>
 
         <div className="border-b border-primary-500 mb-10 pb-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 uppercase tracking-wider">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 uppercase">
             {displayName}
           </h1>
         </div>

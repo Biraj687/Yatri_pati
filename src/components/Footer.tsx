@@ -58,7 +58,7 @@ export function Footer() {
           {/* Dynamic Columns */}
           {config.footer.columns.map((column) => (
             <div key={column.title}>
-              <h3 className="text-white font-bold mb-4 border-b border-gray-700 pb-2 uppercase tracking-wider text-sm font-noto">
+              <h3 className="text-white font-bold mb-4 border-b border-gray-700 pb-2 uppercase text-sm font-noto">
                 {column.title}
               </h3>
               <ul className="space-y-3">

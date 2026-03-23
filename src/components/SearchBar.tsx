@@ -166,7 +166,7 @@ export function SearchResults({
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 mt-2 max-h-96 overflow-y-auto ${className}`}>
       <div className="p-2">
-        <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+        <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
           {results.length} परिणाम भेटियो
         </div>
         

@@ -33,7 +33,7 @@ export const TopNewsBlock: React.FC<TopNewsBlockProps> = ({ article, loading }) 
         {/* Centered Content */}
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pb-12 px-6 text-center">
           {/* Category Pill */}
-          <span className="inline-block bg-white/10 backdrop-blur-md text-white text-[11px] md:text-[13px] font-medium px-4 py-1.5 rounded-full border border-white/20 mb-6 uppercase tracking-widest">
+          <span className="inline-block bg-white/10 backdrop-blur-md text-white text-[11px] md:text-[13px] font-medium px-4 py-1.5 rounded-full border border-white/20 mb-6 uppercase">
             {article.category || 'पाइला'}
           </span>
 

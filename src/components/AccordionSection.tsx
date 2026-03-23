@@ -38,7 +38,7 @@ export function AccordionSection({ title = 'विशेष सिफारि�
   return (
     <section className="w-full py-16 border-y border-gray-100 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
-        <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 mb-10 text-left font-noto tracking-tight">
+        <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 mb-10 text-left font-noto">
           {title}
         </h2>
         
@@ -73,7 +73,7 @@ export function AccordionSection({ title = 'विशेष सिफारि�
                   
                   {/* Expanded Content */}
                   <div className={`transition-all duration-500 ${isActive ? 'opacity-100 visible h-auto' : 'opacity-0 invisible h-0 overflow-hidden'}`}>
-                    <span className="inline-block bg-white/20 backdrop-blur-md text-white text-[12px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 border border-white/30">
+                    <span className="inline-block bg-white/20 backdrop-blur-md text-white text-[12px] font-bold px-3 py-1 rounded-full uppercase mb-4 border border-white/30">
                       {article.category || 'समाचार'}
                     </span>
                     
