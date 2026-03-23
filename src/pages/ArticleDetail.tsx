@@ -75,6 +75,8 @@ export function ArticleDetail() {
 
   const relatedArticles = relatedData?.data || [];
   const displayedRelatedArticles = relatedError ? fallbackRelatedArticles : relatedArticles;
+  // Clean date by removing trailing " 0" if present
+  const cleanedDate = article.date ? article.date.replace(/ 0$/, '') : article.date;
   const siteName = config?.siteName || 'यात्रिपति';
   const pageTitle = `${article.title} - ${siteName}`;
 
@@ -136,7 +138,7 @@ export function ArticleDetail() {
                 
                 <div className="flex items-center gap-2">
                   <FiCalendar className="w-4 h-4" />
-                  <span>{article.date}</span>
+                  <span>{cleanedDate}</span>
                 </div>
                 
                 {/* Read time removed as per user request */}
