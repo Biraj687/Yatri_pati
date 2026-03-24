@@ -133,9 +133,9 @@ export function Home() {
             {featured && <FeaturedArticle article={featured} />}
 
             {/* Right: List of compact articles */}
-            <div className="flex flex-col gap-4 h-full bg-white dark:bg-gray-800 rounded-xl p-4 md:p-8">
+            <div className="flex flex-col gap-4 h-full">
               {articles.slice(0, 3).map((article, index) => (
-                <div key={article.id} className="flex-1">
+                <div key={article.id} className="flex-1 min-h-0">
                   <CompactArticle
                     article={article}
                     index={index}

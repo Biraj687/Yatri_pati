@@ -20,19 +20,19 @@ export function CompactArticle({
   return (
     <article
       ref={ref}
-      className={`relative rounded-xl transition-all duration-300 opacity-0 translate-y-4 text-left group
-        ${minimal ? 'p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50' : 'p-4 hover:bg-gray-50 dark:hover:bg-gray-700/30'}
+      className={`relative rounded-xl border border-black dark:border-gray-600 transition-all duration-300 opacity-0 translate-y-4 text-left bg-white dark:bg-gray-800 h-full flex flex-col
+        ${minimal ? 'p-2' : 'p-4'} 
         ${isVisible ? 'opacity-100 translate-y-0' : ''}`}
       style={{ animationDelay: `${index * 0.1}s`, transition: 'opacity 0.6s ease, transform 0.6s ease' }}
     >
-      <Link to={articleUrl} className={`flex gap-4 items-center ${minimal ? 'h-auto' : 'h-full'}`}>
+      <Link to={articleUrl} className={`flex flex-row-reverse gap-4 items-center ${minimal ? 'h-auto' : 'h-full'}`}>
         {/* Thumbnail */}
-        <div className={`overflow-hidden rounded-lg flex-shrink-0 transition-all duration-300
+        <div className={`overflow-hidden rounded-lg flex-shrink-0
           ${minimal ? 'w-24 h-20 md:w-28 md:h-24' : 'w-32 h-24 md:w-40 md:h-28'}`}>
           <OptimizedImage
             src={article.image}
             alt={article.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-cover"
             width={minimal ? 112 : 160}
             height={minimal ? 96 : 112}
             lazy={true}
@@ -42,7 +42,7 @@ export function CompactArticle({
         
         {/* Content */}
         <div className="flex-1 flex flex-col justify-center min-w-0">
-          <h3 className={`font-bold text-gray-800 dark:text-gray-100 mb-1.5 leading-tight group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2
+          <h3 className={`font-bold text-gray-800 dark:text-gray-100 mb-1.5 leading-tight line-clamp-2
             ${minimal ? 'text-sm md:text-base' : 'text-base md:text-lg'}`}>
             {article.title}
           </h3>

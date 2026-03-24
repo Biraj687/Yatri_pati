@@ -240,7 +240,7 @@ export function ArticleDetail() {
                   ))}
                 </div>
               ) : (
-                <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl text-center">
+                <div className="p-6 border border-black dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-center">
                   <p className="text-gray-600 dark:text-gray-400">
                     यस श्रेणीमा अरू समाचार उपलब्ध छैन।
                   </p>

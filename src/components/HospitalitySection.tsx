@@ -73,34 +73,34 @@ export function HospitalitySection({
           const isHospitality = section.title === hospitalityTitle;
 
           return (
-            <div key={idx} className={idx > 0 ? "mt-24 pt-20" : ""}>
+            <div key={idx} className={idx > 0 ? "mt-12" : ""}>
               <h2 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-12 font-noto">
                 {section.title}
               </h2>
               
               {isHospitality ? (
                 /* HOSPITALITY SPLIT LAYOUT: 2 Large on Left, 4 horizontal on Right */
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                   {/* Left Column: 2 Large Cards */}
                   <div className="flex flex-col gap-4 h-full">
                     {sectionArticles.slice(0, 2).map((article) => (
                       <Link
                         key={article.id}
                         to={`/news/${article.id}`}
-                        className="relative flex-1 overflow-hidden rounded-3xl group shadow-lg transition-all duration-500 hover:shadow-xl min-h-[300px] md:min-h-0"
+                        className="relative flex-1 overflow-hidden rounded-xl border border-black dark:border-gray-600 min-h-[300px] md:min-h-0"
                       >
                         <img
                           src={article.image}
                           alt={article.title}
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          className="absolute inset-0 w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
                         <div className="absolute bottom-0 left-0 w-full p-6 md:p-8">
-                          <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-3 drop-shadow-md group-hover:text-primary-200 transition-colors">
+                          <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-3 drop-shadow-md">
                             {article.title}
                           </h3>
                           <div className="text-white/90 text-sm font-medium flex items-center gap-3">
-                            <span className="hover:text-white transition-colors">{article.author}</span>
+                            <span>{article.author}</span>
                             <span className="opacity-50">—</span>
                             <span className="opacity-80 font-noto">{article.date}</span>
                           </div>
@@ -109,27 +109,27 @@ export function HospitalitySection({
                     ))}
                   </div>
 
-                  {/* Right Column: 4 Horizontal List Cards */}
+                  {/* Right Column: 4 Compact Cards — solid border, image right */}
                   <div className="flex flex-col gap-4 h-full">
                     {sectionArticles.slice(2, 6).map((article) => (
                       <Link
                         key={article.id}
                         to={`/news/${article.id}`}
-                        className="group flex-1 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-2xl transition-all duration-300 hover:shadow-md hover:bg-gray-50/50 dark:hover:bg-gray-700/50 p-4"
+                        className="flex-1 flex flex-row-reverse gap-4 items-center bg-white dark:bg-gray-800 border border-black dark:border-gray-600 rounded-xl p-4"
                       >
-                        <div className="w-full sm:w-32 h-48 sm:h-32 md:w-48 md:h-40 rounded-xl overflow-hidden shadow-sm flex-shrink-0 group-hover:shadow-md transition-all duration-500">
+                        <div className="w-32 h-24 md:w-40 md:h-28 rounded-lg overflow-hidden flex-shrink-0">
                           <img
                             src={article.image}
                             alt={article.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            className="w-full h-full object-cover"
                           />
                         </div>
-                        <div className="flex-1 min-w-0 space-y-3">
-                          <h4 className="text-md md:text-lg font-bold text-gray-900 dark:text-gray-100 leading-snug group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
+                        <div className="flex-1 min-w-0 space-y-2">
+                          <h4 className="text-md md:text-lg font-bold text-gray-900 dark:text-gray-100 leading-snug line-clamp-2">
                             {article.title}
                           </h4>
                           <div className="flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-full overflow-hidden border border-gray-100 dark:border-gray-700 flex-shrink-0">
+                            <div className="w-6 h-6 rounded-full overflow-hidden border border-gray-100 dark:border-gray-700 flex-shrink-0">
                                 <img
                                   src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`}
                                   alt={article.author}
@@ -152,29 +152,29 @@ export function HospitalitySection({
                 </div>
               ) : (
                 /* RELIABLE GRID for other sections */
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {sectionArticles.map((article) => (
                     <Link
                       key={article.id}
                       to={`/news/${article.id}`}
-                      className="flex flex-col group h-full bg-white dark:bg-gray-800 rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-300"
+                      className="flex flex-col h-full bg-white dark:bg-gray-800 border border-black dark:border-gray-600 rounded-xl overflow-hidden"
                     >
-                      <div className="h-52 overflow-hidden rounded-2xl mb-5 shadow-sm group-hover:shadow-md transition-all duration-300">
+                      <div className="h-48 overflow-hidden flex-shrink-0">
                         <img
                           src={article.image}
                           alt={article.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="flex-grow flex flex-col px-1">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-snug mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2 h-[3.5rem] flex items-center">
+                      <div className="flex-grow flex flex-col p-4">
+                        <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 leading-snug mb-2 line-clamp-2">
                           {article.title}
                         </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 font-noto line-clamp-2 mb-4 leading-relaxed opacity-70 h-10 overflow-hidden">
+                        <p className="text-sm text-gray-500 dark:text-gray-400 font-noto line-clamp-2 mb-3 leading-relaxed opacity-70">
                           {article.excerpt || "थप विवरणका लागि पूरा समाचार पढ्नुहोस्..."}
                         </p>
-                        <div className="mt-auto flex items-center gap-2 text-xs md:text-sm text-gray-700 dark:text-gray-300 font-medium pt-3">
-                          <div className="w-6 h-6 rounded-full overflow-hidden border border-gray-100 dark:border-gray-600 flex-shrink-0">
+                        <div className="mt-auto flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300 font-medium pt-2 border-t border-gray-100 dark:border-gray-700">
+                          <div className="w-5 h-5 rounded-full overflow-hidden border border-gray-100 dark:border-gray-600 flex-shrink-0">
                             <img 
                               src={article.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(article.author)}&background=random`} 
                               alt={article.author} 
