@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { FiSearch, FiX } from 'react-icons/fi';
-import { useSearch } from '../context/SearchContext';
-import type { Article } from '../types';
+import { useSearch } from '@context/SearchContext';
+import type { Article } from '@types';
+import { UI_STRINGS } from '@utils/constants';
 
 interface SearchBarProps {
   placeholder?: string;
@@ -88,7 +89,7 @@ export function SearchBar({
             type="button"
             onClick={handleClear}
             className="absolute inset-y-0 right-0 pr-3 flex items-center"
-            aria-label="खोज खाली गर्नुहोस्"
+            aria-label={UI_STRINGS.CLEAR_SEARCH}
           >
             <FiX className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
           </button>
@@ -99,7 +100,7 @@ export function SearchBar({
       {!query && (
         <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
           <span className="hidden sm:inline">
-            शीर्षक, लेखक, वा श्रेणी अनुसार खोज्नुहोस्। उदाहरण: "राजनीति", "खेलकुद", "बिराज प्याकुरेल"
+            {UI_STRINGS.SEARCH_HELP}
           </span>
         </div>
       )}
@@ -135,7 +136,7 @@ export function SearchResults({
         <div className="p-4">
           <div className="flex items-center justify-center">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
-            <span className="ml-3 text-gray-600 dark:text-gray-400">खोजिँदै...</span>
+            <span className="ml-3 text-gray-600 dark:text-gray-400">{UI_STRINGS.SEARCHING}</span>
           </div>
         </div>
       </div>
@@ -146,7 +147,7 @@ export function SearchResults({
     return (
       <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 mt-2 ${className}`}>
         <div className="p-4 text-red-600 dark:text-red-400">
-          <p>खोज गर्दा त्रुटि भयो। कृपया पुनः प्रयास गर्नुहोस्।</p>
+          <p>{UI_STRINGS.SEARCH_ERROR}</p>
         </div>
       </div>
     );
@@ -157,7 +158,7 @@ export function SearchResults({
       <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 mt-2 ${className}`}>
         <div className="p-4 text-center">
           <p className="text-gray-600 dark:text-gray-400">
-            "{query}" को लागि कुनै परिणाम भेटिएन।
+            "{query}" {UI_STRINGS.SEARCH_NO_RESULTS}
           </p>
         </div>
       </div>
@@ -168,7 +169,7 @@ export function SearchResults({
     <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 mt-2 max-h-96 overflow-y-auto ${className}`}>
       <div className="p-2">
         <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
-          {results.length} परिणाम भेटियो
+          {results.length} {UI_STRINGS.SEARCH_RESULTS_FOUND}
         </div>
         
         {results.map((result, index) => (

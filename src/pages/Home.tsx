@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { FeaturedArticle } from '../components/FeaturedArticle';
-import { CompactArticle } from '../components/CompactArticle';
-import { SkeletonLoader } from '../components/SkeletonLoader';
-import { ErrorState } from '../components/ErrorState';
-import { EmptyState } from '../components/EmptyState';
-import { fetchNewsDataWithRetry } from '../services/newsService';
-import type { Article } from '../types';
-import { useSiteConfig } from '../context/SiteConfigContext';
-
-import { AccordionSection } from '../components/AccordionSection';
+import { FeaturedArticle, CompactArticle, SkeletonLoader, ErrorState, EmptyState, AccordionSection } from '@components';
+import { fetchNewsDataWithRetry } from '@services/newsService';
+import type { Article } from '@types';
+import { useSiteConfig } from '@context/SiteConfigContext';
+import { UI_STRINGS } from '@utils/constants';
 
 export function Home() {
   const [featured, setFeatured] = useState<Article | null>(null);

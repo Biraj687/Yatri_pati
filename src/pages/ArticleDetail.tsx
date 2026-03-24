@@ -2,14 +2,12 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FiShare2, FiArrowLeft, FiUser, FiCalendar } from 'react-icons/fi';
-import { SkeletonLoader } from '../components/SkeletonLoader';
-import { CompactArticle } from '../components/CompactArticle';
-import { OptimizedImage } from '../components/OptimizedImage';
-import { useArticle, useNews } from '../hooks/useNews';
-import { useSiteConfig } from '../context/SiteConfigContext';
-import { generateSlug } from '../utils/stringUtils';
-import { mockTargetArticles, normalizeArticle } from '../services/newsService';
-import type { Article } from '../types';
+import { SkeletonLoader, CompactArticle, OptimizedImage } from '@components';
+import { useArticle, useNews } from '@hooks/useNews';
+import { useSiteConfig } from '@context/SiteConfigContext';
+import { generateSlug } from '@utils/stringUtils';
+import { mockTargetArticles, normalizeArticle } from '@services/newsService';
+import type { Article } from '@types';
 
 export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();

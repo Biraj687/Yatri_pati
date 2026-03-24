@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { Category } from '../services/api';
-import { newsApi } from '../services/api';
+import type { Category } from '@services/api';
+import { newsApi } from '@services/api';
 
 interface CategoryContextType {
   // Categories state

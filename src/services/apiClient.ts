@@ -1,6 +1,6 @@
 import { apiRateLimiter, generateRateLimitKey, RateLimitError } from './rateLimiter';
 import { sanitizeArticle } from './sanitizer';
-import type { Article } from '../types';
+import type { Article } from '@types';
 
 /**
  * Secure API Client

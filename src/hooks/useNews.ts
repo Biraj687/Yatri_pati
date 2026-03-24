@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { newsApi } from '../services/api';
-import type { NewsQueryParams, PaginatedResponse } from '../services/api';
-import type { Article } from '../types';
+import { newsApi } from '@services/api';
+import type { NewsQueryParams, PaginatedResponse } from '@services/api';
+import type { Article } from '@types';
 
 interface UseNewsOptions extends NewsQueryParams {
   enabled?: boolean;

@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { searchArticles } from '../services/newsService';
-import type { Article } from '../types';
+import { searchArticles } from '@services/newsService';
+import type { Article } from '@types';
 
 interface SearchContextType {
   // Search state

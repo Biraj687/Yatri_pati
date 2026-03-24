@@ -1,18 +1,16 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { PortalLayout } from './layouts/PortalLayout'
-import { GantavySection, NewsPackagesSection, HospitalitySection } from './components'
-import { SiteConfigProvider, useSiteConfig } from './context/SiteConfigContext'
-import { ThemeProvider } from './context/ThemeContext'
-import { SearchProvider } from './context/SearchContext'
-import { CategoryProvider } from './context/CategoryContext'
-import { SkeletonLoader } from './components/SkeletonLoader'
-import { ErrorBoundary } from './components/ErrorBoundary'
+import { PortalLayout } from '@layouts/PortalLayout'
+import { GantavySection, NewsPackagesSection, HospitalitySection, SkeletonLoader, ErrorBoundary } from '@components'
+import { SiteConfigProvider, useSiteConfig } from '@context/SiteConfigContext'
+import { ThemeProvider } from '@context/ThemeContext'
+import { SearchProvider } from '@context/SearchContext'
+import { CategoryProvider } from '@context/CategoryContext'
 
 // Lazy load page components for code splitting
-const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })))
-const ArticleDetail = lazy(() => import('./pages/ArticleDetail').then(module => ({ default: module.ArticleDetail })))
-const CategoryPage = lazy(() => import('./pages/CategoryPage').then(module => ({ default: module.CategoryPage })))
+const Home = lazy(() => import('@pages/Home').then(module => ({ default: module.Home })))
+const ArticleDetail = lazy(() => import('@pages/ArticleDetail').then(module => ({ default: module.ArticleDetail })))
+const CategoryPage = lazy(() => import('@pages/CategoryPage').then(module => ({ default: module.CategoryPage })))
 
 function App() {
   return (

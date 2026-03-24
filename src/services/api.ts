@@ -1,5 +1,5 @@
 import { apiClient } from './apiClient';
-import type { Article } from '../types';
+import type { Article } from '@types';
 
 export interface PaginatedResponse<T> {
   data: T[];

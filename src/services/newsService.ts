@@ -1,11 +1,12 @@
-import ppImage from '../assets/pp.jpg';
-import heroImage from '../assets/hero.jpg';
-import thumbnailImage from '../assets/thumbnail.jpg';
-import thumbnail2 from '../assets/thumbnail 2.jpg';
-import thumbnail3 from '../assets/thumbnail 3.jpg';
+import ppImage from '@assets/pp.jpg';
+import heroImage from '@assets/hero.jpg';
+import thumbnailImage from '@assets/thumbnail.jpg';
+import thumbnail2 from '@assets/thumbnail 2.jpg';
+import thumbnail3 from '@assets/thumbnail 3.jpg';
 import { apiClient } from './apiClient';
 import { sanitizeArticle } from './sanitizer';
-import type { RawArticle, NewsApiResponse, Article, SiteConfig } from '../types';
+import { calculateReadTime } from '@utils/stringUtils';
+import type { RawArticle, NewsApiResponse, Article, SiteConfig } from '@types';
 
 // Local type for news data response (different from generic ApiResponse<T> in types)
 export interface NewsDataResponse {
@@ -42,16 +43,7 @@ export function normalizeArticle(rawArticle?: RawArticle | null): Article | null
   return article;
 }
 
-// Calculate estimated read time based on word count
-function calculateReadTime(text: string): string {
-  const wordsPerMinute = 200;
-  const words = text.trim().split(/\s+/).length;
-  const minutes = Math.ceil(words / wordsPerMinute);
-
-  if (minutes < 1) return 'कम पढ्नु';
-  if (minutes === 1) return '१ मिनेट पढ्नु';
-  return `${minutes} मिनेट पढ्नु`;
-}
+// Removed calculateReadTime function - now imported from stringUtils
 
 // Mock backend data with fixed images and pp.jpg author avatars
 const mockHeroArticle = {

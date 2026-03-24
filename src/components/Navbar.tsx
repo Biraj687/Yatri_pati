@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FiSearch, FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi'
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa'
-import { useSiteConfig } from '../context/SiteConfigContext'
-import { useTheme } from '../context/ThemeContext'
-import { useSearch } from '../context/SearchContext'
-import { SearchBar, SearchResults } from './SearchBar'
+import { useSiteConfig } from '@context/SiteConfigContext'
+import { useTheme } from '@context/ThemeContext'
+import { useSearch } from '@context/SearchContext'
+import { SearchBar, SearchResults } from '@components'
 import { NepaliDate } from 'nepali-date-library'
-import logoSvg from '../assets/logo.svg'
+import logoSvg from '@assets/logo.svg'
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)

@@ -1,13 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { SkeletonLoader } from '../components/SkeletonLoader';
-import { CompactArticle } from '../components/CompactArticle';
-import { EmptyState } from '../components/EmptyState';
-import { ErrorState } from '../components/ErrorState';
-import { fetchNewsData, fetchArticlesByCategory } from '../services/newsService';
-import type { Article } from '../types';
-import { useSiteConfig } from '../context/SiteConfigContext';
+import { SkeletonLoader, CompactArticle, EmptyState, ErrorState } from '@components';
+import { fetchNewsData, fetchArticlesByCategory } from '@services/newsService';
+import type { Article } from '@types';
+import { useSiteConfig } from '@context/SiteConfigContext';
 
 export function CategoryPage() {
   const { categoryName } = useParams<{ categoryName: string }>();
@@ -131,7 +128,7 @@ export function CategoryPage() {
               message={`${displayName} श्रेणीमा हाल कुनै समाचार उपलब्ध छैन।`}
               icon="news"
             />
-          )}
+          )}  
         </div>
       </section>
     </main>

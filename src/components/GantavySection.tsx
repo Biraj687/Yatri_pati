@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { SkeletonLoader } from './SkeletonLoader';
-import { fetchNewsData } from '../services/newsService';
-import type { Article } from '../types';
+import { SkeletonLoader } from '@components';
+import { fetchNewsData } from '@services/newsService';
+import type { Article } from '@types';
 
 interface GantavySectionProps {
   title?: string;

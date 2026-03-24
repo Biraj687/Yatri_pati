@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchNewsData } from '../services/newsService';
-import type { Article } from '../types';
+import { fetchNewsData } from '@services/newsService';
+import type { Article } from '@types';
 
 interface AccordionSectionProps {
   title?: string;

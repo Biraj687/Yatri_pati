@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { FiFacebook, FiInstagram, FiTwitter, FiGithub, FiYoutube } from 'react-icons/fi'
 import { SiDribbble } from 'react-icons/si'
-import { useSiteConfig } from '../context/SiteConfigContext'
-import logoSvg from '../assets/logo.svg'
+import { useSiteConfig } from '@context/SiteConfigContext'
+import logoSvg from '@assets/logo.svg'
 
 export function Footer() {
   const { config } = useSiteConfig()
