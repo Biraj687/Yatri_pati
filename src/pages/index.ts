@@ -1,3 +1,1 @@
-export { Home } from './Home'
-export { ArticleDetail } from './ArticleDetail'
-export { CategoryPage } from './CategoryPage'
+export { Home } from './Home'; export { ArticleDetail } from './ArticleDetail'; export { CategoryPage } from './CategoryPage';
