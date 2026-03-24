@@ -5,68 +5,26 @@ import thumbnail2 from '../assets/thumbnail 2.jpg';
 import thumbnail3 from '../assets/thumbnail 3.jpg';
 import { apiClient } from './apiClient';
 import { sanitizeArticle } from './sanitizer';
+import type { RawArticle, NewsApiResponse, Article, SiteConfig } from '../types';
 
-export interface Article {
-  id: string | number;
-  title: string;
-  image: string;
-  excerpt: string;
-  author: string;
-  date: string;
-  category?: string;
-  authorAvatar?: string;
-  content?: string;
-  readTime?: string;
-  views?: number;
-  source?: string;
-}
-
-export interface SiteConfig {
-  siteName: string;
-  logo: {
-    text: string;
-    image?: string;
-  };
-  navigation: {
-    label: string;
-    path: string;
-    isCategory: boolean;
-    hasDropdown?: boolean;
-    dropdownItems?: { label: string; path: string }[];
-  }[];
-  socialLinks: {
-    platform: string;
-    url: string;
-  }[];
-  footer: {
-    aboutText: string;
-    copyright: string;
-    columns: {
-      title: string;
-      links: { label: string; path: string; isExternal?: boolean }[];
-    }[];
-  };
-  sectionTitles: {
-    [key: string]: string;
-  };
-  tickerNews: string[];
-}
-
-export interface ApiResponse {
-  hero: Article;
-  featured: Article;
+// Local type for news data response (different from generic ApiResponse<T> in types)
+export interface NewsDataResponse {
+  hero: Article | null;
+  featured: Article | null;
   articles: Article[];
 }
 
 // Normalization function to handle backend dataset variation
-export function normalizeArticle(rawArticle: any): Article {
+export function normalizeArticle(rawArticle?: RawArticle | null): Article | null {
+  if (!rawArticle) return null;
+  
   // Clean date by removing trailing " 0" if present
   let cleanedDate = rawArticle.date || rawArticle.published_at || rawArticle.createdAt || rawArticle.publishedDate || new Date().toLocaleDateString('ne-NP');
   if (cleanedDate) {
     cleanedDate = cleanedDate.replace(/ 0$/, '');
   }
   
-  return {
+  const article: Article = {
     id: rawArticle.id || rawArticle._id || rawArticle.articleId || Math.random(),
     title: rawArticle.title || rawArticle.headline || rawArticle.name || '',
     image: rawArticle.image || rawArticle.thumbnail || rawArticle.thumb || rawArticle.imageUrl || '',
@@ -79,7 +37,9 @@ export function normalizeArticle(rawArticle: any): Article {
     readTime: rawArticle.readTime || rawArticle.estimatedReadTime || calculateReadTime(rawArticle.content || rawArticle.excerpt || ''),
     views: rawArticle.views || rawArticle.viewCount || 0,
     source: rawArticle.source || rawArticle.publisher || rawArticle.publication || undefined
-  }
+  };
+  
+  return article;
 }
 
 // Calculate estimated read time based on word count
@@ -279,21 +239,21 @@ export const mockTargetArticles = [
 // Configuration from environment variables
 const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA === 'true';
 
-export const fetchNewsData = async (): Promise<ApiResponse> => {
+export const fetchNewsData = async (): Promise<NewsDataResponse> => {
   if (USE_MOCK) {
-    return new Promise<ApiResponse>((resolve) => {
+    return new Promise<NewsDataResponse>((resolve) => {
       setTimeout(() => {
         resolve({
-          hero: normalizeArticle(mockHeroArticle),
-          featured: normalizeArticle(mockFeaturedArticle),
-          articles: mockTargetArticles.map(normalizeArticle)
+          hero: normalizeArticle(mockHeroArticle)!,
+          featured: normalizeArticle(mockFeaturedArticle)!,
+          articles: mockTargetArticles.map(normalizeArticle).filter((article): article is Article => article !== null)
         });
       }, 800);
     });
   }
 
   try {
-    const response = await apiClient.get<any>('/news');
+    const response = await apiClient.get<NewsApiResponse>('/news');
     
     if (!response.success) {
       throw new Error(response.error || 'Failed to fetch news');
@@ -301,10 +261,18 @@ export const fetchNewsData = async (): Promise<ApiResponse> => {
 
     const data = response.data;
     
+    const heroArticle = normalizeArticle(data?.hero);
+    const featuredArticle = normalizeArticle(data?.featured);
+    const rawArticles = data?.articles || [];
+    
     return {
-      hero: sanitizeArticle(normalizeArticle(data?.hero)) as Article,
-      featured: sanitizeArticle(normalizeArticle(data?.featured)) as Article,
-      articles: (data?.articles || []).map(normalizeArticle).map(sanitizeArticle) as Article[]
+      hero: heroArticle ? sanitizeArticle(heroArticle) : null,
+      featured: featuredArticle ? sanitizeArticle(featuredArticle) : null,
+      articles: rawArticles
+        .map(normalizeArticle)
+        .filter((article): article is Article => article !== null)
+        .map(sanitizeArticle)
+        .filter((article): article is Article => article !== null)
     };
   } catch (error) {
     console.error("API Fetch Error:", error);
@@ -312,7 +280,7 @@ export const fetchNewsData = async (): Promise<ApiResponse> => {
   }
 };
 
-export const fetchNewsDataWithRetry = async (maxRetries: number = 3, delayMs: number = 1000): Promise<ApiResponse> => {
+export const fetchNewsDataWithRetry = async (maxRetries: number = 3, delayMs: number = 1000): Promise<NewsDataResponse> => {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await fetchNewsData();
@@ -329,32 +297,35 @@ export const fetchArticleById = async (id: string | number): Promise<Article | n
   if (USE_MOCK) {
     try {
       const mockData = await fetchNewsData();
-      const allArticles = [mockData.hero, mockData.featured, ...mockData.articles];
+      const allArticles = [mockData.hero, mockData.featured, ...mockData.articles].filter((a): a is Article => a !== null);
       const found = allArticles.find(a => String(a.id) === String(id));
       return found || null;
     } catch (e) {
+      console.error('Mock article fetch failed:', e);
       return null;
     }
   }
 
   try {
-    const response = await apiClient.get<any>(`/articles/${id}`);
+    const response = await apiClient.get<RawArticle>(`/articles/${id}`);
 
     if (!response.success) {
       throw new Error(response.error || 'Failed to fetch article');
     }
 
     const data = response.data;
-    return sanitizeArticle(normalizeArticle(data)) as Article;
+    const normalized = normalizeArticle(data);
+    return normalized ? sanitizeArticle(normalized) : null;
   } catch (error) {
     console.error("Failed to fetch article:", error);
     // Dynamic fallback when API single endpoint fails
     try {
       const fallbackData = await fetchNewsData();
-      const allArticles = [fallbackData.hero, fallbackData.featured, ...fallbackData.articles];
+      const allArticles = [fallbackData.hero, fallbackData.featured, ...fallbackData.articles].filter((a): a is Article => a !== null);
       const found = allArticles.find(a => String(a.id) === String(id));
       return found || null;
     } catch (fallbackError) {
+      console.error('Fallback article fetch failed:', fallbackError);
       return null;
     }
   }
@@ -365,11 +336,12 @@ export const fetchArticlesByCategory = async (category: string, limit?: number):
   if (USE_MOCK) {
     try {
       const mockData = await fetchNewsData();
-      const allArticles = [mockData.hero, mockData.featured, ...mockData.articles];
+      const allArticles = [mockData.hero, mockData.featured, ...mockData.articles].filter((a): a is Article => a !== null);
       let filtered = allArticles.filter(a => a.category === category || a.category?.toLowerCase() === category.toLowerCase());
       if (limit) filtered = filtered.slice(0, limit);
       return filtered;
     } catch (e) {
+      console.error('Mock category fetch failed:', e);
       return [];
     }
   }
@@ -379,26 +351,40 @@ export const fetchArticlesByCategory = async (category: string, limit?: number):
       ? `/articles?category=${encodeURIComponent(category)}&limit=${limit}`
       : `/articles?category=${encodeURIComponent(category)}`;
 
-    const response = await apiClient.get<any>(endpoint);
+    interface ArticlesResponse {
+      articles?: RawArticle[];
+      data?: RawArticle[];
+      [key: string]: unknown;
+    }
+    
+    const response = await apiClient.get<RawArticle[] | ArticlesResponse>(endpoint);
 
     if (!response.success) {
       throw new Error(response.error || 'Failed to fetch articles');
     }
 
     const data = response.data;
-    const articles = Array.isArray(data) ? data : data.articles || data.data || [];
+    const articles = Array.isArray(data) ? data :
+                    (data as ArticlesResponse).articles ||
+                    (data as ArticlesResponse).data ||
+                    [];
 
-    return articles.map(normalizeArticle).map(sanitizeArticle) as Article[];
+    return articles
+      .map(normalizeArticle)
+      .filter((article: Article | null): article is Article => article !== null)
+      .map(sanitizeArticle)
+      .filter((article: Article | null): article is Article => article !== null);
   } catch (error) {
     console.error("Failed to fetch articles by category:", error);
     // Dynamic fallback
     try {
       const fallbackData = await fetchNewsData();
-      const allArticles = [fallbackData.hero, fallbackData.featured, ...fallbackData.articles];
+      const allArticles = [fallbackData.hero, fallbackData.featured, ...fallbackData.articles].filter((a): a is Article => a !== null);
       let filtered = allArticles.filter(a => a.category === category || a.category?.toLowerCase() === category.toLowerCase());
       if (limit) filtered = filtered.slice(0, limit);
       return filtered;
     } catch (fallbackError) {
+      console.error('Fallback category fetch failed:', fallbackError);
       return [];
     }
   }
@@ -409,7 +395,7 @@ export const searchArticles = async (query: string, limit?: number): Promise<Art
   if (USE_MOCK) {
     try {
       const mockData = await fetchNewsData();
-      const allArticles = [mockData.hero, mockData.featured, ...mockData.articles];
+      const allArticles = [mockData.hero, mockData.featured, ...mockData.articles].filter((a): a is Article => a !== null);
       const lowerQuery = query.toLowerCase();
       let filtered = allArticles.filter(a =>
         a.title.toLowerCase().includes(lowerQuery) ||
@@ -420,6 +406,7 @@ export const searchArticles = async (query: string, limit?: number): Promise<Art
       if (limit) filtered = filtered.slice(0, limit);
       return filtered;
     } catch (e) {
+      console.error('Mock search fetch failed:', e);
       return [];
     }
   }
@@ -429,22 +416,35 @@ export const searchArticles = async (query: string, limit?: number): Promise<Art
       ? `/search?q=${encodeURIComponent(query)}&limit=${limit}`
       : `/search?q=${encodeURIComponent(query)}`;
 
-    const response = await apiClient.get<any>(endpoint);
+    interface SearchResponse {
+      articles?: RawArticle[];
+      results?: RawArticle[];
+      [key: string]: unknown;
+    }
+    
+    const response = await apiClient.get<RawArticle[] | SearchResponse>(endpoint);
 
     if (!response.success) {
       throw new Error(response.error || 'No results found');
     }
 
     const data = response.data;
-    const articles = Array.isArray(data) ? data : data.articles || data.results || [];
+    const articles = Array.isArray(data) ? data :
+                    (data as SearchResponse).articles ||
+                    (data as SearchResponse).results ||
+                    [];
 
-    return articles.map(normalizeArticle).map(sanitizeArticle) as Article[];
+    return articles
+      .map(normalizeArticle)
+      .filter((article: Article | null): article is Article => article !== null)
+      .map(sanitizeArticle)
+      .filter((article: Article | null): article is Article => article !== null);
   } catch (error) {
     console.error("Search failed:", error);
     // Dynamic fallback
     try {
       const fallbackData = await fetchNewsData();
-      const allArticles = [fallbackData.hero, fallbackData.featured, ...fallbackData.articles];
+      const allArticles = [fallbackData.hero, fallbackData.featured, ...fallbackData.articles].filter((a): a is Article => a !== null);
       const lowerQuery = query.toLowerCase();
       let filtered = allArticles.filter(a =>
         a.title.toLowerCase().includes(lowerQuery) ||
@@ -455,6 +455,7 @@ export const searchArticles = async (query: string, limit?: number): Promise<Art
       if (limit) filtered = filtered.slice(0, limit);
       return filtered;
     } catch (fallbackError) {
+      console.error('Fallback search fetch failed:', fallbackError);
       return [];
     }
   }
@@ -557,9 +558,9 @@ export const fetchSiteConfig = async (): Promise<SiteConfig> => {
   }
 
   try {
-    const response = await apiClient.get<any>('/config');
+    const response = await apiClient.get<SiteConfig>('/config');
     if (!response.success) throw new Error('Failed to fetch config');
-    return response.data;
+    return response.data as SiteConfig;
   } catch (err) {
     console.warn("Config fetch failed, using mock fallback", err);
     return mockSiteConfig;

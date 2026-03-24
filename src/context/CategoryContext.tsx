@@ -150,6 +150,7 @@ export function CategoryProvider({ children, initialCategorySlug }: CategoryProv
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useCategory() {
   const context = useContext(CategoryContext);
   if (context === undefined) {

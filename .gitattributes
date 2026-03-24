@@ -1,0 +1,91 @@
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# Source code files
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.sass text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.xml text eol=lf
+*.svg text eol=lf
+
+# Configuration files
+*.editorconfig text eol=lf
+*.gitattributes text eol=lf
+*.gitignore text eol=lf
+*.eslintrc text eol=lf
+*.eslintrc.js text eol=lf
+*.eslintrc.json text eol=lf
+*.prettierrc text eol=lf
+*.prettierrc.js text eol=lf
+*.prettierrc.json text eol=lf
+tsconfig.json text eol=lf
+tsconfig.*.json text eol=lf
+package.json text eol=lf
+package-lock.json text eol=lf
+vite.config.* text eol=lf
+postcss.config.* text eol=lf
+tailwind.config.* text eol=lf
+
+# Documentation
+*.txt text eol=lf
+*.rst text eol=lf
+*.adoc text eol=lf
+
+# Shell scripts (should use LF even on Windows)
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Windows batch files (should use CRLF)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files (should not be modified)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.jar binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.otf binary
+*.mp3 binary
+*.mp4 binary
+*.avi binary
+*.mov binary
+
+# Ensure these files are not normalized (they contain CRLF intentionally)
+*.sln text eol=crlf
+*.vcxproj text eol=crlf
+*.vcxproj.filters text eol=crlf
+
+# Exclude node_modules and build directories
+node_modules/ export-ignore
+dist/ export-ignore
+build/ export-ignore
+.out/ export-ignore
+.coverage/ export-ignore
+
+# Force Git to treat specific files as text
+.gitattributes text
+.gitignore text
+.editorconfig text
+README.md text
+LICENSE text
+CHANGELOG.md text

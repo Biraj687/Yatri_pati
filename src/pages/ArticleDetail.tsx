@@ -9,6 +9,7 @@ import { useArticle, useNews } from '../hooks/useNews';
 import { useSiteConfig } from '../context/SiteConfigContext';
 import { generateSlug } from '../utils/stringUtils';
 import { mockTargetArticles, normalizeArticle } from '../services/newsService';
+import type { Article } from '../types';
 
 export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
@@ -41,7 +42,7 @@ export function ArticleDetail() {
   // Fallback dummy articles when related news fails to load
   const fallbackRelatedArticles = mockTargetArticles
     .map(normalizeArticle)
-    .filter(a => a.id !== article?.id)
+    .filter((a): a is Article => a !== null && a.id !== article?.id)
     .slice(0, 4);
 
   const handleShare = () => {
@@ -74,7 +75,8 @@ export function ArticleDetail() {
   }
 
   const relatedArticles = relatedData?.data || [];
-  const displayedRelatedArticles = relatedError ? fallbackRelatedArticles : relatedArticles;
+  const displayedRelatedArticles = (relatedError ? fallbackRelatedArticles : relatedArticles)
+    .filter((a): a is Article => a !== null);
   // Clean date by removing trailing " 0" if present
   const cleanedDate = article.date ? article.date.replace(/ 0$/, '') : article.date;
   const siteName = config?.siteName || 'यत्रिपाटि';
@@ -178,7 +180,7 @@ export function ArticleDetail() {
             <div className="prose prose-lg dark:prose-invert max-w-none">
               {article.content ? (
                 <div className="space-y-6">
-                  {article.content.split('\n\n').map((paragraph, idx) => (
+                  {article.content.split('\n\n').map((paragraph: string, idx: number) => (
                     <p key={idx} className="leading-relaxed">
                       {paragraph}
                     </p>

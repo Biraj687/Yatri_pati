@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { searchArticles } from '../services/newsService';
-import type { Article } from '../services/newsService';
+import type { Article } from '../types';
 
 interface SearchContextType {
   // Search state
@@ -163,6 +163,7 @@ export function SearchProvider({ children, debounceDelay = 300 }: SearchProvider
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useSearch() {
   const context = useContext(SearchContext);
   if (context === undefined) {

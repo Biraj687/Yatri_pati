@@ -32,7 +32,7 @@ export function OptimizedImage({
   // Intersection Observer for lazy loading
   useEffect(() => {
     if (!lazy || !imgRef.current) {
-      setIsInView(true);
+      // isInView already true when lazy is false (initial state)
       return;
     }
 
@@ -126,6 +126,7 @@ export function OptimizedImage({
 }
 
 // Hook for image preloading
+// eslint-disable-next-line react-refresh/only-export-components
 export function useImagePreload(src: string) {
   const [isLoaded, setIsLoaded] = useState(false);
 

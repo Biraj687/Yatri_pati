@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import type { Article } from '../services/newsService';
+import type { Article } from '../types';
 
 export function HeroSection({ heroArticle }: { heroArticle: Article }) {
   return (

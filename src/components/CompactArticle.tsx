@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import type { Article } from '../services/newsService';
+import type { Article } from '../types';
 import { OptimizedImage } from './OptimizedImage';
 
 export function CompactArticle({

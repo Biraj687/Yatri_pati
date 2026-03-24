@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { fetchSiteConfig } from '../services/newsService';
-import type { SiteConfig } from '../services/newsService';
+import type { SiteConfig } from '../types';
 
 interface SiteConfigContextType {
   config: SiteConfig | null;
@@ -39,6 +39,7 @@ export const SiteConfigProvider: React.FC<{ children: ReactNode }> = ({ children
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSiteConfig = () => {
   const context = useContext(SiteConfigContext);
   if (context === undefined) {

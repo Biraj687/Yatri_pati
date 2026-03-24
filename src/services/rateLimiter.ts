@@ -15,7 +15,7 @@ class RateLimiter {
   private requests: Map<string, RequestEntry[]> = new Map();
   private maxRequests: number;
   private windowMs: number;
-  private cleanupInterval: any = null;
+  private cleanupInterval: number | null = null;
 
   constructor(config: RateLimitConfig = { maxRequests: 50, windowMs: 60000 }) {
     this.maxRequests = config.maxRequests;
@@ -115,7 +115,7 @@ function getBrowserFingerprint(): string {
       hash = hash & hash;
     }
     return Math.abs(hash).toString(16);
-  } catch (e) {
+  } catch (_e) { // eslint-disable-line @typescript-eslint/no-unused-vars
     return Math.random().toString(16);
   }
 }

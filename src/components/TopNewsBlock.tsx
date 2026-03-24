@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import type { Article } from '../services/newsService';
+import type { Article } from '../types';
 
 interface TopNewsBlockProps {
   article: Article | null;

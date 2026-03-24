@@ -1,5 +1,5 @@
 import { apiClient } from './apiClient';
-import type { Article } from './newsService';
+import type { Article } from '../types';
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -143,7 +143,7 @@ class NewsApiService {
     
     try {
       const data = await fetchNewsData();
-      const allArticles = [data.hero, data.featured, ...data.articles];
+      const allArticles = [data.hero, data.featured, ...data.articles].filter((a): a is Article => a !== null);
       
       // Apply filters
       let filtered = allArticles;
@@ -203,7 +203,7 @@ class NewsApiService {
       // Try dynamic import first
       const { fetchNewsData } = await import('./newsService');
       const data = await fetchNewsData();
-      const allArticles = [data.hero, data.featured, ...data.articles];
+      const allArticles = [data.hero, data.featured, ...data.articles].filter((a): a is Article => a !== null);
       
       // Find article by ID
       const article = allArticles.find(a => a.id.toString() === id.toString());
@@ -233,7 +233,7 @@ class NewsApiService {
       // Try dynamic import first
       const { fetchNewsData } = await import('./newsService');
       const data = await fetchNewsData();
-      const allArticles = [data.hero, data.featured, ...data.articles];
+      const allArticles = [data.hero, data.featured, ...data.articles].filter((a): a is Article => a !== null);
       
       // Debug: log all articles and their slugs
       console.log(`Searching for slug: "${slug}"`);
@@ -247,7 +247,7 @@ class NewsApiService {
       const article = allArticles.find(a =>
         this.generateSlug(a.title) === slug ||
         a.id.toString() === slug ||
-        (a as any).slug === slug
+        (a as { slug?: string }).slug === slug
       );
       
       if (article) {
@@ -288,7 +288,7 @@ class NewsApiService {
     
     try {
       const data = await fetchNewsData();
-      const allArticles = [data.hero, data.featured, ...data.articles];
+      const allArticles = [data.hero, data.featured, ...data.articles].filter((a): a is Article => a !== null);
       
       // Sort by views and date for trending
       return allArticles

@@ -3,8 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import { FeaturedArticle } from '../components/FeaturedArticle';
 import { CompactArticle } from '../components/CompactArticle';
 import { SkeletonLoader } from '../components/SkeletonLoader';
+import { ErrorState } from '../components/ErrorState';
+import { EmptyState } from '../components/EmptyState';
 import { fetchNewsDataWithRetry } from '../services/newsService';
-import type { Article } from '../services/newsService';
+import type { Article } from '../types';
 import { useSiteConfig } from '../context/SiteConfigContext';
 
 import { AccordionSection } from '../components/AccordionSection';
@@ -79,37 +81,31 @@ export function Home() {
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-12">
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '50vh',
-          color: '#333',
-          textAlign: 'center'
-        }}>
-          <h2 style={{ color: '#ef4444', marginBottom: '20px' }}>❌ त्रुटि</h2>
-          <p style={{ marginBottom: '20px', fontSize: '16px' }}>{error}</p>
-          <button
-            onClick={handleRetry}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              fontSize: '16px'
-            }}
-          >
-            पुनः प्रयास गर्नुहोस्
-          </button>
-        </div>
+        <ErrorState
+          title="त्रुटि भयो"
+          message={error}
+          onRetry={handleRetry}
+        />
       </div>
     );
   }
 
   const sectionTitles = config?.sectionTitles || {};
+
+  // Check for empty state
+  const hasArticles = articles.length > 0 || featured !== null;
+  
+  if (!hasArticles && !loading && !error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem] py-12">
+        <EmptyState
+          title="कुनै समाचार भेटिएन"
+          message="हाल कुनै समाचार उपलब्ध छैन। कृपया केही समय पछि पुनः प्रयास गर्नुहोस्।"
+          icon="news"
+        />
+      </div>
+    );
+  }
 
   return (
     <>

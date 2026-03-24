@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { FiSearch, FiX } from 'react-icons/fi';
 import { useSearch } from '../context/SearchContext';
+import type { Article } from '../types';
 
 interface SearchBarProps {
   placeholder?: string;
@@ -21,7 +22,7 @@ export function SearchBar({
   useContext = true
 }: SearchBarProps) {
   const [query, setQuery] = useState(initialValue);
-  const searchContext = useContext ? useSearch() : null;
+  const searchContext = useSearch();
 
   // Handle search query changes - directly use context's debounced search
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +30,7 @@ export function SearchBar({
     setQuery(value);
     
     // Use context's debounced search if available
-    if (searchContext) {
+    if (useContext) {
       searchContext.setSearchQuery(value);
     }
     
@@ -42,7 +43,7 @@ export function SearchBar({
   const handleClear = () => {
     setQuery('');
     
-    if (searchContext) {
+    if (useContext) {
       searchContext.clearSearch();
     }
     
@@ -55,7 +56,7 @@ export function SearchBar({
     e.preventDefault();
     if (query.trim()) {
       // Use context's search if available
-      if (searchContext) {
+      if (useContext) {
         searchContext.setSearchQuery(query);
       }
       
@@ -109,10 +110,10 @@ export function SearchBar({
 // Search results component
 interface SearchResultsProps {
   query: string;
-  results: any[];
+  results: Article[];
   isLoading: boolean;
   error: Error | null;
-  onResultClick?: (result: any) => void;
+  onResultClick?: (result: Article) => void;
   className?: string;
 }
 

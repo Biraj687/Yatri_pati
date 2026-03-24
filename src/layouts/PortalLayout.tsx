@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Header, Footer, TopNewsBlock } from '../components';
-import { fetchNewsData, type Article } from '../services/newsService';
+import { fetchNewsData } from '../services/newsService';
+import type { Article } from '../types';
 
 interface PortalLayoutProps {
   children: React.ReactNode;

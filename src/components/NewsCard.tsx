@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FiUser, FiCalendar, FiEye } from 'react-icons/fi';
-import type { Article } from '../services/newsService';
+import type { Article } from '../types';
 import { OptimizedImage } from './OptimizedImage';
 
 interface NewsCardProps {

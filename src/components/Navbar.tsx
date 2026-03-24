@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FiSearch, FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi'
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa'
@@ -26,11 +26,7 @@ export function Navbar() {
   } = useSearch()
   const navigate = useNavigate()
   
-  const [todayBS, setTodayBS] = useState<NepaliDate | null>(null)
-
-  useEffect(() => {
-    setTodayBS(new NepaliDate())
-  }, [])
+  const [todayBS] = useState<NepaliDate>(new NepaliDate())
 
   const handleSearchClick = () => {
     setSearchModalOpen(true)
@@ -42,7 +38,7 @@ export function Navbar() {
     closeSearch()
   }
 
-  const handleSearchResultClick = (result: any) => {
+  const handleSearchResultClick = (result: { id: string | number }) => {
     // Navigate to the article detail page
     if (result.id) {
       navigate(`/news/${result.id}`)

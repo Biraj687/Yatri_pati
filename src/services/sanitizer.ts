@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify';
+import type { Article } from '../types';
 
 /**
  * Sanitize user input to prevent XSS attacks
@@ -29,7 +30,7 @@ export const sanitizeSearchQuery = (query: string): string => {
   
   // Remove special characters and limit length
   const sanitized = query
-    .replace(/[<>\"'`]/g, '') // Remove dangerous characters
+    .replace(/[<>"'`]/g, '') // Remove dangerous characters
     .trim()
     .substring(0, 100); // Limit to 100 chars
   
@@ -59,17 +60,17 @@ export const isValidUrl = (url: string): boolean => {
 /**
  * Sanitize article/content from API responses
  */
-export const sanitizeArticle = (article: any) => {
+export const sanitizeArticle = (article: Partial<Article> & Record<string, unknown>): Article | null => {
   if (!article) return null;
   
   return {
-    id: article.id,
-    title: sanitizeInput(article.title || ''),
-    excerpt: sanitizeInput(article.excerpt || ''),
-    author: sanitizeInput(article.author || ''),
-    date: sanitizeInput(article.date || ''),
-    category: sanitizeInput(article.category || ''),
-    image: article.image ? (isValidUrl(article.image) ? article.image : '') : '',
-    authorAvatar: article.authorAvatar ? (isValidUrl(article.authorAvatar) ? article.authorAvatar : '') : ''
+    id: article.id ?? '',
+    title: sanitizeInput((article.title as string) || ''),
+    excerpt: sanitizeInput((article.excerpt as string) || ''),
+    author: sanitizeInput((article.author as string) || ''),
+    date: sanitizeInput((article.date as string) || ''),
+    category: sanitizeInput((article.category as string) || ''),
+    image: article.image ? (isValidUrl(article.image as string) ? article.image : '') : '',
+    authorAvatar: article.authorAvatar ? (isValidUrl(article.authorAvatar as string) ? article.authorAvatar : '') : ''
   };
 };

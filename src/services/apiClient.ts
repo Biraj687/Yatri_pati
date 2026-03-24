@@ -1,5 +1,6 @@
 import { apiRateLimiter, generateRateLimitKey, RateLimitError } from './rateLimiter';
 import { sanitizeArticle } from './sanitizer';
+import type { Article } from '../types';
 
 /**
  * Secure API Client
@@ -79,7 +80,7 @@ export class ApiClient {
    */
   async post<T>(
     endpoint: string,
-    data: any,
+    data: unknown,
     rateLimitKey?: string
   ): Promise<ApiResponse<T>> {
     const key = rateLimitKey || generateRateLimitKey(endpoint);
@@ -160,7 +161,7 @@ export class ApiClient {
 
     // Sanitize article data if present
     if (data && typeof data === 'object') {
-      data.articles = data.articles?.map((article: any) => sanitizeArticle(article));
+      data.articles = data.articles?.map((article: Partial<Article> & Record<string, unknown>) => sanitizeArticle(article));
       if (data.hero) data.hero = sanitizeArticle(data.hero);
       if (data.featured) data.featured = sanitizeArticle(data.featured);
     }
@@ -175,7 +176,7 @@ export class ApiClient {
   /**
    * Handle errors
    */
-  private handleError<T>(error: any): ApiResponse<T> {
+  private handleError<T>(error: unknown): ApiResponse<T> {
     let message = 'An error occurred';
 
     if (error instanceof RateLimitError) {

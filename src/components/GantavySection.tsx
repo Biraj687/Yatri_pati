@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SkeletonLoader } from './SkeletonLoader';
 import { fetchNewsData } from '../services/newsService';
-import type { Article } from '../services/newsService';
+import type { Article } from '../types';
 
 interface GantavySectionProps {
   title?: string;
@@ -17,7 +17,7 @@ export function GantavySection({ title = 'गन्तव्य' }: GantavySecti
       try {
         const data = await fetchNewsData();
         // Get first 6 articles from all available articles
-        const allArticles = [data.hero, data.featured, ...data.articles].filter(Boolean);
+        const allArticles = [data.hero, data.featured, ...data.articles].filter((a): a is Article => a !== null);
         setArticles(allArticles.slice(0, 6));
       } catch (error) {
         console.error("Failed to load articles", error);

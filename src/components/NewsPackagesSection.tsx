@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SkeletonLoader } from './SkeletonLoader';
 import { fetchNewsData } from '../services/newsService';
-import type { Article } from '../services/newsService';
+import type { Article } from '../types';
 
 interface NewsPackagesSectionProps {
   newsTitle?: string;
@@ -22,7 +22,7 @@ export default function NewsPackagesSection({
       try {
         const data = await fetchNewsData();
         // Get first 3 articles for news column
-        const allArticles = [data.hero, data.featured, ...data.articles].filter(Boolean);
+        const allArticles = [data.hero, data.featured, ...data.articles].filter((a): a is Article => a !== null);
         setNewsArticles(allArticles.slice(0, 3));
         // Get next 3 articles for packages column
         setPackageArticles(allArticles.slice(3, 6));

@@ -59,6 +59,8 @@ export function ThemeProvider({ children, defaultTheme = 'light' }: ThemeProvide
     const handleChange = (_e: MediaQueryListEvent) => {
       // No longer auto-switching based on system preference
       // Theme is now always light by default unless user explicitly changes it
+      // _e parameter is intentionally unused
+      void _e;
     };
     
     mediaQuery.addEventListener('change', handleChange);
@@ -79,6 +81,7 @@ export function ThemeProvider({ children, defaultTheme = 'light' }: ThemeProvide
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
