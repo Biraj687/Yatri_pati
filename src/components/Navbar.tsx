@@ -85,7 +85,7 @@ export function Navbar() {
         </div>
 
         <div className="flex-1 flex items-center justify-end gap-3 md:gap-4">
-           {config.socialLinks.map((link) => (
+           {config.socialLinks.map((link: typeof config.socialLinks[number]) => (
               <a 
                 key={link.platform}
                 href={link.url} 
@@ -138,7 +138,7 @@ export function Navbar() {
       {/* Bottom Row: Centered Navigation Links */}
       <div className="hidden md:flex w-full justify-center items-center px-4 mb-2">
         <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-8 max-w-7xl">
-          {config.navigation.map((item) => (
+          {config.navigation.map((item: typeof config.navigation[number]) => (
             <div key={item.label} className="relative group flex items-center h-12">
               <Link 
                 to={item.path} 
@@ -149,7 +149,7 @@ export function Navbar() {
               </Link>
               {item.hasDropdown && item.dropdownItems && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-b shadow-xl min-w-[160px] z-50 hidden group-hover:block py-2">
-                  {item.dropdownItems.map((sub) => (
+                  {item.dropdownItems.map((sub: typeof item.dropdownItems[number]) => (
                     <Link 
                       key={sub.label} 
                       to={sub.path} 
@@ -187,7 +187,7 @@ export function Navbar() {
 
           <div className="flex-1 overflow-y-auto pb-8">
             <div className="space-y-1">
-              {config.navigation.map((item) => {
+              {config.navigation.map((item: typeof config.navigation[number]) => {
                 const isDropdownOpen = openDropdown === item.label;
                 return (
                   <div key={item.label}>
@@ -214,7 +214,7 @@ export function Navbar() {
                     </div>
                     {item.hasDropdown && item.dropdownItems && isDropdownOpen && (
                       <div className="pl-4 space-y-2 mb-4 border-l-2 border-gray-100 ml-2">
-                        {item.dropdownItems.map((sub) => (
+                        {item.dropdownItems.map((sub: typeof item.dropdownItems[number]) => (
                           <Link
                             key={sub.label}
                             to={sub.path}
