@@ -64,7 +64,7 @@ export function GantavySection({ title = 'गन्तव्य' }: GantavySecti
               </div>
 
               {/* Title */}
-              <h3 className="text-white text-2xl md:text-3xl font-bold leading-normal mb-4 flex-grow group-hover:text-primary-400 transition-colors line-clamp-2 overflow-hidden">
+              <h3 className="text-white text-2xl md:text-3xl font-bold leading-[2.5rem] mb-4 flex-grow group-hover:text-gray-300 transition-colors line-clamp-2 overflow-hidden">
                 {article.title}
               </h3>
 

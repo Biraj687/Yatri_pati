@@ -1,8 +1,8 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { FiShare2, FiArrowLeft, FiUser, FiCalendar } from 'react-icons/fi';
-import { SkeletonLoader, CompactArticle, OptimizedImage } from '@components';
+import { FiShare2, FiArrowLeft, FiUser, FiCalendar, FiUsers } from 'react-icons/fi';
+import { SkeletonLoader, CompactArticle, OptimizedImage, MultiAuthorDisplay, ArticleContentRenderer, TagDisplay } from '@components';
 import { useArticle, useNews } from '@hooks/useNews';
 import { useSiteConfig } from '@context/SiteConfigContext';
 import { generateSlug } from '@utils/stringUtils';
@@ -100,7 +100,7 @@ export function ArticleDetail() {
             <nav className="mb-8">
               <ol className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                 <li>
-                  <Link to="/" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  <Link to="/" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
                     गृहपृष्ठ
                   </Link>
                 </li>
@@ -110,7 +110,7 @@ export function ArticleDetail() {
                     <li>
                       <Link 
                         to={`/category/${generateSlug(article.category)}`}
-                        className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                        className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                       >
                         {article.category}
                       </Link>
@@ -126,15 +126,20 @@ export function ArticleDetail() {
 
             {/* Article Header */}
             <header className="mb-10">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[2.5rem] mb-6">
                 {article.title}
               </h1>
               
               <div className="flex flex-wrap items-center gap-4 md:gap-6 text-sm md:text-base text-gray-600 dark:text-gray-400 mb-8">
-                <div className="flex items-center gap-2">
-                  <FiUser className="w-4 h-4" />
-                  <span className="font-medium">{article.author}</span>
-                </div>
+                {/* Multi-author display */}
+                <MultiAuthorDisplay
+                  authors={article.authors}
+                  author={article.author}
+                  showAvatars={true}
+                  avatarSize="md"
+                  layout="horizontal"
+                  className="flex items-center gap-2"
+                />
                 
                 <div className="flex items-center gap-2">
                   <FiCalendar className="w-4 h-4" />
@@ -175,23 +180,31 @@ export function ArticleDetail() {
             )}
 
             {/* Article Content */}
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-              {article.content ? (
-                <div className="space-y-6">
-                  {article.content.split('\n\n').map((paragraph: string, idx: number) => (
-                    <p key={idx} className="leading-relaxed">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 rounded-xl p-6">
-                  <p className="text-blue-800 dark:text-blue-200">
-                    यस समाचारको पूर्ण विवरण उपलब्ध छैन। थप विवरणका लागि मूल स्रोत हेर्नुहोस्।
-                  </p>
-                </div>
-              )}
-            </div>
+            <ArticleContentRenderer
+              content={article.content || ''}
+              className="mt-8"
+              headingClassName="border-b border-gray-200 dark:border-gray-700 pb-2"
+              paragraphClassName="text-gray-700 dark:text-gray-300 leading-relaxed"
+              listClassName="ml-4"
+            />
+
+            {/* Tags and Slug */}
+            {(article.tags || article.slug) && (
+              <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
+                <TagDisplay
+                  tags={article.tags}
+                  slug={article.slug}
+                  variant="pill"
+                  showIcon={true}
+                  className="gap-3"
+                  tagClassName="hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300"
+                  onTagClick={(tag) => {
+                    // Navigate to tag page or filter by tag
+                    console.log('Tag clicked:', tag);
+                  }}
+                />
+              </div>
+            )}
 
             {/* Article Actions */}
             <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-4">
@@ -206,7 +219,7 @@ export function ArticleDetail() {
               <div className="flex items-center gap-4">
                 <button
                   onClick={handleShare}
-                  className="inline-flex items-center gap-2 px-5 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 px-5 py-3 bg-primary-600 hover:bg-primary-600 text-white rounded-lg transition-colors"
                 >
                   <FiShare2 />
                   सेयर गर्नुहोस्

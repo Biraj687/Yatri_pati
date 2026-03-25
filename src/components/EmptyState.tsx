@@ -52,7 +52,7 @@ export function SearchEmptyState({ query, onClearSearch }: { query: string; onCl
         onClearSearch && (
           <button
             onClick={onClearSearch}
-            className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors duration-200"
+            className="px-6 py-3 bg-primary-600 hover:bg-primary-600 text-white font-medium rounded-lg transition-colors duration-200"
           >
             खोज खाली गर्नुहोस्
           </button>
@@ -73,7 +73,7 @@ export function CategoryEmptyState({ category, onBrowseAll }: { category: string
         onBrowseAll && (
           <button
             onClick={onBrowseAll}
-            className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors duration-200"
+            className="px-6 py-3 bg-primary-600 hover:bg-primary-600 text-white font-medium rounded-lg transition-colors duration-200"
           >
             सबै समाचार हेर्नुहोस्
           </button>

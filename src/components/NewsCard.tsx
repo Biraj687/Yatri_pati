@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { FiUser, FiCalendar, FiEye } from 'react-icons/fi';
 import type { Article } from '@types';
 import { OptimizedImage } from './OptimizedImage';
+import { NewsTag } from './NewsTag';
 
 interface NewsCardProps {
   article: Article;
@@ -59,6 +60,37 @@ export function NewsCard({
     }
   };
 
+  // Helper to determine which tag to display and its variant
+  const getTagInfo = () => {
+    // First check tags array
+    if (article.tags && article.tags.length > 0) {
+      const firstTag = article.tags[0];
+      // Determine variant based on tag content
+      const lowerTag = firstTag.toLowerCase();
+      if (lowerTag.includes('breaking')) {
+        return { label: firstTag, variant: 'breaking' as const };
+      } else if (lowerTag.includes('current') || lowerTag.includes('affairs')) {
+        return { label: firstTag, variant: 'current-affairs' as const };
+      } else {
+        return { label: firstTag, variant: 'default' as const };
+      }
+    }
+    // Fallback to slug
+    if (article.slug) {
+      const lowerSlug = article.slug.toLowerCase();
+      if (lowerSlug.includes('breaking')) {
+        return { label: article.slug, variant: 'breaking' as const };
+      } else if (lowerSlug.includes('current') || lowerSlug.includes('affairs')) {
+        return { label: article.slug, variant: 'current-affairs' as const };
+      } else {
+        return { label: article.slug, variant: 'default' as const };
+      }
+    }
+    return null;
+  };
+
+  const tagInfo = getTagInfo();
+
   return (
     <Link
       to={articleUrl}
@@ -70,7 +102,13 @@ export function NewsCard({
     >
       {/* Image */}
       {(variant === 'default' || variant === 'featured' || variant === 'horizontal') && article.image && (
-        <div className={`${getImageSize()} overflow-hidden rounded-lg flex-shrink-0`}>
+        <div className={`${getImageSize()} overflow-hidden rounded-lg flex-shrink-0 relative`}>
+          {/* NewsTag badge - positioned top-left */}
+          {tagInfo && (
+            <div className="absolute top-2 left-2 z-10">
+              <NewsTag label={tagInfo.label} variant={tagInfo.variant} />
+            </div>
+          )}
           <OptimizedImage
             src={article.image}
             alt={article.title}
@@ -109,8 +147,15 @@ export function NewsCard({
           </div>
         )}
 
+        {/* NewsTag badge - positioned above title (alternative to image positioning) */}
+        {tagInfo && variant === 'compact' && (
+          <div className="mb-2">
+            <NewsTag label={tagInfo.label} variant={tagInfo.variant} />
+          </div>
+        )}
+
         {/* Title */}
-        <h3 className={`font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors ${
+        <h3 className={`font-bold text-gray-900 dark:text-gray-100 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors leading-[2.5rem] ${
           variant === 'compact' ? 'text-base line-clamp-2' :
           variant === 'horizontal' ? 'text-lg md:text-xl line-clamp-2' :
           'text-xl md:text-2xl line-clamp-2'
@@ -120,7 +165,7 @@ export function NewsCard({
 
         {/* Excerpt */}
         {showExcerpt && article.excerpt && (
-          <p className={`mt-2 text-gray-600 dark:text-gray-400 line-clamp-2 ${
+          <p className={`mt-2 text-gray-600 dark:text-gray-400 line-clamp-2 leading-snug ${
             variant === 'compact' ? 'text-sm' : 'text-base'
           }`}>
             {article.excerpt}

@@ -79,7 +79,7 @@ export function AccordionSection({ title = 'विशेष सिफारि�
                       {article.category || 'समाचार'}
                     </span>
                     
-                    <h3 className="text-white font-extrabold leading-tight mb-4 font-noto text-2xl md:text-3xl lg:text-4xl drop-shadow-md">
+                    <h3 className="text-white font-extrabold leading-snug mb-4 font-noto text-2xl md:text-3xl lg:text-4xl drop-shadow-md">
                       {article.title}
                     </h3>
                     

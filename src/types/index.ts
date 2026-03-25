@@ -44,12 +44,20 @@ export interface RawArticle {
   [key: string]: unknown;
 }
 
+export interface Author {
+  name: string;
+  avatar?: string;
+  role?: string;
+  bio?: string;
+}
+
 export interface Article {
   id: string | number;
   title: string;
   image: string;
   excerpt: string;
-  author: string;
+  author: string; // Legacy single author field (string)
+  authors?: Author[]; // New multi-author support
   date: string;
   category?: string;
   authorAvatar?: string;
@@ -59,6 +67,8 @@ export interface Article {
   source?: string;
   videoUrl?: string;
   thumbnailImage?: string;
+  tags?: string[];
+  slug?: string;
   [key: string]: unknown;
 }
 

@@ -30,7 +30,7 @@ export function ErrorState({
       {onRetry && (
         <button
           onClick={onRetry}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors duration-200"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-600 text-white font-medium rounded-lg transition-colors duration-200"
         >
           <FaRedo className="w-4 h-4" />
           पुनः प्रयास गर्नुहोस्

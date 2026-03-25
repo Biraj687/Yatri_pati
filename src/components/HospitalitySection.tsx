@@ -96,7 +96,7 @@ export function HospitalitySection({
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
                         <div className="absolute bottom-0 left-0 w-full p-6 md:p-8">
-                          <h3 className="text-white text-3xl md:text-4xl font-bold leading-tight mb-3 drop-shadow-md">
+                          <h3 className="text-white text-3xl md:text-4xl font-bold leading-snug mb-3 drop-shadow-md">
                             {article.title}
                           </h3>
                           <div className="text-white/90 text-sm font-medium flex items-center gap-3">

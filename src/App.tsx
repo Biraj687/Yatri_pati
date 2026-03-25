@@ -40,28 +40,38 @@ function AppContent() {
             <Suspense fallback={<SkeletonLoader type="hero" />}>
               <Home />
             </Suspense>
-            <AdBanner 
+            <AdBanner
               id="ad-banner-1"
               adText="Advertisement Space 1"
-              height="100px"
+              height="120px"
+              maxWidth="max-w-[1440px]"
+              center={true}
+              className="mt-8"
             />
             <GantavySection title={titles.destination} />
-            <AdBanner 
+            <AdBanner
               id="ad-banner-2"
               adText="Advertisement Space 2"
               height="100px"
+              maxWidth="max-w-[1440px]"
+              center={true}
             />
             <NewsPackagesSection newsTitle={titles.latest} packageTitle={titles.packages} />
-            <AdBanner 
+            <AdBanner
               id="ad-banner-3"
               adText="Advertisement Space 3"
               height="100px"
+              maxWidth="max-w-[1440px]"
+              center={true}
             />
             <HospitalitySection hospitalityTitle={titles.hospitality} hotelsTitle={titles.hotels} />
-            <AdBanner 
+            <AdBanner
               id="ad-banner-4"
               adText="Advertisement Space 4"
-              height="100px"
+              height="120px"
+              maxWidth="max-w-[1440px]"
+              center={true}
+              className="mb-8"
             />
           </PortalLayout>
         } />
