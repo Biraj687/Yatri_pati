@@ -9,20 +9,21 @@ import {
   SettingsPage,
 } from '@pages';
 
-export function App() {
+function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/dashboard">
       <DashboardProvider>
         <Routes>
-          <Route path="/dashboard" element={<DashboardLayout><DashboardHome /></DashboardLayout>} />
-          <Route path="/dashboard/news" element={<DashboardLayout><NewsManagementPage /></DashboardLayout>} />
-          <Route path="/dashboard/files" element={<DashboardLayout><FileManagerPage /></DashboardLayout>} />
-          <Route path="/dashboard/analytics" element={<DashboardLayout><AnalyticsPage /></DashboardLayout>} />
-          <Route path="/dashboard/settings" element={<DashboardLayout><SettingsPage /></DashboardLayout>} />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<DashboardLayout><DashboardHome /></DashboardLayout>} />
+          <Route path="/news" element={<DashboardLayout><NewsManagementPage /></DashboardLayout>} />
+          <Route path="/files" element={<DashboardLayout><FileManagerPage /></DashboardLayout>} />
+          <Route path="/analytics" element={<DashboardLayout><AnalyticsPage /></DashboardLayout>} />
+          <Route path="/settings" element={<DashboardLayout><SettingsPage /></DashboardLayout>} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </DashboardProvider>
     </BrowserRouter>
   );
 }
+
+export default App;

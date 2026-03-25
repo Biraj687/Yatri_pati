@@ -30,7 +30,25 @@
       "@types/*": ["src/types/*"],
       "@context/*": ["src/context/*"],
       "@assets/*": ["src/assets/*"],
-      "@layouts/*": ["src/layouts/*"]
+      "@layouts/*": ["src/layouts/*"],
+      "@dashboard": ["dashboard/src/index.ts"],
+      "@dashboard/*": ["dashboard/src/*"],
+      "@dashboard/components": ["dashboard/src/components/index.ts"],
+      "@dashboard/components/*": ["dashboard/src/components/*"],
+      "@dashboard/pages": ["dashboard/src/pages/index.ts"],
+      "@dashboard/pages/*": ["dashboard/src/pages/*"],
+      "@dashboard/context": ["dashboard/src/context/index.ts"],
+      "@dashboard/context/*": ["dashboard/src/context/*"],
+      "@dashboard/types": ["dashboard/src/types/index.ts"],
+      "@dashboard/types/*": ["dashboard/src/types/*"],
+      "@dashboard/utils": ["dashboard/src/utils/index.ts"],
+      "@dashboard/utils/*": ["dashboard/src/utils/*"],
+      "@dashboard/hooks": ["dashboard/src/hooks/index.ts"],
+      "@dashboard/hooks/*": ["dashboard/src/hooks/*"],
+      "@dashboard/layouts": ["dashboard/src/layouts/index.ts"],
+      "@dashboard/layouts/*": ["dashboard/src/layouts/*"],
+      "@dashboard/services": ["dashboard/src/services/index.ts"],
+      "@dashboard/services/*": ["dashboard/src/services/*"]
     },
 
     /* Linting */

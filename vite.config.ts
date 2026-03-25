@@ -26,6 +26,7 @@ export default defineConfig(({ mode }): UserConfig => ({
       '@context': fileURLToPath(new URL('./src/context', import.meta.url)),
       '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
       '@layouts': fileURLToPath(new URL('./src/layouts', import.meta.url)),
+      '@dashboard': fileURLToPath(new URL('./dashboard/src', import.meta.url)),
     },
   },
   build: {

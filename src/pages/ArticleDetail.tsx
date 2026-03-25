@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { FiShare2, FiArrowLeft, FiUser, FiCalendar, FiUsers } from 'react-icons/fi';
+import { FiShare2, FiArrowLeft, FiCalendar } from 'react-icons/fi';
 import { SkeletonLoader, CompactArticle, OptimizedImage, MultiAuthorDisplay, ArticleContentRenderer, TagDisplay } from '@components';
 import { useArticle, useNews } from '@hooks/useNews';
 import { useSiteConfig } from '@context/SiteConfigContext';

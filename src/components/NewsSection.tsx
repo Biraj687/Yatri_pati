@@ -48,7 +48,7 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
     return null;
   }
 
-  const renderArticle = (article: Article, index: number, isLarge = false) => {
+  const renderArticle = (article: Article, isLarge = false) => {
     const titleClasses = isLarge
       ? 'text-3xl md:text-4xl font-bold leading-[2.5rem]'
       : 'text-xl font-bold leading-[2.5rem]';
@@ -116,9 +116,9 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
       case 'two-column':
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {displayedArticles.map((article, index) => (
+            {displayedArticles.map(article => (
               <div key={article.id} className="flex flex-col">
-                {renderArticle(article, index)}
+                {renderArticle(article)}
               </div>
             ))}
           </div>
@@ -132,16 +132,16 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Column - Large Cards */}
             <div className="flex flex-col gap-6">
-              {leftArticles.map((article, index) => (
-                <div key={article.id}>
-                  {renderArticle(article, index, true)}
+              {leftArticles.map(article => (
+                  <div key={article.id}>
+                  {renderArticle(article, true)}
                 </div>
               ))}
             </div>
             
             {/* Right Column - Horizontal List */}
             <div className="flex flex-col gap-4">
-              {rightArticles.map((article, index) => (
+              {rightArticles.map(article => (
                 <div key={article.id} className="flex gap-4 items-start">
                   <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
                     <OptimizedImage
@@ -169,10 +169,10 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
       case 'grid-3':
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayedArticles.map((article, index) => (
-              <div key={article.id}>
-                {renderArticle(article, index)}
-              </div>
+            {displayedArticles.map(article => (
+              <article key={article.id}>
+                {renderArticle(article)}
+              </article>
             ))}
           </div>
         );
@@ -180,9 +180,9 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
       case 'grid-4':
         return (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {displayedArticles.map((article, index) => (
+            {displayedArticles.map(article => (
               <div key={article.id}>
-                {renderArticle(article, index)}
+                {renderArticle(article)}
               </div>
             ))}
           </div>
@@ -191,7 +191,7 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
       case 'list-vertical':
         return (
           <div className="flex flex-col gap-6">
-            {displayedArticles.map((article, index) => (
+            {displayedArticles.map(article => (
               <div key={article.id} className="flex gap-6">
                 <div className="w-32 h-24 flex-shrink-0 overflow-hidden rounded-lg">
                   <OptimizedImage
@@ -218,9 +218,9 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
       case 'list-horizontal':
         return (
           <div className="flex overflow-x-auto gap-6 pb-4 -mx-4 px-4">
-            {displayedArticles.map((article, index) => (
+            {displayedArticles.map(article => (
               <div key={article.id} className="w-64 flex-shrink-0">
-                {renderArticle(article, index)}
+                {renderArticle(article)}
               </div>
             ))}
           </div>
@@ -229,9 +229,9 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
       default:
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {displayedArticles.map((article, index) => (
+            {displayedArticles.map(article => (
               <div key={article.id}>
-                {renderArticle(article, index)}
+                {renderArticle(article)}
               </div>
             ))}
           </div>
