@@ -10,8 +10,11 @@ import {
 } from '@pages';
 
 function App() {
+  const basename = import.meta.env.DEV ? '/' : '/dashboard';
+  console.log('🔍 App Config:', { DEV: import.meta.env.DEV, basename, url: window.location.href });
+  
   return (
-    <BrowserRouter basename="/dashboard">
+    <BrowserRouter basename={basename}>
       <DashboardProvider>
         <Routes>
           <Route path="/" element={<DashboardLayout><DashboardHome /></DashboardLayout>} />

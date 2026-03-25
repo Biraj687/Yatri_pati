@@ -13,11 +13,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const isActive = (path: string) => location.pathname === path;
 
   const menuItems = [
-    { label: 'Dashboard', path: '/dashboard', icon: FiHome },
-    { label: 'News', path: '/dashboard/news', icon: FiFileText },
-    { label: 'File Manager', path: '/dashboard/files', icon: FiFolder },
-    { label: 'Analytics', path: '/dashboard/analytics', icon: FiBarChart2 },
-    { label: 'Settings', path: '/dashboard/settings', icon: FiSettings },
+    { label: 'Dashboard', path: '/', icon: FiHome },
+    { label: 'News', path: '/news', icon: FiFileText },
+    { label: 'File Manager', path: '/files', icon: FiFolder },
+    { label: 'Analytics', path: '/analytics', icon: FiBarChart2 },
+    { label: 'Settings', path: '/settings', icon: FiSettings },
   ];
 
   return (

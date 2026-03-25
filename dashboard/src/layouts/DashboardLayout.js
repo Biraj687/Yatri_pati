@@ -7,11 +7,11 @@ export function DashboardLayout({ children }) {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
     const menuItems = [
-        { label: 'Dashboard', path: '/dashboard', icon: FiHome },
-        { label: 'News', path: '/dashboard/news', icon: FiFileText },
-        { label: 'File Manager', path: '/dashboard/files', icon: FiFolder },
-        { label: 'Analytics', path: '/dashboard/analytics', icon: FiBarChart2 },
-        { label: 'Settings', path: '/dashboard/settings', icon: FiSettings },
+        { label: 'Dashboard', path: '/', icon: FiHome },
+        { label: 'News', path: '/news', icon: FiFileText },
+        { label: 'File Manager', path: '/files', icon: FiFolder },
+        { label: 'Analytics', path: '/analytics', icon: FiBarChart2 },
+        { label: 'Settings', path: '/settings', icon: FiSettings },
     ];
     return (_jsxs("div", { className: "flex h-screen bg-gray-50", children: [_jsxs("aside", { className: `${sidebarOpen ? 'w-64' : 'w-20'} bg-white border-r border-gray-200 shadow-sm transition-all duration-300 flex flex-col overflow-hidden`, children: [_jsxs("div", { className: "p-6 flex items-center justify-between", children: [sidebarOpen && _jsx("h1", { className: "text-xl font-bold text-primary", children: "Yatripati" }), _jsx("button", { onClick: () => setSidebarOpen(!sidebarOpen), className: "text-gray-600 hover:text-primary", children: sidebarOpen ? _jsx(FiX, { size: 24 }) : _jsx(FiMenu, { size: 24 }) })] }), _jsx("nav", { className: "flex-1 px-3 space-y-2 overflow-y-auto", children: menuItems.map(({ label, path, icon: Icon }) => (_jsxs(Link, { to: path, className: `
                 flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive(path)
