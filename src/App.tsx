@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { PortalLayout } from '@layouts/PortalLayout'
-import { GantavySection, NewsPackagesSection, HospitalitySection, SkeletonLoader, ErrorBoundary } from '@components'
+import { GantavySection, NewsPackagesSection, HospitalitySection, SkeletonLoader, ErrorBoundary, AdBanner } from '@components'
 import { SiteConfigProvider, useSiteConfig } from '@context/SiteConfigContext'
 import { ThemeProvider } from '@context/ThemeContext'
 import { SearchProvider } from '@context/SearchContext'
@@ -40,9 +40,29 @@ function AppContent() {
             <Suspense fallback={<SkeletonLoader type="hero" />}>
               <Home />
             </Suspense>
+            <AdBanner 
+              id="ad-banner-1"
+              adText="Advertisement Space 1"
+              height="100px"
+            />
             <GantavySection title={titles.destination} />
+            <AdBanner 
+              id="ad-banner-2"
+              adText="Advertisement Space 2"
+              height="100px"
+            />
             <NewsPackagesSection newsTitle={titles.latest} packageTitle={titles.packages} />
+            <AdBanner 
+              id="ad-banner-3"
+              adText="Advertisement Space 3"
+              height="100px"
+            />
             <HospitalitySection hospitalityTitle={titles.hospitality} hotelsTitle={titles.hotels} />
+            <AdBanner 
+              id="ad-banner-4"
+              adText="Advertisement Space 4"
+              height="100px"
+            />
           </PortalLayout>
         } />
         

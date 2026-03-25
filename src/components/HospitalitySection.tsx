@@ -44,7 +44,7 @@ export function HospitalitySection({
           {sections.map((section, idx) => (
             <div key={idx} className={idx > 0 ? "mt-20" : ""}>
               <div className="mb-10">
-                <h2 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-12 font-noto opacity-50">
+                <h2 className="text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-12 font-noto opacity-50">
                   {section.title}
                 </h2>
               </div>
@@ -74,7 +74,7 @@ export function HospitalitySection({
 
           return (
             <div key={idx} className={idx > 0 ? "mt-12" : ""}>
-              <h2 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-12 font-noto">
+              <h2 className="text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-12 font-noto">
                 {section.title}
               </h2>
               
@@ -87,7 +87,7 @@ export function HospitalitySection({
                       <Link
                         key={article.id}
                         to={`/news/${article.id}`}
-                        className="relative flex-1 overflow-hidden rounded-xl border border-black dark:border-gray-600 min-h-[300px] md:min-h-0"
+                        className="relative flex-1 overflow-hidden rounded-xl border border-[#e0e0e0] dark:border-gray-600 min-h-[300px] md:min-h-0"
                       >
                         <img
                           src={article.image}
@@ -96,7 +96,7 @@ export function HospitalitySection({
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
                         <div className="absolute bottom-0 left-0 w-full p-6 md:p-8">
-                          <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-3 drop-shadow-md">
+                          <h3 className="text-white text-3xl md:text-4xl font-bold leading-tight mb-3 drop-shadow-md">
                             {article.title}
                           </h3>
                           <div className="text-white/90 text-sm font-medium flex items-center gap-3">
@@ -115,7 +115,7 @@ export function HospitalitySection({
                       <Link
                         key={article.id}
                         to={`/news/${article.id}`}
-                        className="flex-1 flex flex-row-reverse gap-4 items-center bg-white dark:bg-gray-800 border border-black dark:border-gray-600 rounded-xl p-4"
+                        className="flex-1 flex gap-4 items-center bg-white dark:bg-gray-800 border border-[#e0e0e0] dark:border-gray-600 rounded-xl p-4 hover:shadow-md transition-shadow duration-300"
                       >
                         <div className="w-32 h-24 md:w-40 md:h-28 rounded-lg overflow-hidden flex-shrink-0">
                           <img
@@ -125,7 +125,7 @@ export function HospitalitySection({
                           />
                         </div>
                         <div className="flex-1 min-w-0 space-y-2">
-                          <h4 className="text-md md:text-lg font-bold text-gray-900 dark:text-gray-100 leading-snug line-clamp-2">
+                          <h4 className="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 leading-snug line-clamp-2">
                             {article.title}
                           </h4>
                           <div className="flex items-center gap-2">
@@ -157,7 +157,7 @@ export function HospitalitySection({
                     <Link
                       key={article.id}
                       to={`/news/${article.id}`}
-                      className="flex flex-col h-full bg-white dark:bg-gray-800 border border-black dark:border-gray-600 rounded-xl overflow-hidden"
+                      className="flex flex-col h-full bg-white dark:bg-gray-800 border border-[#e0e0e0] dark:border-gray-600 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-300"
                     >
                       <div className="h-48 overflow-hidden flex-shrink-0">
                         <img
@@ -167,7 +167,7 @@ export function HospitalitySection({
                         />
                       </div>
                       <div className="flex-grow flex flex-col p-4">
-                        <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 leading-snug mb-2 line-clamp-2">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-snug mb-2 line-clamp-2">
                           {article.title}
                         </h3>
                         <p className="text-sm text-gray-500 dark:text-gray-400 font-noto line-clamp-2 mb-3 leading-relaxed opacity-70">

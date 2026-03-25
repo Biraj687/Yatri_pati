@@ -1,15 +1,45 @@
 import { Link } from 'react-router-dom';
 import type { Article } from '@types';
 
-export function HeroSection({ heroArticle }: { heroArticle: Article }) {
+interface HeroSectionProps {
+  heroArticle: Article;
+}
+
+export function HeroSection({ heroArticle }: HeroSectionProps) {
+  const isVideo = heroArticle.videoUrl || (heroArticle.image && heroArticle.image.endsWith('.mp4'));
+  
   return (
     <section className="py-8 px-4 md:px-12 lg:px-20 w-full max-w-[1440px] mx-auto group relative overflow-hidden">
       <Link to={`/news/${heroArticle.id}`} className="block relative max-w-6xl mx-auto rounded-sxl overflow-hidden shadow-2xl transition-all duration-300" style={{ aspectRatio: '16 / 7' }}>
-        <img 
-          src={heroArticle.image} 
-          alt="Featured" 
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+        {isVideo ? (
+          <>
+            {/* Video Element */}
+            <video
+              src={heroArticle.videoUrl || heroArticle.image}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-full object-cover"
+              poster={heroArticle.thumbnailImage || heroArticle.image}
+            />
+            {/* Fallback Image if video fails to load */}
+            <noscript>
+              <img 
+                src={heroArticle.thumbnailImage || heroArticle.image} 
+                alt="Featured" 
+                className="w-full h-full object-cover absolute inset-0"
+              />
+            </noscript>
+          </>
+        ) : (
+          <img 
+            src={heroArticle.image} 
+            alt="Featured" 
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        )}
+        
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 

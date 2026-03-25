@@ -115,7 +115,7 @@ export function Home() {
       {/* Samachar Section - with breathing space */}
       <main className="w-full py-12 dark:bg-gray-900 transition-colors duration-300">
         <section className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[5rem]">
-          <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-10 text-left uppercase border-b-2 border-primary-600 inline-block pb-2">
+          <h2 className="text-5xl font-bold text-gray-800 dark:text-gray-100 mb-10 text-left uppercase border-b-2 border-primary-600 inline-block pb-2">
             {sectionTitles.latest || 'समाचार'}
           </h2>
 

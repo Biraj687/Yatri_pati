@@ -45,6 +45,8 @@ export function AccordionSection({ title = 'विशेष सिफारि�
         <div className="flex flex-col lg:flex-row gap-4 h-auto lg:h-[600px] w-full overflow-hidden">
           {articles.map((article) => {
             const isActive = activeId === article.id;
+            // Use thumbnailImage if available, otherwise fall back to main image
+            const displayImage = article.thumbnailImage || article.image;
             
             return (
               <Link
@@ -57,7 +59,7 @@ export function AccordionSection({ title = 'विशेष सिफारि�
               >
                 {/* Background Image */}
                 <img
-                  src={article.image}
+                  src={displayImage}
                   alt={article.title}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />

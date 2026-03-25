@@ -43,7 +43,7 @@ export default function NewsPackagesSection({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* News Column */}
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-gray-400 dark:border-gray-600 pb-3 text-left">
+              <h2 className="text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-[#e0e0e0] dark:border-gray-600 pb-3 text-left">
                 {newsTitle}
               </h2>
               <div className="space-y-4">
@@ -55,7 +55,7 @@ export default function NewsPackagesSection({
 
             {/* Packages Column */}
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-primary-600 pb-3 text-left">
+              <h2 className="text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-[#e0e0e0] dark:border-gray-600 pb-3 text-left">
                 {packageTitle}
               </h2>
               <div className="space-y-4">
@@ -77,7 +77,7 @@ export default function NewsPackagesSection({
 
           {/* News Column */}
           <div className="flex flex-col h-full">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-gray-400 dark:border-gray-600 pb-3 text-left">
+            <h2 className="text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-[#e0e0e0] dark:border-gray-600 pb-3 text-left">
               {newsTitle}
             </h2>
             <div className="flex flex-col gap-4 flex-1">
@@ -85,7 +85,7 @@ export default function NewsPackagesSection({
                 <Link
                   key={article.id}
                   to={`/news/${article.id}`}
-                  className="flex-1 flex flex-row-reverse gap-4 p-4 border border-black dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 overflow-hidden items-start"
+                  className="flex-1 flex gap-4 p-4 border border-[#e0e0e0] dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 overflow-hidden items-center hover:shadow-md transition-shadow duration-300"
                 >
                   <img
                     src={article.image}
@@ -93,7 +93,7 @@ export default function NewsPackagesSection({
                     className="w-28 h-24 object-cover rounded flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0 text-left">
-                    <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2">
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2">
                       {article.title}
                     </h3>
                     <div className="flex items-center gap-2 mb-2">
@@ -119,7 +119,7 @@ export default function NewsPackagesSection({
 
           {/* Packages Column */}
           <div className="flex flex-col h-full">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-primary-600 pb-3 text-left">
+            <h2 className="text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b-4 border-[#e0e0e0] dark:border-gray-600 pb-3 text-left">
               {packageTitle}
             </h2>
             <div className="flex flex-col gap-4 flex-1">
@@ -127,7 +127,7 @@ export default function NewsPackagesSection({
                 <Link
                   key={article.id}
                   to={`/news/${article.id}`}
-                  className="flex-1 flex flex-row-reverse gap-4 p-4 border border-black dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 overflow-hidden items-start"
+                  className="flex-1 flex gap-4 p-4 border border-[#e0e0e0] dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 overflow-hidden items-center hover:shadow-md transition-shadow duration-300"
                 >
                   <img
                     src={article.image}
@@ -135,7 +135,7 @@ export default function NewsPackagesSection({
                     className="w-28 h-24 object-cover rounded flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0 text-left">
-                    <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2">
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2">
                       {article.title}
                     </h3>
                     <div className="flex items-center gap-2 mb-2">

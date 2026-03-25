@@ -57,6 +57,8 @@ export interface Article {
   readTime?: string;
   views?: number;
   source?: string;
+  videoUrl?: string;
+  thumbnailImage?: string;
   [key: string]: unknown;
 }
 
