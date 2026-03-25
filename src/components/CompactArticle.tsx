@@ -45,7 +45,7 @@ export function CompactArticle({
         
         {/* Content */}
         <div className="flex-1 flex flex-col justify-center min-w-0">
-          <h3 className={`font-bold text-gray-800 dark:text-gray-100 mb-1.5 leading-snug line-clamp-2
+          <h3 className={`font-bold text-gray-800 dark:text-gray-100 mb-1.5 leading-tight line-clamp-2
             ${minimal ? 'text-sm md:text-base' : 'text-lg md:text-xl'}`}>
             {article.title}
           </h3>

@@ -126,7 +126,7 @@ export function ArticleDetail() {
 
             {/* Article Header */}
             <header className="mb-10">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[2.5rem] mb-6">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[3.5rem] mb-6">
                 {article.title}
               </h1>
               

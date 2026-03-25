@@ -1,0 +1,113 @@
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { useState, useEffect } from 'react';
+import { FiPlus, FiSearch } from 'react-icons/fi';
+import { useDashboard } from '@context';
+import { NewsList } from '@components';
+import { NewsEditor } from '@components';
+import { Button, Modal, Alert, LoadingSpinner, Input } from '@components';
+import { useModal, useDebounce } from '@hooks';
+export function NewsManagementPage() {
+    const { articles, loading, error, loadArticles, createArticle, updateArticle, deleteArticle, publishArticle, toggleSticky, clearError, } = useDashboard();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all');
+    const [sortBy, setSortBy] = useState('newest');
+    const [selectedArticle, setSelectedArticle] = useState();
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deleteTarget, setDeleteTarget] = useState(null);
+    const [saveError, setSaveError] = useState(null);
+    const [saveSuccess, setSaveSuccess] = useState(false);
+    const editorModal = useModal();
+    const debouncedSearch = useDebounce(searchTerm, 500);
+    useEffect(() => {
+        loadArticles({
+            search: debouncedSearch,
+            status: statusFilter === 'all' ? undefined : statusFilter,
+        });
+    }, [debouncedSearch, statusFilter, loadArticles]);
+    const filteredAndSorted = [...articles].sort((a, b) => {
+        switch (sortBy) {
+            case 'newest':
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            case 'oldest':
+                return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+            case 'most-viewed':
+                return (b.views || 0) - (a.views || 0);
+            case 'rank':
+                return (b.rank || 0) - (a.rank || 0);
+            default:
+                return 0;
+        }
+    });
+    const handleCreateNew = () => {
+        setSelectedArticle(undefined);
+        setSaveError(null);
+        setSaveSuccess(false);
+        editorModal.open();
+    };
+    const handleEdit = (article) => {
+        setSelectedArticle(article);
+        setSaveError(null);
+        setSaveSuccess(false);
+        editorModal.open();
+    };
+    const handleSave = async (payload) => {
+        setSaveError(null);
+        setSaveSuccess(false);
+        try {
+            if (selectedArticle?.id) {
+                await updateArticle(selectedArticle.id, payload);
+            }
+            else {
+                await createArticle(payload);
+            }
+            setSaveSuccess(true);
+            setTimeout(() => {
+                editorModal.close();
+                setTimeout(() => setSaveSuccess(false), 2000);
+            }, 1500);
+        }
+        catch (err) {
+            setSaveError(err instanceof Error ? err.message : 'Failed to save article');
+        }
+    };
+    const handleDelete = async (id) => {
+        setDeleteTarget(id);
+        setShowDeleteConfirm(true);
+    };
+    const confirmDelete = async () => {
+        if (!deleteTarget)
+            return;
+        try {
+            await deleteArticle(deleteTarget);
+            setShowDeleteConfirm(false);
+            setDeleteTarget(null);
+        }
+        catch (error) {
+            setSaveError(error instanceof Error ? error.message : 'Failed to delete article');
+        }
+    };
+    const publishDraft = async (id) => {
+        try {
+            await publishArticle(id);
+            setSaveSuccess(true);
+            setTimeout(() => setSaveSuccess(false), 2000);
+        }
+        catch (err) {
+            setSaveError(err instanceof Error ? err.message : 'Failed to publish article');
+        }
+    };
+    const toggleArticleSticky = async (id) => {
+        try {
+            await toggleSticky(id);
+        }
+        catch (err) {
+            setSaveError(err instanceof Error ? err.message : 'Failed to update sticky status');
+        }
+    };
+    return (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "flex items-center justify-between gap-4", children: [_jsxs("div", { children: [_jsx("h1", { className: "text-3xl font-bold text-gray-900", children: "News Management" }), _jsx("p", { className: "text-gray-600 mt-1", children: "Manage all your news articles and content" })] }), _jsxs(Button, { variant: "primary", onClick: handleCreateNew, className: "gap-2", children: [_jsx(FiPlus, { size: 20 }), "New Article"] })] }), error && _jsx(Alert, { type: "error", message: error, onClose: clearError }), saveError && _jsx(Alert, { type: "error", message: saveError, onClose: () => setSaveError(null) }), saveSuccess && _jsx(Alert, { type: "success", message: "Article saved successfully!", onClose: () => setSaveSuccess(false), dismissible: false }), _jsx("div", { className: "bg-white rounded-lg border border-gray-200 p-4 space-y-4", children: _jsxs("div", { className: "flex gap-4 flex-col md:flex-row", children: [_jsx("div", { className: "flex-1", children: _jsx(Input, { placeholder: "Search articles...", icon: _jsx(FiSearch, { size: 18 }), value: searchTerm, onChange: (e) => setSearchTerm(e.target.value) }) }), _jsxs("select", { value: statusFilter, onChange: (e) => setStatusFilter(e.target.value), className: "px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500", children: [_jsx("option", { value: "all", children: "All Status" }), _jsx("option", { value: "draft", children: "Drafts" }), _jsx("option", { value: "published", children: "Published" }), _jsx("option", { value: "archived", children: "Archived" })] }), _jsxs("select", { value: sortBy, onChange: (e) => setSortBy(e.target.value), className: "px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500", children: [_jsx("option", { value: "newest", children: "Newest First" }), _jsx("option", { value: "oldest", children: "Oldest First" }), _jsx("option", { value: "most-viewed", children: "Most Viewed" }), _jsx("option", { value: "rank", children: "By Rank" })] })] }) }), loading ? (_jsx("div", { className: "flex items-center justify-center h-96", children: _jsx(LoadingSpinner, {}) })) : (_jsx(NewsList, { articles: filteredAndSorted, onEdit: handleEdit, onDelete: handleDelete, onToggleSticky: toggleArticleSticky, onPublish: publishDraft, loading: loading, onRowClick: handleEdit })), _jsx(Modal, { isOpen: editorModal.isOpen, title: selectedArticle ? 'Edit Article' : 'Create New Article', onClose: () => {
+                    editorModal.close();
+                    setSelectedArticle(undefined);
+                    setSaveError(null);
+                    setSaveSuccess(false);
+                }, size: "xl", children: saveSuccess ? (_jsxs("div", { className: "text-center py-8", children: [_jsx("div", { className: "text-5xl mb-3", children: "\u2705" }), _jsxs("p", { className: "text-lg font-semibold text-gray-900", children: ["Article ", selectedArticle ? 'updated' : 'created', " successfully!"] })] })) : (_jsx(NewsEditor, { article: selectedArticle, onSave: handleSave, onCancel: editorModal.close, loading: loading })) }), _jsx(Modal, { isOpen: showDeleteConfirm, title: "Delete Article", onClose: () => setShowDeleteConfirm(false), size: "sm", footer: _jsxs(_Fragment, { children: [_jsx(Button, { variant: "ghost", onClick: () => setShowDeleteConfirm(false), children: "Cancel" }), _jsx(Button, { variant: "danger", onClick: confirmDelete, loading: loading, children: "Delete Article" })] }), children: _jsxs("div", { className: "text-center py-4", children: [_jsx("div", { className: "text-5xl mb-3", children: "\u26A0\uFE0F" }), _jsx("p", { className: "text-gray-900 font-semibold mb-2", children: "Are you sure?" }), _jsx("p", { className: "text-gray-600 text-sm", children: "This action cannot be undone. The article will be permanently deleted." })] }) })] }));
+}
