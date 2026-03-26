@@ -1,18 +1,24 @@
 import { useEffect } from 'react';
-import { FiFileText, FiEye, FiUsers, FiTrendingUp } from 'react-icons/fi';
+import { FiFileText, FiEye, FiUsers, FiTrendingUp, FiRefreshCw } from 'react-icons/fi';
 import { useDashboard } from '@context/DashboardContext';
-import { LoadingSpinner, Card } from '@components';
+import { LoadingSpinner, Card, Alert, Button } from '@components';
 import { NewsCardPreview } from '@components';
 import { formatNumberCompact } from '@utils';
 
 export function DashboardHome() {
-  const { stats, loadStats } = useDashboard();
+  const { stats, loadStats, loading, error, clearError } = useDashboard();
 
   useEffect(() => {
     loadStats();
   }, [loadStats]);
 
-  if (!stats) {
+  const handleRetry = () => {
+    clearError();
+    loadStats();
+  };
+
+  // Show loading spinner only when loading and no stats yet
+  if (loading && !stats) {
     return (
       <div className="flex items-center justify-center h-96">
         <LoadingSpinner />
@@ -20,39 +26,62 @@ export function DashboardHome() {
     );
   }
 
+  // Show error state
+  if (error && !stats) {
+    return (
+      <div className="flex flex-col items-center justify-center h-96 space-y-4">
+        <Alert type="error" message={error} />
+        <Button variant="primary" onClick={handleRetry} className="gap-2">
+          <FiRefreshCw size={18} />
+          Retry
+        </Button>
+      </div>
+    );
+  }
+
+  // Fallback mock stats for development when stats is null (should not happen)
+  const safeStats = stats || {
+    totalArticles: 0,
+    publishedArticles: 0,
+    draftArticles: 0,
+    totalViews: 0,
+    totalAuthors: 0,
+    recentArticles: [],
+  };
+
   const statCards = [
     {
       icon: FiFileText,
       label: 'Total Articles',
-      value: stats.totalArticles,
+      value: safeStats.totalArticles,
       color: 'bg-blue-50 text-blue-600',
       borderColor: 'border-blue-200',
     },
     {
       icon: FiTrendingUp,
       label: 'Published',
-      value: stats.publishedArticles,
+      value: safeStats.publishedArticles,
       color: 'bg-green-50 text-green-600',
       borderColor: 'border-green-200',
     },
     {
       icon: FiFileText,
       label: 'Drafts',
-      value: stats.draftArticles,
+      value: safeStats.draftArticles,
       color: 'bg-yellow-50 text-yellow-600',
       borderColor: 'border-yellow-200',
     },
     {
       icon: FiEye,
       label: 'Total Views',
-      value: formatNumberCompact(stats.totalViews),
+      value: formatNumberCompact(safeStats.totalViews),
       color: 'bg-purple-50 text-purple-600',
       borderColor: 'border-purple-200',
     },
     {
       icon: FiUsers,
       label: 'Authors',
-      value: stats.totalAuthors,
+      value: safeStats.totalAuthors,
       color: 'bg-pink-50 text-pink-600',
       borderColor: 'border-pink-200',
     },
@@ -82,11 +111,11 @@ export function DashboardHome() {
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Articles</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {stats.recentArticles.slice(0, 6).map(article => (
+          {safeStats.recentArticles.slice(0, 6).map(article => (
             <NewsCardPreview key={article.id} article={article} compact />
           ))}
         </div>
-        {stats.recentArticles.length === 0 && (
+        {safeStats.recentArticles.length === 0 && (
           <Card className="p-12 text-center text-gray-500">
             <div className="text-4xl mb-2">📭</div>
             <p>No articles yet. Start by creating your first article!</p>
@@ -101,18 +130,18 @@ export function DashboardHome() {
           <div>
             <p className="text-gray-600 mb-1">Publish Rate</p>
             <p className="text-2xl font-bold text-blue-600">
-              {stats.totalArticles > 0 ? Math.round((stats.publishedArticles / stats.totalArticles) * 100) : 0}%
+              {safeStats.totalArticles > 0 ? Math.round((safeStats.publishedArticles / safeStats.totalArticles) * 100) : 0}%
             </p>
           </div>
           <div>
             <p className="text-gray-600 mb-1">Avg. Views</p>
             <p className="text-2xl font-bold text-indigo-600">
-              {stats.publishedArticles > 0 ? Math.round(stats.totalViews / stats.publishedArticles) : 0}
+              {safeStats.publishedArticles > 0 ? Math.round(safeStats.totalViews / safeStats.publishedArticles) : 0}
             </p>
           </div>
           <div>
             <p className="text-gray-600 mb-1">Active Authors</p>
-            <p className="text-2xl font-bold text-purple-600">{stats.totalAuthors}</p>
+            <p className="text-2xl font-bold text-purple-600">{safeStats.totalAuthors}</p>
           </div>
         </div>
       </Card>
