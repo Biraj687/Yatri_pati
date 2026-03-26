@@ -10,7 +10,7 @@ import type {
   NewsQueryParams,
   ApiResponse
 } from '../types';
-import { mockArticles, mockCategories } from '../mocks/articles';
+import { mockArticles } from '../mocks/articles';
 
 export class NewsService {
   private api = mainApiClient;

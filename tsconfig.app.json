@@ -48,7 +48,19 @@
       "@dashboard/layouts": ["dashboard/src/layouts/index.ts"],
       "@dashboard/layouts/*": ["dashboard/src/layouts/*"],
       "@dashboard/services": ["dashboard/src/services/index.ts"],
-      "@dashboard/services/*": ["dashboard/src/services/*"]
+      "@dashboard/services/*": ["dashboard/src/services/*"],
+      "@shared/services": ["shared/services/index.ts"],
+      "@shared/services/*": ["shared/services/*"],
+      "@shared/types": ["shared/types/index.ts"],
+      "@shared/types/*": ["shared/types/*"],
+      "@shared/hooks": ["shared/hooks/index.ts"],
+      "@shared/hooks/*": ["shared/hooks/*"],
+      "@shared/context": ["shared/context/index.ts"],
+      "@shared/context/*": ["shared/context/*"],
+      "@shared/utils": ["shared/utils/index.ts"],
+      "@shared/utils/*": ["shared/utils/*"],
+      "@shared/mocks": ["shared/mocks/index.ts"],
+      "@shared/mocks/*": ["shared/mocks/*"]
     },
 
     /* Linting */

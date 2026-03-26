@@ -14,6 +14,13 @@ export default defineConfig({
             '@context': path.resolve(__dirname, './src/context'),
             '@layouts': path.resolve(__dirname, './src/layouts'),
             '@services': path.resolve(__dirname, './src/services'),
+            // Shared resources (backend-agnostic layer)
+            '@shared/services': path.resolve(__dirname, '../shared/services'),
+            '@shared/types': path.resolve(__dirname, '../shared/types'),
+            '@shared/hooks': path.resolve(__dirname, '../shared/hooks'),
+            '@shared/context': path.resolve(__dirname, '../shared/context'),
+            '@shared/utils': path.resolve(__dirname, '../shared/utils'),
+            '@shared/mocks': path.resolve(__dirname, '../shared/mocks'),
         },
     },
     server: {

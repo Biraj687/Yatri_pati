@@ -52,6 +52,8 @@ export function generateId() {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 export function formatNumberCompact(num) {
+    if (num === undefined || num === null)
+        return '0';
     if (num >= 1000000)
         return (num / 1000000).toFixed(1) + 'M';
     if (num >= 1000)

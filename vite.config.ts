@@ -27,6 +27,13 @@ export default defineConfig(({ mode }): UserConfig => ({
       '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
       '@layouts': fileURLToPath(new URL('./src/layouts', import.meta.url)),
       '@dashboard': fileURLToPath(new URL('./dashboard/src', import.meta.url)),
+      // Shared resources (backend-agnostic layer)
+      '@shared/services': fileURLToPath(new URL('./shared/services', import.meta.url)),
+      '@shared/types': fileURLToPath(new URL('./shared/types', import.meta.url)),
+      '@shared/hooks': fileURLToPath(new URL('./shared/hooks', import.meta.url)),
+      '@shared/context': fileURLToPath(new URL('./shared/context', import.meta.url)),
+      '@shared/utils': fileURLToPath(new URL('./shared/utils', import.meta.url)),
+      '@shared/mocks': fileURLToPath(new URL('./shared/mocks', import.meta.url)),
     },
   },
   build: {

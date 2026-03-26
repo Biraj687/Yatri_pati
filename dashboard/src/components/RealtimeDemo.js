@@ -1,0 +1,142 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+/**
+ * Realtime & Optimistic UI Demo Component
+ * Demonstrates real-time updates and optimistic UI features
+ */
+import { useState, useEffect, useCallback } from 'react';
+import { useRealtimeDashboard, useDashboardNotifications } from '../../../shared/hooks/useRealtimeDashboard';
+import { Button, Card, Alert, Badge } from './UI';
+export function RealtimeDemo() {
+    const { subscribeToArticles, subscribeToStats, connectionStatus, isRealtimeEnabled, optimisticallyCreateArticle, optimisticallyUpdateArticle, optimisticallyDeleteArticle, isTempId } = useRealtimeDashboard();
+    const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification, clearAll, hasNotifications, isEnabled: notificationsEnabled } = useDashboardNotifications();
+    const [demoArticles, setDemoArticles] = useState([
+        { id: '1', title: 'Sample Article 1', status: 'published', views: 100 },
+        { id: '2', title: 'Sample Article 2', status: 'draft', views: 50 },
+        { id: '3', title: 'Sample Article 3', status: 'published', views: 200 }
+    ]);
+    const [demoStats, setDemoStats] = useState({
+        totalArticles: 3,
+        publishedArticles: 2,
+        draftArticles: 1,
+        totalFiles: 0,
+        totalViews: 350,
+        recentArticles: [],
+        popularCategories: []
+    });
+    const [isConnected, setIsConnected] = useState(false);
+    const [lastEvent, setLastEvent] = useState('');
+    // Subscribe to real-time events
+    useEffect(() => {
+        if (!isRealtimeEnabled)
+            return;
+        const unsubscribeArticles = subscribeToArticles({
+            onCreate: (article) => {
+                setLastEvent(`Article created: ${article.title}`);
+                setDemoArticles(prev => [...prev, article]);
+                setDemoStats(prev => ({
+                    ...prev,
+                    totalArticles: prev.totalArticles + 1
+                }));
+            },
+            onUpdate: (article) => {
+                setLastEvent(`Article updated: ${article.title}`);
+                setDemoArticles(prev => prev.map(a => a.id === article.id ? article : a));
+            },
+            onDelete: (articleId) => {
+                setLastEvent(`Article deleted: ${articleId}`);
+                setDemoArticles(prev => prev.filter(a => a.id !== articleId));
+                setDemoStats(prev => ({
+                    ...prev,
+                    totalArticles: Math.max(0, prev.totalArticles - 1)
+                }));
+            }
+        });
+        const unsubscribeStats = subscribeToStats((stats) => {
+            setLastEvent('Stats updated');
+            setDemoStats(stats);
+        });
+        return () => {
+            unsubscribeArticles();
+            unsubscribeStats();
+        };
+    }, [isRealtimeEnabled, subscribeToArticles, subscribeToStats]);
+    // Update connection status
+    useEffect(() => {
+        setIsConnected(connectionStatus.isConnected);
+    }, [connectionStatus]);
+    // Demo: Optimistically create article
+    const handleCreateDemoArticle = useCallback(() => {
+        const newArticle = {
+            title: `New Article ${Date.now()}`,
+            image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2VlZWVlZSIvPjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5OTk5OTkiPk5ldyBBcnRpY2xlPC90ZXh0Pjwvc3ZnPg==',
+            excerpt: 'This is a demo article created with optimistic UI',
+            date: new Date().toISOString().split('T')[0],
+            status: 'draft',
+            views: 0
+        };
+        // Simulate API call
+        const apiPromise = new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    ...newArticle,
+                    id: `real_${Date.now()}`,
+                    category: 'demo',
+                    readTime: '2 min',
+                    source: 'Demo',
+                    tags: ['demo', 'optimistic']
+                });
+            }, 2000);
+        });
+        const result = optimisticallyCreateArticle(demoArticles, newArticle, apiPromise);
+        setDemoArticles(result.newArray);
+        // Simulate replacing temp ID with real ID after API succeeds
+        apiPromise.then((realArticle) => {
+            setDemoArticles(prev => prev.map(article => article.id === result.tempId ? realArticle : article));
+        });
+    }, [demoArticles, optimisticallyCreateArticle]);
+    // Demo: Optimistically update article
+    const handleUpdateDemoArticle = useCallback((articleId) => {
+        const updates = {
+            title: `Updated ${Date.now()}`,
+            views: Math.floor(Math.random() * 1000)
+        };
+        // Simulate API call
+        const apiPromise = new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({ id: articleId, ...updates });
+            }, 2000);
+        });
+        const result = optimisticallyUpdateArticle(demoArticles, articleId, updates, apiPromise);
+        setDemoArticles(result.newArray);
+    }, [demoArticles, optimisticallyUpdateArticle]);
+    // Demo: Optimistically delete article
+    const handleDeleteDemoArticle = useCallback((articleId) => {
+        // Simulate API call
+        const apiPromise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // Simulate random failure (30% chance)
+                if (Math.random() < 0.3) {
+                    reject(new Error('Delete failed: Simulated error'));
+                }
+                else {
+                    resolve();
+                }
+            }, 2000);
+        });
+        const result = optimisticallyDeleteArticle(demoArticles, articleId, apiPromise);
+        setDemoArticles(result.newArray);
+        // Handle rollback on error
+        apiPromise.catch(() => {
+            // In a real app, you would show an error message
+            console.log('Delete failed, article restored');
+        });
+    }, [demoArticles, optimisticallyDeleteArticle]);
+    // Demo: Send test notification
+    const handleSendTestNotification = useCallback(() => {
+        // In a real app, this would send via WebSocket
+        // For demo, we'll just add a local notification
+        // This would normally come from real-time service
+        setLastEvent('Test notification sent');
+    }, []);
+    return (_jsxs("div", { className: "space-y-6", children: [_jsxs(Card, { className: "p-6", children: [_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsx("h2", { className: "text-xl font-bold text-gray-800", children: "Real-time & Optimistic UI Demo" }), _jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Badge, { variant: isConnected ? 'success' : 'danger', className: "animate-pulse", children: isConnected ? '🟢 Connected' : '🔴 Disconnected' }), _jsx(Badge, { variant: "info", children: connectionStatus.usePolling ? '📡 Polling' : '🔌 WebSocket' })] })] }), !isRealtimeEnabled && (_jsx(Alert, { type: "warning", message: "Real-time features are disabled. Enable them in your environment variables.", className: "mb-4" })), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [_jsxs("div", { className: "space-y-4", children: [_jsx("h3", { className: "font-semibold text-gray-700", children: "Connection Status" }), _jsxs("div", { className: "space-y-2", children: [_jsxs("div", { className: "flex justify-between", children: [_jsx("span", { className: "text-gray-600", children: "Status:" }), _jsx("span", { className: isConnected ? 'text-green-600' : 'text-red-600', children: isConnected ? 'Connected' : 'Disconnected' })] }), _jsxs("div", { className: "flex justify-between", children: [_jsx("span", { className: "text-gray-600", children: "Mode:" }), _jsx("span", { children: connectionStatus.usePolling ? 'Polling' : 'WebSocket' })] }), _jsxs("div", { className: "flex justify-between", children: [_jsx("span", { className: "text-gray-600", children: "Reconnect Attempts:" }), _jsx("span", { children: connectionStatus.reconnectAttempts })] }), lastEvent && (_jsx("div", { className: "mt-4 p-3 bg-blue-50 border border-blue-200 rounded", children: _jsxs("p", { className: "text-sm text-blue-800", children: ["Last Event: ", lastEvent] }) }))] })] }), _jsxs("div", { className: "space-y-4", children: [_jsx("h3", { className: "font-semibold text-gray-700", children: "Demo Controls" }), _jsxs("div", { className: "flex flex-wrap gap-2", children: [_jsx(Button, { variant: "primary", onClick: handleCreateDemoArticle, disabled: !isRealtimeEnabled, children: "Create Article (Optimistic)" }), _jsx(Button, { variant: "secondary", onClick: () => handleUpdateDemoArticle('1'), disabled: !isRealtimeEnabled, children: "Update Article 1" }), _jsx(Button, { variant: "danger", onClick: () => handleDeleteDemoArticle('2'), disabled: !isRealtimeEnabled, children: "Delete Article 2 (30% fail)" }), _jsx(Button, { variant: "ghost", onClick: handleSendTestNotification, disabled: !isRealtimeEnabled, children: "Send Test Notification" })] })] })] })] }), _jsxs(Card, { className: "p-6", children: [_jsx("h3", { className: "font-semibold text-gray-700 mb-4", children: "Demo Articles" }), _jsx("div", { className: "space-y-3", children: demoArticles.map((article) => (_jsxs("div", { className: "flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50", children: [_jsxs("div", { children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx("span", { className: "font-medium", children: article.title }), isTempId(article.id) && (_jsx(Badge, { variant: "warning", className: "text-xs", children: "Optimistic" }))] }), _jsxs("div", { className: "text-sm text-gray-500", children: ["Status: ", article.status, " \u2022 Views: ", article.views] })] }), _jsxs("div", { className: "flex gap-2", children: [_jsx(Button, { size: "sm", variant: "ghost", onClick: () => handleUpdateDemoArticle(article.id), children: "Update" }), _jsx(Button, { size: "sm", variant: "danger", onClick: () => handleDeleteDemoArticle(article.id), children: "Delete" })] })] }, article.id))) })] }), notificationsEnabled && (_jsxs(Card, { className: "p-6", children: [_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsx("h3", { className: "font-semibold text-gray-700", children: "Notifications" }), _jsxs("div", { className: "flex items-center gap-2", children: [unreadCount > 0 && (_jsxs(Badge, { variant: "danger", children: [unreadCount, " unread"] })), _jsx(Button, { size: "sm", variant: "ghost", onClick: markAllAsRead, children: "Mark all read" }), _jsx(Button, { size: "sm", variant: "ghost", onClick: clearAll, children: "Clear all" })] })] }), hasNotifications ? (_jsxs("div", { className: "space-y-3", children: [notifications.slice(0, 3).map((notification) => (_jsx("div", { className: `p-3 border rounded-lg ${notification.read ? 'bg-gray-50' : 'bg-blue-50 border-blue-200'}`, children: _jsxs("div", { className: "flex justify-between items-start", children: [_jsxs("div", { children: [_jsx("div", { className: "font-medium", children: notification.title }), _jsx("div", { className: "text-sm text-gray-600 mt-1", children: notification.message })] }), _jsxs("div", { className: "flex items-center gap-2", children: [_jsx("span", { className: "text-xs text-gray-500", children: notification.timestamp.toLocaleTimeString() }), !notification.read && (_jsx(Button, { size: "sm", variant: "ghost", onClick: () => markAsRead(notification.id), children: "Mark read" })), _jsx(Button, { size: "sm", variant: "ghost", onClick: () => removeNotification(notification.id), children: "\u00D7" })] })] }) }, notification.id))), notifications.length > 3 && (_jsxs("div", { className: "text-center text-sm text-gray-500", children: ["+ ", notifications.length - 3, " more notifications"] }))] })) : (_jsx("div", { className: "text-center py-8 text-gray-500", children: "No notifications yet" }))] })), _jsxs(Card, { className: "p-6", children: [_jsx("h3", { className: "font-semibold text-gray-700 mb-4", children: "Demo Stats" }), _jsxs("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4", children: [_jsxs("div", { className: "text-center p-4 bg-gray-50 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-800", children: demoStats.totalArticles }), _jsx("div", { className: "text-sm text-gray-600", children: "Total Articles" })] }), _jsxs("div", { className: "text-center p-4 bg-gray-50 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-800", children: demoStats.publishedArticles }), _jsx("div", { className: "text-sm text-gray-600", children: "Published" })] }), _jsxs("div", { className: "text-center p-4 bg-gray-50 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-800", children: demoStats.totalViews }), _jsx("div", { className: "text-sm text-gray-600", children: "Total Views" })] }), _jsxs("div", { className: "text-center p-4 bg-gray-50 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-800", children: demoArticles.length }), _jsx("div", { className: "text-sm text-gray-600", children: "Current" })] })] })] }), _jsxs(Card, { className: "p-6 bg-gradient-to-r from-blue-50 to-indigo-50", children: [_jsx("h3", { className: "font-semibold text-gray-800 mb-3", children: "How It Works" }), _jsxs("div", { className: "space-y-3 text-gray-700", children: [_jsxs("p", { children: [_jsx("strong", { children: "Real-time Updates:" }), " This demo shows how articles and stats can update in real-time using WebSocket or polling. When enabled, changes from other users would appear instantly."] }), _jsxs("p", { children: [_jsx("strong", { children: "Optimistic UI:" }), " When you create, update, or delete articles, the UI updates immediately (optimistically) while the API request is in progress. If the request fails, the UI rolls back."] }), _jsxs("p", { children: [_jsx("strong", { children: "Notifications:" }), " Real-time notifications appear for system events and user activities."] }), _jsxs("p", { className: "text-sm text-gray-600", children: ["Note: This is a frontend demo. For full functionality, you need a backend with WebSocket support. Enable real-time features by setting ", _jsx("code", { children: "VITE_ENABLE_REALTIME=true" }), " in your environment."] })] })] })] }));
+}

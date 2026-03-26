@@ -175,3 +175,53 @@ export interface NewsQueryParams {
   sortBy?: 'date' | 'views' | 'title';
   sortOrder?: 'asc' | 'desc';
 }
+
+// Advertisement types
+export interface Advertisement {
+  id: string | number;
+  title: string;
+  description?: string;
+  imageUrl: string;
+  linkUrl: string;
+  position: 'hero' | 'sidebar' | 'inline' | 'footer' | 'fullwidth';
+  placement?: number; // Order of placement
+  isActive: boolean;
+  targetAudience?: string[];
+  impressions?: number;
+  clicks?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  startDate?: string;
+  endDate?: string;
+  status?: 'draft' | 'active' | 'expired';
+}
+
+export interface CreateAdvPayload {
+  title: string;
+  description?: string;
+  imageUrl: string;
+  linkUrl: string;
+  position: 'hero' | 'sidebar' | 'inline' | 'footer' | 'fullwidth';
+  isActive?: boolean;
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface UpdateAdvPayload extends Partial<CreateAdvPayload> {
+  id: string | number;
+}
+
+// Analytics types
+export interface AnalyticsData {
+  totalImpressions: number;
+  totalClicks: number;
+  topAds: Array<{ id: string; title: string; clicks: number; impressions: number }>;
+  ctr: number; // Click-through rate
+}
+
+// Async hooks state
+export interface AsyncState<T> {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+}

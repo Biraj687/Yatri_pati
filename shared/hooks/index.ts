@@ -9,6 +9,8 @@ export { useAsync, usePaginatedAsync } from './useAsync';
 export { useNews, usePaginatedNews, useNewsManagement } from './useNews';
 export { useDashboard, useDashboardRealtime } from './useDashboard';
 export { useAuth, useRequireAuth } from './useAuth';
+export { useAdvertisements, useActiveAdvertisements, useAdvertisementAnalytics } from './useAdvertisements';
+export { useRealTimeUpdates, useLiveNotifications } from './useRealTimeUpdates';
 
 /**
  * Re-export types for convenience
@@ -33,4 +35,8 @@ export type {
   DashboardStats,
   FileItem,
   CreateNewsPayload,
+  Advertisement,
+  CreateAdvPayload,
+  UpdateAdvPayload,
+  AnalyticsData,
 } from '../types';

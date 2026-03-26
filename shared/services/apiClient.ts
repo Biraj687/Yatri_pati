@@ -22,7 +22,7 @@ export interface ApiResponse<T> {
   errorDetails?: any;
 }
 
-export interface RequestOptions {
+export interface RequestOptions<T = any> {
   headers?: Record<string, string>;
   timeout?: number;
   retryOnFailure?: boolean;
@@ -63,7 +63,7 @@ export class ApiClient {
    */
   async get<T>(
     endpoint: string,
-    options: RequestOptions = {}
+    options: RequestOptions<T> = {}
   ): Promise<ApiResponse<T>> {
     const cacheKey = `GET:${endpoint}`;
     
@@ -126,7 +126,7 @@ export class ApiClient {
   async post<T>(
     endpoint: string,
     data: unknown,
-    options: RequestOptions = {}
+    options: RequestOptions<T> = {}
   ): Promise<ApiResponse<T>> {
     // Use mock data if enabled
     if (this.useMock && options.mockData) {
@@ -153,7 +153,7 @@ export class ApiClient {
   async put<T>(
     endpoint: string,
     data: unknown,
-    options: RequestOptions = {}
+    options: RequestOptions<T> = {}
   ): Promise<ApiResponse<T>> {
     // Use mock data if enabled
     if (this.useMock && options.mockData) {
@@ -179,7 +179,7 @@ export class ApiClient {
    */
   async delete<T>(
     endpoint: string,
-    options: RequestOptions = {}
+    options: RequestOptions<T> = {}
   ): Promise<ApiResponse<T>> {
     // Use mock data if enabled
     if (this.useMock && options.mockData) {
@@ -293,7 +293,7 @@ export class ApiClient {
     }
   }
 
-  private handleMockResponse<T>(mockData: any): ApiResponse<T> {
+  private async handleMockResponse<T>(mockData: any): Promise<ApiResponse<T>> {
     return new Promise<ApiResponse<T>>((resolve) => {
       setTimeout(() => {
         const data = typeof mockData === 'function' 

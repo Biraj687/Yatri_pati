@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiMenu, FiX, FiHome, FiFileText, FiFolder, FiBarChart2, FiSettings, FiLogOut } from 'react-icons/fi';
+import { FiMenu, FiX, FiHome, FiFileText, FiFolder, FiBarChart2, FiSettings, FiLogOut, FiAward } from 'react-icons/fi';
 export function DashboardLayout({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const location = useLocation();
@@ -9,6 +9,7 @@ export function DashboardLayout({ children }) {
     const menuItems = [
         { label: 'Dashboard', path: '/', icon: FiHome },
         { label: 'News', path: '/news', icon: FiFileText },
+        { label: 'Advertisements', path: '/advertisements', icon: FiAward },
         { label: 'File Manager', path: '/files', icon: FiFolder },
         { label: 'Analytics', path: '/analytics', icon: FiBarChart2 },
         { label: 'Settings', path: '/settings', icon: FiSettings },

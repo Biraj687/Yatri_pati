@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from 'react';
 import { FiAlertCircle, FiCheckCircle, FiInfo, FiX } from 'react-icons/fi';
-export function Alert({ type, message, onClose, dismissible = true }) {
+export function Alert({ type, message, onClose, dismissible = true, className = '' }) {
     const getColors = () => {
         switch (type) {
             case 'error': return 'bg-red-50 text-red-800 border-red-200';
@@ -19,9 +19,9 @@ export function Alert({ type, message, onClose, dismissible = true }) {
             default: return _jsx(FiAlertCircle, { size: 20 });
         }
     };
-    return (_jsxs("div", { className: `p-4 rounded-lg border flex items-start gap-3 ${getColors()}`, children: [_jsx("div", { className: "flex-shrink-0 mt-0.5", children: getIcon() }), _jsx("div", { className: "flex-1", children: message }), dismissible && onClose && (_jsx("button", { onClick: onClose, className: "flex-shrink-0 ml-2 hover:opacity-70", children: _jsx(FiX, { size: 20 }) }))] }));
+    return (_jsxs("div", { className: `p-4 rounded-lg border flex items-start gap-3 ${getColors()} ${className}`, children: [_jsx("div", { className: "flex-shrink-0 mt-0.5", children: getIcon() }), _jsx("div", { className: "flex-1", children: message }), dismissible && onClose && (_jsx("button", { onClick: onClose, className: "flex-shrink-0 ml-2 hover:opacity-70", children: _jsx(FiX, { size: 20 }) }))] }));
 }
-export function Badge({ children, variant = 'primary', size = 'md' }) {
+export function Badge({ children, variant = 'primary', size = 'md', className = '' }) {
     const sizeClass = size === 'sm' ? 'px-2 py-1 text-xs' : size === 'lg' ? 'px-4 py-2 text-base' : 'px-3 py-1.5 text-sm';
     const variantClass = {
         primary: 'bg-blue-100 text-blue-800',
@@ -31,7 +31,7 @@ export function Badge({ children, variant = 'primary', size = 'md' }) {
         warning: 'bg-yellow-100 text-yellow-800',
         info: 'bg-cyan-100 text-cyan-800',
     }[variant];
-    return (_jsx("span", { className: `inline-flex items-center font-medium rounded-full ${sizeClass} ${variantClass}`, children: children }));
+    return (_jsx("span", { className: `inline-flex items-center font-medium rounded-full ${sizeClass} ${variantClass} ${className}`, children: children }));
 }
 export function Button({ variant = 'primary', size = 'md', loading = false, fullWidth = false, className = '', disabled, children, ...props }) {
     const sizeClass = {

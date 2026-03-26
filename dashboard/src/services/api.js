@@ -1,17 +1,22 @@
-const API_BASE_URL = 'http://localhost:3000/api';
-const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA === 'true';
+import { apiConfig } from '../config';
 export class DashboardApiService {
     constructor() {
         Object.defineProperty(this, "baseUrl", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: API_BASE_URL
+            value: apiConfig.url
+        });
+        Object.defineProperty(this, "useMock", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: apiConfig.useMock
         });
     }
     // Articles
     async getAllArticles(params) {
-        if (USE_MOCK) {
+        if (this.useMock) {
             // Mock articles
             const mockArticles = [
                 {
@@ -155,7 +160,7 @@ export class DashboardApiService {
     }
     // Files
     async getAllFiles() {
-        if (USE_MOCK) {
+        if (this.useMock) {
             const mockFiles = [
                 {
                     id: '1',
@@ -216,7 +221,7 @@ export class DashboardApiService {
     }
     // Statistics
     async getDashboardStats() {
-        if (USE_MOCK) {
+        if (this.useMock) {
             const mockStats = {
                 totalArticles: 15,
                 publishedArticles: 10,

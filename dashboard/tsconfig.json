@@ -32,7 +32,19 @@
       "@layouts": ["./src/layouts"],
       "@layouts/*": ["./src/layouts/*"],
       "@services": ["./src/services"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@shared/services": ["../shared/services"],
+      "@shared/services/*": ["../shared/services/*"],
+      "@shared/types": ["../shared/types"],
+      "@shared/types/*": ["../shared/types/*"],
+      "@shared/hooks": ["../shared/hooks"],
+      "@shared/hooks/*": ["../shared/hooks/*"],
+      "@shared/context": ["../shared/context"],
+      "@shared/context/*": ["../shared/context/*"],
+      "@shared/utils": ["../shared/utils"],
+      "@shared/utils/*": ["../shared/utils/*"],
+      "@shared/mocks": ["../shared/mocks"],
+      "@shared/mocks/*": ["../shared/mocks/*"]
     }
   },
   "include": ["vite.config.ts", "src"],

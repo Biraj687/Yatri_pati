@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
-import { FiFileText, FiEye, FiUsers, FiTrendingUp, FiRefreshCw } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { FiFileText, FiEye, FiUsers, FiTrendingUp, FiRefreshCw, FiAward } from 'react-icons/fi';
 import { useDashboard } from '@context/DashboardContext';
+import { useAdvertisementAnalytics } from '@shared/hooks';
 import { LoadingSpinner, Card, Alert, Button } from '@components';
 import { NewsCardPreview } from '@components';
 import { formatNumberCompact } from '@utils';
 
 export function DashboardHome() {
   const { stats, loadStats, loading, error, clearError } = useDashboard();
+  const adAnalytics = useAdvertisementAnalytics();
 
   useEffect(() => {
     loadStats();
@@ -145,6 +148,45 @@ export function DashboardHome() {
           </div>
         </div>
       </Card>
+
+      {/* Advertisement Metrics */}
+      <div className="mt-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+            <FiAward size={24} className="text-orange-600" />
+            Advertisement Performance
+          </h2>
+          <Link to="/advertisements" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+            Manage Ads →
+          </Link>
+        </div>
+        {adAnalytics.loading ? (
+          <Card className="p-8 flex items-center justify-center">
+            <LoadingSpinner />
+          </Card>
+        ) : adAnalytics.error ? (
+          <Alert type="error" message={adAnalytics.error} />
+        ) : adAnalytics.data ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="bg-orange-50 border-orange-200 p-6">
+              <div className="text-orange-600 text-sm font-medium mb-2">Total Impressions</div>
+              <div className="text-3xl font-bold text-orange-900">{formatNumberCompact(adAnalytics.data?.totalImpressions ?? 0)}</div>
+            </Card>
+            <Card className="bg-amber-50 border-amber-200 p-6">
+              <div className="text-amber-600 text-sm font-medium mb-2">Total Clicks</div>
+              <div className="text-3xl font-bold text-amber-900">{formatNumberCompact(adAnalytics.data?.totalClicks ?? 0)}</div>
+            </Card>
+            <Card className="bg-red-50 border-red-200 p-6">
+              <div className="text-red-600 text-sm font-medium mb-2">Click-Through Rate</div>
+              <div className="text-3xl font-bold text-red-900">{adAnalytics.data.ctr?.toFixed(2) || '0'}%</div>
+            </Card>
+          </div>
+        ) : (
+          <Card className="p-8 text-center text-gray-500">
+            <p>No advertisement data available</p>
+          </Card>
+        )}
+      </div>
     </div>
   );
 }

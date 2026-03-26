@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useAsync, usePaginatedAsync } from './useAsync';
 import { newsService } from '../services/newsService';
 import { dashboardService } from '../services/dashboardService';
-import type { Article, PaginatedResponse, CreateNewsPayload } from '../types';
+import type { Article, CreateNewsPayload } from '../types';
 
 /**
  * Hook for fetching and managing news articles (public/news portal)
