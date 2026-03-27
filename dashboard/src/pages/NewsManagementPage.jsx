@@ -6,6 +6,7 @@ import { NewsList, NewsEditor, Button, Modal, Alert, LoadingSpinner, Input } fro
 export function NewsManagementPage() {
   const {
     articles,
+    categories,
     loading,
     error,
     loadArticles,
@@ -229,6 +230,7 @@ export function NewsManagementPage() {
             onSave={handleSave}
             onCancel={() => setShowEditor(false)}
             loading={loading}
+            categories={categories.filter(c => c.isActive).map(c => c.name)}
           />
         )}
       </Modal>

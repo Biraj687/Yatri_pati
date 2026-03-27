@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FiMenu, FiX, FiHome, FiFileText, FiFolder, FiBarChart2, FiSettings, FiLogOut, FiAward } from 'react-icons/fi';
+import { FiMenu, FiX, FiHome, FiFileText, FiFolder, FiBarChart2, FiSettings, FiLogOut, FiTag, FiShoppingCart } from 'react-icons/fi';
 import { useAuth } from '@context/AuthContext';
 
 
@@ -14,12 +14,13 @@ export function DashboardLayout({ children }) {
   const isActive = (path) => location.pathname === path;
 
   const menuItems = [
-    { label: 'Dashboard', path: '/', icon, requiredRole},
-    { label: 'News', path: '/news', icon, requiredRole: ['admin', 'editor'] },
-    { label: 'Advertisements', path: '/advertisements', icon, requiredRole: 'admin' },
-    { label: 'File Manager', path: '/files', icon, requiredRole: 'admin' },
-    { label: 'Analytics', path: '/analytics', icon, requiredRole: 'admin' },
-    { label: 'Settings', path: '/settings', icon, requiredRole: 'admin' },
+    { label: 'Dashboard', path: '/', icon: FiHome, requiredRole: [] },
+    { label: 'News', path: '/news', icon: FiFileText, requiredRole: ['admin', 'editor'] },
+    { label: 'Categories', path: '/categories', icon: FiTag, requiredRole: ['admin', 'editor'] },
+    { label: 'Advertisements', path: '/advertisements', icon: FiShoppingCart, requiredRole: 'admin' },
+    { label: 'File Manager', path: '/files', icon: FiFolder, requiredRole: 'admin' },
+    { label: 'Analytics', path: '/analytics', icon: FiBarChart2, requiredRole: 'admin' },
+    { label: 'Settings', path: '/settings', icon: FiSettings, requiredRole: 'admin' },
   ];
 
   const visibleMenuItems = menuItems.filter(item => {

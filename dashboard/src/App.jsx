@@ -7,6 +7,7 @@ import { DashboardLayout } from '@layouts/DashboardLayout';
 import {
   DashboardHome,
   NewsManagementPage,
+  CategoryManagementPage,
   FileManagerPage,
   AnalyticsPage,
   SettingsPage,
@@ -30,6 +31,14 @@ function AppRoutes() {
         element={
           <DashboardLayout>
             <NewsManagementPage />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="/categories"
+        element={
+          <DashboardLayout>
+            <CategoryManagementPage />
           </DashboardLayout>
         }
       />

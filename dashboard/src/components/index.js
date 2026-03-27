@@ -6,5 +6,7 @@ export * from './AdvertisementAnalytics';
 export * from './AdvertisementCard';
 export * from './AdvertisementForm';
 export * from './AdvertisementList';
+export * from './CategoryList';
+export * from './CategoryEditor';
 export * from './ErrorBoundary';
 export * from './ProtectedRoute';
