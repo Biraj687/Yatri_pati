@@ -1,1 +1,1 @@
-export { dashboardAPI } from './api';
+export {};

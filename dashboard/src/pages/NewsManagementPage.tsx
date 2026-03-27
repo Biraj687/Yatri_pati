@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FiPlus, FiSearch } from 'react-icons/fi';
-import { useDashboard } from '@context';
-import { NewsList } from '@components';
-import { NewsEditor } from '@components';
-import { Button, Modal, Alert, LoadingSpinner, Input } from '@components';
-import { useModal, useDebounce } from '@hooks';
+import { useDashboard } from '@context/DashboardContext';
+import { NewsList, NewsEditor, Button, Modal, Alert, LoadingSpinner, Input } from '@components';
 import type { NewsArticle } from '@types';
 
 export function NewsManagementPage() {
@@ -29,16 +26,15 @@ export function NewsManagementPage() {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
 
-  const editorModal = useModal();
-  const debouncedSearch = useDebounce(searchTerm, 500);
-
+  // Simple debounce effect
   useEffect(() => {
-    loadArticles({
-      search: debouncedSearch,
-      status: statusFilter === 'all' ? undefined : statusFilter,
-    });
-  }, [debouncedSearch, statusFilter, loadArticles]);
+    const timer = setTimeout(() => {
+      loadArticles();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm, statusFilter, loadArticles]);
 
   const filteredAndSorted = [...articles].sort((a, b) => {
     switch (sortBy) {
@@ -59,14 +55,14 @@ export function NewsManagementPage() {
     setSelectedArticle(undefined);
     setSaveError(null);
     setSaveSuccess(false);
-    editorModal.open();
+    setShowEditor(true);
   };
 
   const handleEdit = (article: NewsArticle) => {
     setSelectedArticle(article);
     setSaveError(null);
     setSaveSuccess(false);
-    editorModal.open();
+    setShowEditor(true);
   };
 
   const handleSave = async (payload: any) => {
@@ -81,7 +77,7 @@ export function NewsManagementPage() {
       }
       setSaveSuccess(true);
       setTimeout(() => {
-        editorModal.close();
+        setShowEditor(false);
         setTimeout(() => setSaveSuccess(false), 2000);
       }, 1500);
     } catch (err) {
@@ -195,10 +191,10 @@ export function NewsManagementPage() {
 
       {/* Editor Modal */}
       <Modal
-        isOpen={editorModal.isOpen}
+        isOpen={showEditor}
         title={selectedArticle ? 'Edit Article' : 'Create New Article'}
         onClose={() => {
-          editorModal.close();
+          setShowEditor(false);
           setSelectedArticle(undefined);
           setSaveError(null);
           setSaveSuccess(false);
@@ -216,7 +212,7 @@ export function NewsManagementPage() {
           <NewsEditor
             article={selectedArticle}
             onSave={handleSave}
-            onCancel={editorModal.close}
+            onCancel={() => setShowEditor(false)}
             loading={loading}
           />
         )}

@@ -1,26 +1,72 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState } from 'react';
-import { Card, Button, Input, Alert } from '@components';
+/**
+ * Settings Page - Dashboard configuration and settings
+ */
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { dashboardSettingsSchema } from '@utils/validation';
+import { useNotification } from '@context/NotificationContext';
+const defaultSettings = {
+    siteName: 'Yatripati Dashboard',
+    siteDescription: 'Manage your news and advertisements',
+    siteUrl: 'https://yatripati.com',
+    logoUrl: 'https://via.placeholder.com/150',
+    socialLinks: {
+        facebook: 'https://facebook.com/yatripati',
+        twitter: 'https://twitter.com/yatripati',
+        instagram: 'https://instagram.com/yatripati',
+        linkedin: 'https://linkedin.com/company/yatripati',
+    },
+    maintenanceMode: false,
+    enableComments: true,
+    postsPerPage: 10,
+    timezone: 'UTC',
+};
 export function SettingsPage() {
-    const [settings, setSettings] = useState({
-        siteName: localStorage.getItem('siteName') || 'Yatripati News Portal',
-        defaultAuthor: localStorage.getItem('defaultAuthor') || 'Yatripati',
-        postsPerPage: parseInt(localStorage.getItem('postsPerPage') || '20'),
-        autoSave: localStorage.getItem('autoSave') !== 'false',
-        darkMode: localStorage.getItem('darkMode') === 'true',
-        emailNotifications: localStorage.getItem('emailNotifications') !== 'false',
-        theme: localStorage.getItem('theme') || 'light',
+    const [_settings, setSettings] = useState(defaultSettings);
+    const [loading, setLoading] = useState(false);
+    const { showNotification } = useNotification();
+    const { register, handleSubmit, formState: { errors }, reset, } = useForm({
+        resolver: zodResolver(dashboardSettingsSchema),
+        defaultValues: defaultSettings,
     });
-    const [saveMessage, setSaveMessage] = useState(null);
-    const handleSettingChange = (key, value) => {
-        setSettings(prev => ({ ...prev, [key]: value }));
+    useEffect(() => {
+        // Load settings from backend or localStorage
+        const savedSettings = localStorage.getItem('dashboardSettings');
+        if (savedSettings) {
+            try {
+                const parsed = JSON.parse(savedSettings);
+                setSettings(parsed);
+                reset(parsed);
+            }
+            catch (e) {
+                console.error('Failed to load settings', e);
+            }
+        }
+    }, [reset]);
+    const onSubmit = async (data) => {
+        setLoading(true);
+        try {
+            // TODO: Replace with actual API call
+            // await dashboardService.updateSettings(data);
+            // For now, save to localStorage
+            localStorage.setItem('dashboardSettings', JSON.stringify(data));
+            setSettings(data);
+            showNotification('Settings saved successfully!', 'success');
+        }
+        catch (error) {
+            showNotification(error.message, 'error');
+        }
+        finally {
+            setLoading(false);
+        }
     };
-    const handleSave = () => {
-        Object.entries(settings).forEach(([key, value]) => {
-            localStorage.setItem(key, String(value));
-        });
-        setSaveMessage({ type: 'success', message: 'Settings saved successfully!' });
-        setTimeout(() => setSaveMessage(null), 3000);
-    };
-    return (_jsxs("div", { className: "space-y-6 max-w-2xl", children: [_jsxs("div", { children: [_jsx("h1", { className: "text-3xl font-bold text-gray-900", children: "Settings" }), _jsx("p", { className: "text-gray-600 mt-1", children: "Manage dashboard preferences and configuration" })] }), saveMessage && (_jsx(Alert, { type: saveMessage.type, message: saveMessage.message, onClose: () => setSaveMessage(null), dismissible: true })), _jsxs(Card, { className: "p-6", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900 mb-4", children: "General Settings" }), _jsxs("div", { className: "space-y-4", children: [_jsx(Input, { label: "Site Name", value: settings.siteName, onChange: (e) => handleSettingChange('siteName', e.target.value), placeholder: "Your site name" }), _jsx(Input, { label: "Default Author", value: settings.defaultAuthor, onChange: (e) => handleSettingChange('defaultAuthor', e.target.value), placeholder: "Default author name", helperText: "Used when no specific author is selected" }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Posts Per Page" }), _jsx("input", { type: "number", value: settings.postsPerPage, onChange: (e) => handleSettingChange('postsPerPage', parseInt(e.target.value)), min: "5", max: "100", className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" }), _jsx("p", { className: "text-xs text-gray-500 mt-1", children: "Number of articles to display per page" })] })] })] }), _jsxs(Card, { className: "p-6", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900 mb-4", children: "Display Settings" }), _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between p-4 bg-gray-50 rounded-lg", children: [_jsxs("div", { children: [_jsx("p", { className: "font-medium text-gray-900", children: "Dark Mode" }), _jsx("p", { className: "text-sm text-gray-600", children: "Enable dark theme for the dashboard" })] }), _jsx("input", { type: "checkbox", checked: settings.darkMode, onChange: (e) => handleSettingChange('darkMode', e.target.checked), className: "w-5 h-5 rounded border-gray-300" })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Theme" }), _jsxs("select", { value: settings.theme, onChange: (e) => handleSettingChange('theme', e.target.value), className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500", children: [_jsx("option", { value: "light", children: "Light" }), _jsx("option", { value: "dark", children: "Dark" }), _jsx("option", { value: "auto", children: "Auto (System Preference)" })] })] })] })] }), _jsxs(Card, { className: "p-6", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900 mb-4", children: "Notifications" }), _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between p-4 bg-gray-50 rounded-lg", children: [_jsxs("div", { children: [_jsx("p", { className: "font-medium text-gray-900", children: "Auto Save" }), _jsx("p", { className: "text-sm text-gray-600", children: "Automatically save drafts" })] }), _jsx("input", { type: "checkbox", checked: settings.autoSave, onChange: (e) => handleSettingChange('autoSave', e.target.checked), className: "w-5 h-5 rounded border-gray-300" })] }), _jsxs("div", { className: "flex items-center justify-between p-4 bg-gray-50 rounded-lg", children: [_jsxs("div", { children: [_jsx("p", { className: "font-medium text-gray-900", children: "Email Notifications" }), _jsx("p", { className: "text-sm text-gray-600", children: "Receive email updates" })] }), _jsx("input", { type: "checkbox", checked: settings.emailNotifications, onChange: (e) => handleSettingChange('emailNotifications', e.target.checked), className: "w-5 h-5 rounded border-gray-300" })] })] })] }), _jsxs(Card, { className: "p-6", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900 mb-4", children: "API Configuration" }), _jsxs("div", { className: "space-y-4 bg-gray-50 rounded-lg p-4", children: [_jsxs("div", { children: [_jsx("p", { className: "text-xs font-mono text-gray-600", children: "API Endpoint" }), _jsx("p", { className: "text-sm font-medium text-gray-900 mt-1", children: "http://localhost:3000/api" })] }), _jsxs("div", { children: [_jsx("p", { className: "text-xs font-mono text-gray-600", children: "Auth Token Status" }), _jsx("p", { className: "text-sm font-medium text-gray-900 mt-1", children: localStorage.getItem('authToken') ? '✅ Active' : '⚠️ Not Set' })] })] })] }), _jsxs(Card, { className: "p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900 mb-2", children: "About Dashboard" }), _jsx("p", { className: "text-sm text-gray-600", children: "Yatripati News Management Dashboard v1.0.0" }), _jsx("p", { className: "text-xs text-gray-500 mt-3", children: "Built with React, TypeScript, and Tailwind CSS" })] }), _jsxs("div", { className: "flex gap-3 justify-end", children: [_jsx(Button, { variant: "ghost", onClick: () => window.location.reload(), children: "Reset" }), _jsx(Button, { variant: "primary", onClick: handleSave, children: "Save Settings" })] })] }));
+    return (_jsxs("div", { className: "space-y-8", children: [_jsxs("div", { children: [_jsx("h1", { className: "text-3xl font-bold text-gray-900", children: "Dashboard Settings" }), _jsx("p", { className: "text-gray-600 mt-2", children: "Configure your dashboard and site preferences" })] }), _jsxs("form", { onSubmit: handleSubmit(onSubmit), className: "space-y-8", children: [_jsx(Section, { title: "General Settings", description: "Basic site information", children: _jsxs("div", { className: "space-y-4", children: [_jsx(FormGroup, { label: "Site Name", error: errors.siteName?.message, children: _jsx("input", { ...register('siteName'), type: "text", className: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" }) }), _jsx(FormGroup, { label: "Site Description", error: errors.siteDescription?.message, children: _jsx("textarea", { ...register('siteDescription'), className: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500", rows: 3 }) }), _jsx(FormGroup, { label: "Site URL", error: errors.siteUrl?.message, children: _jsx("input", { ...register('siteUrl'), type: "url", className: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" }) }), _jsx(FormGroup, { label: "Logo URL", error: errors.logoUrl?.message, children: _jsx("input", { ...register('logoUrl'), type: "url", className: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" }) })] }) }), _jsx(Section, { title: "Social Media", description: "Connect your social profiles", children: _jsxs("div", { className: "space-y-4", children: [_jsx(FormGroup, { label: "Facebook", error: errors.socialLinks?.facebook?.message, children: _jsx("input", { ...register('socialLinks.facebook'), type: "url", placeholder: "https://facebook.com/...", className: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" }) }), _jsx(FormGroup, { label: "Twitter", error: errors.socialLinks?.twitter?.message, children: _jsx("input", { ...register('socialLinks.twitter'), type: "url", placeholder: "https://twitter.com/...", className: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" }) }), _jsx(FormGroup, { label: "Instagram", error: errors.socialLinks?.instagram?.message, children: _jsx("input", { ...register('socialLinks.instagram'), type: "url", placeholder: "https://instagram.com/...", className: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" }) }), _jsx(FormGroup, { label: "LinkedIn", error: errors.socialLinks?.linkedin?.message, children: _jsx("input", { ...register('socialLinks.linkedin'), type: "url", placeholder: "https://linkedin.com/...", className: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" }) })] }) }), _jsx(Section, { title: "Content Settings", description: "Control content behavior", children: _jsxs("div", { className: "space-y-4", children: [_jsx(FormGroup, { label: "Posts Per Page", error: errors.postsPerPage?.message, children: _jsx("input", { ...register('postsPerPage', { valueAsNumber: true }), type: "number", min: "1", max: "100", className: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" }) }), _jsx(FormGroup, { label: "Timezone", error: errors.timezone?.message, children: _jsxs("select", { ...register('timezone'), className: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500", children: [_jsx("option", { children: "UTC" }), _jsx("option", { children: "EST" }), _jsx("option", { children: "CST" }), _jsx("option", { children: "MST" }), _jsx("option", { children: "PST" })] }) }), _jsx("div", { className: "flex items-center gap-4", children: _jsxs("label", { className: "flex items-center gap-2 cursor-pointer", children: [_jsx("input", { ...register('enableComments'), type: "checkbox", className: "w-4 h-4 rounded border-gray-300" }), _jsx("span", { className: "text-sm font-medium text-gray-700", children: "Enable Comments" })] }) }), _jsx("div", { className: "flex items-center gap-4", children: _jsxs("label", { className: "flex items-center gap-2 cursor-pointer", children: [_jsx("input", { ...register('maintenanceMode'), type: "checkbox", className: "w-4 h-4 rounded border-gray-300" }), _jsx("span", { className: "text-sm font-medium text-gray-700", children: "Maintenance Mode" })] }) })] }) }), _jsxs("div", { className: "flex gap-4", children: [_jsx("button", { type: "submit", disabled: loading, className: "px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition", children: loading ? 'Saving...' : 'Save Settings' }), _jsx("button", { type: "button", onClick: () => reset(), className: "px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition", children: "Reset" })] })] })] }));
+}
+function Section({ title, description, children }) {
+    return (_jsxs("div", { className: "bg-white rounded-lg shadow p-6", children: [_jsxs("div", { className: "mb-6", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900", children: title }), _jsx("p", { className: "text-sm text-gray-600 mt-1", children: description })] }), children] }));
+}
+function FormGroup({ label, error, children }) {
+    return (_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: label }), children, error && _jsx("p", { className: "text-red-600 text-xs mt-1", children: error })] }));
 }

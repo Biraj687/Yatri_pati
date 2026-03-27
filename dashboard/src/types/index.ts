@@ -1,9 +1,15 @@
+/**
+ * Dashboard Type Definitions - Comprehensive & Type-Safe
+ */
+
+// ============ Entity Types ============
+
 export interface Author {
   id?: string;
   name: string;
   avatar?: string;
   email?: string;
-  role?: string;
+  role?: 'admin' | 'editor' | 'contributor';
 }
 
 export interface NewsArticle {
@@ -31,6 +37,22 @@ export interface NewsArticle {
   seoKeywords?: string[];
 }
 
+export interface Advertisement {
+  id: string;
+  title: string;
+  description?: string;
+  imageUrl: string;
+  link?: string;
+  position: 'banner' | 'sidebar' | 'footer' | 'inline';
+  isActive: boolean;
+  startDate: string;
+  endDate?: string;
+  impressions: number;
+  clicks: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface FileItem {
   id: string;
   name: string;
@@ -48,7 +70,42 @@ export interface DashboardStats {
   totalViews: number;
   totalAuthors: number;
   recentArticles: NewsArticle[];
+  advertisementMetrics?: AdvertisementMetrics;
 }
+
+export interface AdvertisementMetrics {
+  totalImpressions: number;
+  totalClicks: number;
+  clickThroughRate: number;
+  topPerformingAds: Advertisement[];
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'editor' | 'viewer';
+  avatar?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+// ============ Payload Types (for create/update operations) ============
 
 export interface CreateNewsPayload {
   title: string;
@@ -61,14 +118,51 @@ export interface CreateNewsPayload {
   authors: Author[];
   category?: string;
   tags?: string[];
-  status: 'draft' | 'published';
-  rank?: number;
-  sticky?: boolean;
+  status?: 'draft' | 'published';
   seoTitle?: string;
   seoDescription?: string;
   seoKeywords?: string[];
 }
 
 export interface UpdateNewsPayload extends Partial<CreateNewsPayload> {
-  id: string;
+  id?: string;
 }
+
+export interface CreateAdvertisementPayload {
+  title: string;
+  description?: string;
+  imageUrl: string;
+  link?: string;
+  position: 'banner' | 'sidebar' | 'footer' | 'inline';
+  isActive?: boolean;
+  startDate: string;
+  endDate?: string;
+}
+
+export interface UpdateAdvertisementPayload extends Partial<CreateAdvertisementPayload> {
+  id?: string;
+}
+
+export interface UploadFilePayload {
+  file: File;
+  name?: string;
+}
+
+export interface DashboardSettings {
+  siteName: string;
+  siteDescription: string;
+  siteUrl: string;
+  logoUrl?: string;
+  socialLinks?: {
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    linkedin?: string;
+  };
+  maintenanceMode: boolean;
+  enableComments: boolean;
+  postsPerPage: number;
+  timezone: string;
+}
+
+export interface UpdateSettingsPayload extends Partial<DashboardSettings> {}

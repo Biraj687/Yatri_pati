@@ -1,186 +1,268 @@
-import { useState } from 'react';
-import { Card, Button, Input, Alert } from '@components';
+/**
+ * Settings Page - Dashboard configuration and settings
+ */
+
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { dashboardSettingsSchema, type DashboardSettingsInput } from '@utils/validation';
+import { useNotification } from '@context/NotificationContext';
+import type { DashboardSettings } from '@types';
+
+const defaultSettings: DashboardSettings = {
+  siteName: 'Yatripati Dashboard',
+  siteDescription: 'Manage your news and advertisements',
+  siteUrl: 'https://yatripati.com',
+  logoUrl: 'https://via.placeholder.com/150',
+  socialLinks: {
+    facebook: 'https://facebook.com/yatripati',
+    twitter: 'https://twitter.com/yatripati',
+    instagram: 'https://instagram.com/yatripati',
+    linkedin: 'https://linkedin.com/company/yatripati',
+  },
+  maintenanceMode: false,
+  enableComments: true,
+  postsPerPage: 10,
+  timezone: 'UTC',
+};
 
 export function SettingsPage() {
-  const [settings, setSettings] = useState({
-    siteName: localStorage.getItem('siteName') || 'Yatripati News Portal',
-    defaultAuthor: localStorage.getItem('defaultAuthor') || 'Yatripati',
-    postsPerPage: parseInt(localStorage.getItem('postsPerPage') || '20'),
-    autoSave: localStorage.getItem('autoSave') !== 'false',
-    darkMode: localStorage.getItem('darkMode') === 'true',
-    emailNotifications: localStorage.getItem('emailNotifications') !== 'false',
-    theme: localStorage.getItem('theme') || 'light',
+  const [_settings, setSettings] = useState<DashboardSettings>(defaultSettings);
+  const [loading, setLoading] = useState(false);
+  const { showNotification } = useNotification();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(dashboardSettingsSchema),
+    defaultValues: defaultSettings,
   });
 
-  const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  useEffect(() => {
+    // Load settings from backend or localStorage
+    const savedSettings = localStorage.getItem('dashboardSettings');
+    if (savedSettings) {
+      try {
+        const parsed = JSON.parse(savedSettings);
+        setSettings(parsed);
+        reset(parsed as DashboardSettingsInput);
+      } catch (e) {
+        console.error('Failed to load settings', e);
+      }
+    }
+  }, [reset]);
 
-  const handleSettingChange = (key: string, value: any) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
-  };
-
-  const handleSave = () => {
-    Object.entries(settings).forEach(([key, value]) => {
-      localStorage.setItem(key, String(value));
-    });
-    setSaveMessage({ type: 'success', message: 'Settings saved successfully!' });
-    setTimeout(() => setSaveMessage(null), 3000);
+  const onSubmit = async (data: any) => {
+    setLoading(true);
+    try {
+      // TODO: Replace with actual API call
+      // await dashboardService.updateSettings(data);
+      
+      // For now, save to localStorage
+      localStorage.setItem('dashboardSettings', JSON.stringify(data));
+      setSettings(data as DashboardSettings);
+      showNotification('Settings saved successfully!', 'success');
+    } catch (error) {
+      showNotification((error as Error).message, 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-1">Manage dashboard preferences and configuration</p>
+        <h1 className="text-3xl font-bold text-gray-900">Dashboard Settings</h1>
+        <p className="text-gray-600 mt-2">Configure your dashboard and site preferences</p>
       </div>
 
-      {/* Alerts */}
-      {saveMessage && (
-        <Alert
-          type={saveMessage.type}
-          message={saveMessage.message}
-          onClose={() => setSaveMessage(null)}
-          dismissible
-        />
-      )}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        {/* General Settings */}
+        <Section title="General Settings" description="Basic site information">
+          <div className="space-y-4">
+            <FormGroup label="Site Name" error={errors.siteName?.message}>
+              <input
+                {...register('siteName')}
+                type="text"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </FormGroup>
 
-      {/* General Settings */}
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">General Settings</h2>
-        <div className="space-y-4">
-          <Input
-            label="Site Name"
-            value={settings.siteName}
-            onChange={(e) => handleSettingChange('siteName', e.target.value)}
-            placeholder="Your site name"
-          />
-          <Input
-            label="Default Author"
-            value={settings.defaultAuthor}
-            onChange={(e) => handleSettingChange('defaultAuthor', e.target.value)}
-            placeholder="Default author name"
-            helperText="Used when no specific author is selected"
-          />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Posts Per Page</label>
-            <input
-              type="number"
-              value={settings.postsPerPage}
-              onChange={(e) => handleSettingChange('postsPerPage', parseInt(e.target.value))}
-              min="5"
-              max="100"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <p className="text-xs text-gray-500 mt-1">Number of articles to display per page</p>
+            <FormGroup label="Site Description" error={errors.siteDescription?.message}>
+              <textarea
+                {...register('siteDescription')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                rows={3}
+              />
+            </FormGroup>
+
+            <FormGroup label="Site URL" error={errors.siteUrl?.message}>
+              <input
+                {...register('siteUrl')}
+                type="url"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </FormGroup>
+
+            <FormGroup label="Logo URL" error={errors.logoUrl?.message}>
+              <input
+                {...register('logoUrl')}
+                type="url"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </FormGroup>
           </div>
-        </div>
-      </Card>
+        </Section>
 
-      {/* Display Settings */}
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Display Settings</h2>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div>
-              <p className="font-medium text-gray-900">Dark Mode</p>
-              <p className="text-sm text-gray-600">Enable dark theme for the dashboard</p>
+        {/* Social Links */}
+        <Section title="Social Media" description="Connect your social profiles">
+          <div className="space-y-4">
+            <FormGroup label="Facebook" error={errors.socialLinks?.facebook?.message}>
+              <input
+                {...register('socialLinks.facebook')}
+                type="url"
+                placeholder="https://facebook.com/..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </FormGroup>
+
+            <FormGroup label="Twitter" error={errors.socialLinks?.twitter?.message}>
+              <input
+                {...register('socialLinks.twitter')}
+                type="url"
+                placeholder="https://twitter.com/..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </FormGroup>
+
+            <FormGroup label="Instagram" error={errors.socialLinks?.instagram?.message}>
+              <input
+                {...register('socialLinks.instagram')}
+                type="url"
+                placeholder="https://instagram.com/..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </FormGroup>
+
+            <FormGroup label="LinkedIn" error={errors.socialLinks?.linkedin?.message}>
+              <input
+                {...register('socialLinks.linkedin')}
+                type="url"
+                placeholder="https://linkedin.com/..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </FormGroup>
+          </div>
+        </Section>
+
+        {/* Content Settings */}
+        <Section title="Content Settings" description="Control content behavior">
+          <div className="space-y-4">
+            <FormGroup label="Posts Per Page" error={errors.postsPerPage?.message}>
+              <input
+                {...register('postsPerPage', { valueAsNumber: true })}
+                type="number"
+                min="1"
+                max="100"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </FormGroup>
+
+            <FormGroup label="Timezone" error={errors.timezone?.message}>
+              <select
+                {...register('timezone')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option>UTC</option>
+                <option>EST</option>
+                <option>CST</option>
+                <option>MST</option>
+                <option>PST</option>
+              </select>
+            </FormGroup>
+
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  {...register('enableComments')}
+                  type="checkbox"
+                  className="w-4 h-4 rounded border-gray-300"
+                />
+                <span className="text-sm font-medium text-gray-700">Enable Comments</span>
+              </label>
             </div>
-            <input
-              type="checkbox"
-              checked={settings.darkMode}
-              onChange={(e) => handleSettingChange('darkMode', e.target.checked)}
-              className="w-5 h-5 rounded border-gray-300"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Theme</label>
-            <select
-              value={settings.theme}
-              onChange={(e) => handleSettingChange('theme', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-              <option value="auto">Auto (System Preference)</option>
-            </select>
-          </div>
-        </div>
-      </Card>
 
-      {/* Notification Settings */}
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Notifications</h2>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div>
-              <p className="font-medium text-gray-900">Auto Save</p>
-              <p className="text-sm text-gray-600">Automatically save drafts</p>
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  {...register('maintenanceMode')}
+                  type="checkbox"
+                  className="w-4 h-4 rounded border-gray-300"
+                />
+                <span className="text-sm font-medium text-gray-700">Maintenance Mode</span>
+              </label>
             </div>
-            <input
-              type="checkbox"
-              checked={settings.autoSave}
-              onChange={(e) => handleSettingChange('autoSave', e.target.checked)}
-              className="w-5 h-5 rounded border-gray-300"
-            />
           </div>
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div>
-              <p className="font-medium text-gray-900">Email Notifications</p>
-              <p className="text-sm text-gray-600">Receive email updates</p>
-            </div>
-            <input
-              type="checkbox"
-              checked={settings.emailNotifications}
-              onChange={(e) => handleSettingChange('emailNotifications', e.target.checked)}
-              className="w-5 h-5 rounded border-gray-300"
-            />
-          </div>
+        </Section>
+
+        {/* Action Buttons */}
+        <div className="flex gap-4">
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
+          >
+            {loading ? 'Saving...' : 'Save Settings'}
+          </button>
+          <button
+            type="button"
+            onClick={() => reset()}
+            className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+          >
+            Reset
+          </button>
         </div>
-      </Card>
+      </form>
+    </div>
+  );
+}
 
-      {/* API Settings */}
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">API Configuration</h2>
-        <div className="space-y-4 bg-gray-50 rounded-lg p-4">
-          <div>
-            <p className="text-xs font-mono text-gray-600">API Endpoint</p>
-            <p className="text-sm font-medium text-gray-900 mt-1">http://localhost:3000/api</p>
-          </div>
-          <div>
-            <p className="text-xs font-mono text-gray-600">Auth Token Status</p>
-            <p className="text-sm font-medium text-gray-900 mt-1">
-              {localStorage.getItem('authToken') ? '✅ Active' : '⚠️ Not Set'}
-            </p>
-          </div>
-        </div>
-      </Card>
+// Helper Components
 
-      {/* About */}
-      <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-2">About Dashboard</h2>
-        <p className="text-sm text-gray-600">
-          Yatripati News Management Dashboard v1.0.0
-        </p>
-        <p className="text-xs text-gray-500 mt-3">
-          Built with React, TypeScript, and Tailwind CSS
-        </p>
-      </Card>
+interface SectionProps {
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}
 
-      {/* Save Button */}
-      <div className="flex gap-3 justify-end">
-        <Button
-          variant="ghost"
-          onClick={() => window.location.reload()}
-        >
-          Reset
-        </Button>
-        <Button
-          variant="primary"
-          onClick={handleSave}
-        >
-          Save Settings
-        </Button>
+function Section({ title, description, children }: SectionProps) {
+  return (
+    <div className="bg-white rounded-lg shadow p-6">
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+        <p className="text-sm text-gray-600 mt-1">{description}</p>
       </div>
+      {children}
+    </div>
+  );
+}
+
+interface FormGroupProps {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}
+
+function FormGroup({ label, error, children }: FormGroupProps) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
+      {children}
+      {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
     </div>
   );
 }

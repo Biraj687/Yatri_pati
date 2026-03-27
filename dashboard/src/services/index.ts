@@ -1,1 +1,3 @@
-export { dashboardAPI } from './api';
+// Services are imported from shared/services
+// This file can be used for dashboard-specific service extensions
+export {};

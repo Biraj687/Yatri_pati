@@ -1,171 +1,280 @@
-import { useDashboard } from '@context';
-import { Card } from '@components';
-import { formatNumberCompact } from '@utils';
+/**
+ * Analytics Page - Dashboard metrics and analytics
+ */
+
+import { useEffect, useState } from 'react';
+import { useDashboard } from '@context/DashboardContext';
+import { useNotification } from '@context/NotificationContext';
+
+interface AnalyticsData {
+  articleViews: number[];
+  articleClicks: number[];
+  adImpressions: number[];
+  adClicks: number[];
+  dates: string[];
+}
 
 export function AnalyticsPage() {
-  const { articles, stats: _stats } = useDashboard();
+  const { stats, loadStats, loading } = useDashboard();
+  const { showNotification } = useNotification();
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
 
-  // Calculate analytics
-  const totalArticles = articles.length;
-  const publishedArticles = articles.filter(a => a.status === 'published').length;
-  const draftArticles = articles.filter(a => a.status === 'draft').length;
-  const totalViews = articles.reduce((sum, a) => sum + (a.views || 0), 0);
-  const avgViews = publishedArticles > 0 ? Math.round(totalViews / publishedArticles) : 0;
-  const stickyArticles = articles.filter(a => a.sticky).length;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await loadStats();
+        // Generate mock analytics data
+        const dates = generateLast7Days();
+        setAnalytics({
+          articleViews: dates.map(() => Math.floor(Math.random() * 1000) + 500),
+          articleClicks: dates.map(() => Math.floor(Math.random() * 500) + 200),
+          adImpressions: dates.map(() => Math.floor(Math.random() * 2000) + 1000),
+          adClicks: dates.map(() => Math.floor(Math.random() * 300) + 100),
+          dates,
+        });
+        showNotification('Analytics loaded successfully', 'success');
+      } catch (error) {
+        showNotification((error as Error).message, 'error');
+      }
+    };
 
-  const categoryStats = articles.reduce((acc, article) => {
-    const category = article.category || 'Uncategorized';
-    acc[category] = (acc[category] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+    fetchData();
+  }, [loadStats, showNotification]);
 
-  const topArticles = [...articles]
-    .sort((a, b) => (b.views || 0) - (a.views || 0))
-    .slice(0, 10);
-
-  const topAuthors = articles.reduce((acc, article) => {
-    article.authors.forEach(author => {
-      acc[author.name] = (acc[author.name] || 0) + 1;
-    });
-    return acc;
-  }, {} as Record<string, number>);
+  if (loading) {
+    return <LoadingSkeletons />;
+  }
 
   return (
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Analytics & Insights</h1>
-        <p className="text-gray-600 mt-1">Overview of your news portal performance</p>
+        <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
+        <p className="text-gray-600 mt-2">Track your dashboard performance metrics</p>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card className="p-6">
-          <h3 className="text-sm font-semibold text-gray-600 mb-2">Total Articles</h3>
-          <p className="text-3xl font-bold text-gray-900">{totalArticles}</p>
-          <p className="text-xs text-gray-500 mt-2">{publishedArticles} published • {draftArticles} drafts</p>
-        </Card>
-        <Card className="p-6">
-          <h3 className="text-sm font-semibold text-gray-600 mb-2">Total Views</h3>
-          <p className="text-3xl font-bold text-blue-600">{formatNumberCompact(totalViews)}</p>
-          <p className="text-xs text-gray-500 mt-2">{formatNumberCompact(avgViews)} avg per article</p>
-        </Card>
-        <Card className="p-6">
-          <h3 className="text-sm font-semibold text-gray-600 mb-2">Featured Articles</h3>
-          <p className="text-3xl font-bold text-yellow-600">{stickyArticles}</p>
-          <p className="text-xs text-gray-500 mt-2">{((stickyArticles / totalArticles) * 100 || 0).toFixed(1)}% of total</p>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MetricCard
+          title="Total Articles"
+          value={stats?.totalArticles ?? 0}
+          change="+12%"
+          color="blue"
+        />
+        <MetricCard
+          title="Published"
+          value={stats?.publishedArticles ?? 0}
+          change="+8%"
+          color="green"
+        />
+        <MetricCard
+          title="Total Views"
+          value={stats?.totalViews ?? 0}
+          change="+23%"
+          color="purple"
+        />
+        <MetricCard
+          title="Active Authors"
+          value={stats?.totalAuthors ?? 0}
+          change="+2%"
+          color="orange"
+        />
       </div>
 
-      {/* Two Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Categories */}
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Articles by Category</h2>
-          <div className="space-y-3">
-            {Object.entries(categoryStats)
-              .sort(([, a], [, b]) => b - a)
-              .map(([category, count]) => (
-                <div key={category}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-gray-900">{category}</span>
-                    <span className="text-sm font-bold text-gray-700">{count}</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-blue-600 h-2 rounded-full transition-all"
-                      style={{
-                        width: `${(count / totalArticles) * 100}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
+      {/* Charts */}
+      {analytics && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Article Views Chart */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Article Views (7 days)</h2>
+            <BarChart data={analytics.articleViews} dates={analytics.dates} />
           </div>
-        </Card>
 
-        {/* Top Authors */}
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Contributors</h2>
-          <div className="space-y-3">
-            {Object.entries(topAuthors)
-              .sort(([, a], [, b]) => b - a)
-              .slice(0, 8)
-              .map(([author, count]) => (
-                <div key={author}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-gray-900">{author}</span>
-                    <span className="text-sm font-bold text-gray-700">{count} articles</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-purple-600 h-2 rounded-full transition-all"
-                      style={{
-                        width: `${(count / (Math.max(...Object.values(topAuthors)))) * 100}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
+          {/* Ad Performance Chart */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Ad Impressions (7 days)</h2>
+            <BarChart data={analytics.adImpressions} dates={analytics.dates} color="orange" />
           </div>
-        </Card>
-      </div>
 
-      {/* Top Articles */}
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Performing Articles</h2>
+          {/* CTR Analysis */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Article Click Rate</h2>
+            <LineChart data={analytics.articleClicks} />
+          </div>
+
+          {/* Ad Click Analysis */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Ad Click Performance</h2>
+            <LineChart data={analytics.adClicks} color="green" />
+          </div>
+        </div>
+      )}
+
+      {/* Recent Activity */}
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="p-6 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-900">Recent Articles</h2>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 px-3 text-xs font-semibold text-gray-600">Title</th>
-                <th className="text-left py-2 px-3 text-xs font-semibold text-gray-600">Views</th>
-                <th className="text-left py-2 px-3 text-xs font-semibold text-gray-600">Status</th>
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Views</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Published</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {topArticles.map(article => (
+              {stats?.recentArticles.slice(0, 5).map(article => (
                 <tr key={article.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-3 text-sm text-gray-900 font-medium">{article.title.substring(0, 50)}</td>
-                  <td className="py-3 px-3 text-sm font-bold text-blue-600">{formatNumberCompact(article.views || 0)}</td>
-                  <td className="py-3 px-3">
-                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                      article.status === 'published'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {article.status}
-                    </span>
+                  <td className="px-6 py-4 text-sm text-gray-900">{article.title}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{article.views ?? 0}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    {new Date(article.publishedAt || article.createdAt).toLocaleDateString()}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </Card>
-
-      {/* Performance Summary */}
-      <Card className="bg-gradient-to-br from-indigo-50 to-blue-50 p-6 border-indigo-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Performance Summary</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          <div>
-            <p className="text-sm text-gray-600 mb-1">Publish Rate</p>
-            <p className="text-2xl font-bold text-blue-600">{totalArticles > 0 ? Math.round((publishedArticles / totalArticles) * 100) : 0}%</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600 mb-1">Avg. Views/Article</p>
-            <p className="text-2xl font-bold text-indigo-600">{formatNumberCompact(avgViews)}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600 mb-1">Total Authors</p>
-            <p className="text-2xl font-bold text-purple-600">{Object.keys(topAuthors).length}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600 mb-1">Categories</p>
-            <p className="text-2xl font-bold text-pink-600">{Object.keys(categoryStats).length}</p>
-          </div>
-        </div>
-      </Card>
+      </div>
     </div>
   );
+}
+
+// Helper Components
+
+function MetricCard({
+  title,
+  value,
+  change,
+  color,
+}: {
+  title: string;
+  value: number;
+  change: string;
+  color: string;
+}) {
+  const colors = {
+    blue: 'bg-blue-50 text-blue-600',
+    green: 'bg-green-50 text-green-600',
+    purple: 'bg-purple-50 text-purple-600',
+    orange: 'bg-orange-50 text-orange-600',
+  };
+
+  return (
+    <div className={`${colors[color as keyof typeof colors]} rounded-lg p-6`}>
+      <p className="text-sm font-medium opacity-75">{title}</p>
+      <p className="text-3xl font-bold mt-2">{value.toLocaleString()}</p>
+      <p className="text-xs font-semibold mt-2">{change} vs last month</p>
+    </div>
+  );
+}
+
+function BarChart({
+  data,
+  dates,
+  color = 'blue',
+}: {
+  data: number[];
+  dates: string[];
+  color?: string;
+}) {
+  const max = Math.max(...data);
+
+  const colorClass = {
+    blue: 'bg-blue-500',
+    orange: 'bg-orange-500',
+    green: 'bg-green-500',
+  }[color];
+
+  return (
+    <div className="flex items-end justify-between gap-2 h-64">
+      {data.map((value, idx) => (
+        <div key={idx} className="flex-1 flex flex-col items-center gap-2">
+          <div className="w-full flex flex-col-reverse">
+            <div
+              className={`w-full ${colorClass} rounded-t`}
+              style={{ height: `${(value / max) * 200}px` }}
+              title={`${value}`}
+            />
+          </div>
+          <span className="text-xs text-gray-500">{dates[idx].split('-')[2]}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function LineChart({
+  data,
+  color = 'purple',
+}: {
+  data: number[];
+  color?: string;
+}) {
+  const max = Math.max(...data);
+  const points = data.map((v, i) => ({
+    x: (i / (data.length - 1)) * 100,
+    y: 100 - (v / max) * 100,
+  }));
+
+  const colorClass = {
+    purple: 'stroke-purple-500',
+    green: 'stroke-green-500',
+  }[color];
+
+  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+
+  return (
+    <div className="h-64">
+      <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
+        {/* Grid lines */}
+        {[0, 25, 50, 75, 100].map(y => (
+          <line
+            key={y}
+            x1="0"
+            y1={y}
+            x2="100"
+            y2={y}
+            stroke="#f3f4f6"
+            strokeWidth="0.5"
+          />
+        ))}
+        {/* Line */}
+        <path d={pathD} fill="none" className={colorClass} strokeWidth="1.5" />
+        {/* Points */}
+        {points.map((p, i) => (
+          <circle key={i} cx={p.x} cy={p.y} r="1.5" fill="#6366f1" />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+function LoadingSkeletons() {
+  return (
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="bg-gray-200 rounded-lg h-24 animate-pulse" />
+        ))}
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {[1, 2].map(i => (
+          <div key={i} className="bg-gray-200 rounded-lg h-64 animate-pulse" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function generateLast7Days(): string[] {
+  const dates: string[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    dates.push(date.toISOString().split('T')[0]);
+  }
+  return dates;
 }
