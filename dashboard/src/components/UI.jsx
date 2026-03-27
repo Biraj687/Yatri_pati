@@ -1,11 +1,9 @@
 import React from 'react';
 import { FiAlertCircle, FiCheckCircle, FiInfo, FiX } from 'react-icons/fi';
 
-
-
-export function Alert({ type, message, onClose, dismissible = true, className = '' }) {
+export function Alert({ variant, title, children, onClose, dismissible = true, className = '' }) {
   const getColors = () => {
-    switch (type) {
+    switch (variant) {
       case 'error': return 'bg-red-50 text-red-800 border-red-200';
       case 'success': return 'bg-green-50 text-green-800 border-green-200';
       case 'info': return 'bg-blue-50 text-blue-800 border-blue-200';
@@ -15,7 +13,7 @@ export function Alert({ type, message, onClose, dismissible = true, className = 
   };
 
   const getIcon = () => {
-    switch (type) {
+    switch (variant) {
       case 'error': return <FiAlertCircle size={20} />;
       case 'success': return <FiCheckCircle size={20} />;
       case 'info': return <FiInfo size={20} />;
@@ -26,7 +24,10 @@ export function Alert({ type, message, onClose, dismissible = true, className = 
   return (
     <div className={`p-4 rounded-lg border flex items-start gap-3 ${getColors()} ${className}`}>
       <div className="flex-shrink-0 mt-0.5">{getIcon()}</div>
-      <div className="flex-1">{message}</div>
+      <div className="flex-1">
+        {title && <div className="font-semibold mb-1">{title}</div>}
+        <div>{children}</div>
+      </div>
       {dismissible && onClose && (
         <button onClick={onClose} className="flex-shrink-0 ml-2 hover:opacity-70">
           <FiX size={20} />
@@ -35,8 +36,6 @@ export function Alert({ type, message, onClose, dismissible = true, className = 
     </div>
   );
 }
-
-
 
 export function Badge({ children, variant = 'primary', size = 'md', className = '' }) {
   const sizeClass = size === 'sm' ? 'px-2 py-1 text-xs' : size === 'lg' ? 'px-4 py-2 text-base' : 'px-3 py-1.5 text-sm';
@@ -54,13 +53,6 @@ export function Badge({ children, variant = 'primary', size = 'md', className = 
       {children}
     </span>
   );
-}
-
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
-  loading?;
-  fullWidth?;
-  children;
 }
 
 export function Button({
@@ -100,12 +92,6 @@ export function Button({
   );
 }
 
-  label?;
-  error?;
-  helperText?;
-  icon?;
-}
-
 export function Input({ label, error, helperText, icon, className = '', ...props }) {
   return (
     <div className="w-full">
@@ -125,11 +111,6 @@ export function Input({ label, error, helperText, icon, className = '', ...props
   );
 }
 
-  label?;
-  error?;
-  helperText?;
-}
-
 export function TextArea({ label, error, helperText, className = '', ...props }) {
   return (
     <div className="w-full">
@@ -146,8 +127,6 @@ export function TextArea({ label, error, helperText, className = '', ...props })
   );
 }
 
-
-
 export function LoadingSpinner({ size = 'md' }) {
   const sizeClass = {
     sm: 'w-4 h-4',
@@ -162,8 +141,6 @@ export function LoadingSpinner({ size = 'md' }) {
   );
 }
 
-
-
 export function Card({ children, className = '', hoverable = false }) {
   return (
     <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${hoverable ? 'hover:shadow-md transition-shadow cursor-pointer' : ''} ${className}`}>
@@ -171,8 +148,6 @@ export function Card({ children, className = '', hoverable = false }) {
     </div>
   );
 }
-
-
 
 export function Modal({ isOpen, title, children, onClose, footer, size = 'md' }) {
   if (!isOpen) return null;
@@ -203,15 +178,11 @@ export function Modal({ isOpen, title, children, onClose, footer, size = 'md' })
   );
 }
 
->;
-  defaultValue?;
-}
-
 export function Tabs({ tabs, defaultValue }) {
   const [activeTab, setActiveTab] = React.useState(defaultValue || tabs[0]?.value);
 
   return (
-    
+    <div>
       <div className="flex border-b border-gray-200">
         {tabs.map(tab => (
           <button
@@ -234,13 +205,8 @@ export function Tabs({ tabs, defaultValue }) {
   );
 }
 
-export function Skeleton({ width = 'w-full', height = 'h-4', className = '' }: { width?; height?; className?}) {
+export function Skeleton({ width = 'w-full', height = 'h-4', className = '' }) {
   return <div className={`${width} ${height} bg-gray-200 rounded animate-pulse ${className}`} />;
-}
-
-  label?;
-  error?;
-  options: { value; label}[];
 }
 
 export function Select({ label, error, options, className = '', ...props }) {
@@ -261,4 +227,3 @@ export function Select({ label, error, options, className = '', ...props }) {
     </div>
   );
 }
-
