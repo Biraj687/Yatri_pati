@@ -10,79 +10,82 @@ export function NewsList({ articles, onEdit, onDelete, onToggleSticky, onPublish
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-200">
-            
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Title</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Author(s)</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Date</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Views</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Actions</th>
+            <tr>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Title</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Author(s)</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Date</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Views</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {articles.length === 0 ? (
-              
-                <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
-                  No articles found
+              <tr>
+                <td colSpan={6} className="px-4 py-12 text-center text-gray-500">
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-sm">No articles found</p>
+                    <p className="text-xs text-gray-400">Create a new article to get started</p>
+                  </div>
                 </td>
               </tr>
             ) : (
               articles.map(article => (
                 <tr key={article.id} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => onRowClick?.(article)}>
-                  <td className="px-6 py-4">
+                  <td className="px-4 py-4">
                     <div className="flex items-center gap-2">
-                      {article.sticky && <FiStar size={16} className="text-yellow-500" />}
-                      <div className="font-medium text-gray-900 max-w-xs">{truncate(article.title, 40)}</div>
+                      {article.sticky && <FiStar size={16} className="text-yellow-500 flex-shrink-0" />}
+                      <div className="font-medium text-gray-900 text-sm truncate">{truncate(article.title, 40)}</div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 py-4">
                     <div className="text-sm text-gray-600">
-                      {article.authors.map(a => a.name).join(', ') || 'Yatripati'}
+                      {article.authors?.map(a => a.name).join(', ') || 'Yatripati'}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 py-4">
                     <Badge variant={article.status === 'draft' ? 'warning' : article.status === 'published' ? 'success' : 'info'}>
                       {article.status}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
+                  <td className="px-4 py-4 text-sm text-gray-600 whitespace-nowrap">
                     {formatDate(article.updatedAt || article.createdAt)}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 py-4">
                     <div className="flex items-center gap-1 text-gray-600">
                       <FiEye size={16} />
                       <span className="text-sm">{formatNumberCompact(article.views || 0)}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
-                    <div className="flex items-center gap-2">
+                  <td className="px-4 py-4" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center gap-1">
                       {article.status === 'draft' && (
                         <Button
                           size="sm"
                           variant="primary"
                           onClick={() => onPublish(article.id)}
-                          className="text-xs"
+                          className="text-xs whitespace-nowrap"
                         >
                           Publish
                         </Button>
                       )}
                       <button
                         onClick={() => onToggleSticky(article.id)}
-                        className={`p-2 rounded hover:bg-gray-100 ${article.sticky ? 'text-yellow-500' : 'text-gray-400'}`}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${article.sticky ? 'text-yellow-500' : 'text-gray-400 hover:text-gray-600'}`}
                         title={article.sticky ? 'Remove sticky' : 'Make sticky'}
                       >
                         <FiStar size={16} />
                       </button>
                       <button
                         onClick={() => onEdit(article)}
-                        className="p-2 rounded hover:bg-gray-100 text-gray-600 hover:text-blue-600"
+                        className="p-1.5 rounded hover:bg-gray-100 text-gray-600 hover:text-blue-600 transition-colors"
                         title="Edit"
                       >
                         <FiEdit2 size={16} />
                       </button>
                       <button
                         onClick={() => onDelete(article.id)}
-                        className="p-2 rounded hover:bg-gray-100 text-gray-600 hover:text-red-600"
+                        className="p-1.5 rounded hover:bg-gray-100 text-gray-600 hover:text-red-600 transition-colors"
                         title="Delete"
                       >
                         <FiTrash2 size={16} />

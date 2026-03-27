@@ -121,12 +121,12 @@ export function NewsManagementPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4">
-        
+      <div className="flex items-center justify-between gap-4 flex-col sm:flex-row">
+        <div className="flex-1">
           <h1 className="text-3xl font-bold text-gray-900">News Management</h1>
-          <p className="text-gray-600 mt-1">Manage all your news articles and content</p>
+          <p className="text-gray-600 text-sm mt-1">Manage all your news articles and content</p>
         </div>
-        <Button variant="primary" onClick={handleCreateNew} className="gap-2">
+        <Button variant="primary" onClick={handleCreateNew} className="gap-2 w-full sm:w-auto">
           <FiPlus size={20} />
           New Article
         </Button>
@@ -139,7 +139,7 @@ export function NewsManagementPage() {
 
       {/* Filters & Search */}
       <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
-        <div className="flex gap-4 flex-col md:flex-row">
+        <div className="flex gap-3 flex-col sm:flex-row sm:items-end">
           <div className="flex-1">
             <Input
               placeholder="Search articles..."
@@ -148,26 +148,42 @@ export function NewsManagementPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="all">All Status</option>
-            <option value="draft">Drafts</option>
-            <option value="published">Published</option>
-            <option value="archived">Archived</option>
-          </select>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="most-viewed">Most Viewed</option>
-            <option value="rank">By Rank</option>
-          </select>
+          <div className="flex gap-3 w-full sm:w-auto">
+            <div className="relative flex-1 sm:flex-initial">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full px-3 py-2 pr-5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer transition-colors hover:border-gray-400"
+              >
+                <option value="all">All Status</option>
+                <option value="draft">Drafts</option>
+                <option value="published">Published</option>
+                <option value="archived">Archived</option>
+              </select>
+              <div className="pointer-events-none absolute right-1.5 top-2.5 text-gray-600">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+            </div>
+            <div className="relative flex-1 sm:flex-initial">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full px-3 py-2 pr-5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer transition-colors hover:border-gray-400"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="most-viewed">Most Viewed</option>
+                <option value="rank">By Rank</option>
+              </select>
+              <div className="pointer-events-none absolute right-1.5 top-2.5 text-gray-600">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

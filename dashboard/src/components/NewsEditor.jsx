@@ -2,9 +2,23 @@ import { useState, useEffect } from 'react';
 import { FiX } from 'react-icons/fi';
 import { Input, TextArea, Button, Badge } from './UI';
 
+// Default categories - will be fetched from backend in real implementation
+const DEFAULT_CATEGORIES = [
+  'Politics',
+  'Tourism',
+  'Economy',
+  'Culture',
+  'Entertainment',
+  'Sports',
+  'Technology',
+  'Health',
+  'Education',
+  'Travel',
+  'Business',
+  'Lifestyle',
+];
 
-
-export function NewsEditor({ article, onSave, onCancel, loading = false, onMediaSelect }) {
+export function NewsEditor({ article, onSave, onCancel, loading = false, onMediaSelect, categories = DEFAULT_CATEGORIES }) {
   const [formData, setFormData] = useState({
     title: '',
     subtitle: '',
@@ -17,12 +31,12 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     category: '',
     tags: [],
     status: 'draft',
-    rank,
-    sticky,
+    rank: 0,
+    sticky: false,
     seoTitle: '',
     seoDescription: '',
     seoKeywords: [],
-    authors: [{ name: 'Yatripati' } ],
+    authors: [{ name: 'Yatripati' }],
   });
 
   const [tagInput, setTagInput] = useState('');
@@ -273,14 +287,23 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Tags & Categories</h3>
         <div className="space-y-4">
-          <Input
-            label="Category"
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            placeholder="Enter category"
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white cursor-pointer"
+            >
+              <option value="">-- Select a Category --</option>
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+            {!formData.category && <p className="text-gray-500 text-xs mt-1">Please select a category for this article</p>}
+          </div>
           
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
             <div className="flex gap-2 mb-2">
               <input
@@ -296,7 +319,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
             <div className="flex flex-wrap gap-2">
               {formData.tags.map(tag => (
                 <Badge key={tag} variant="info">
-                  {tag}</span>
+                  {tag}
                   <button onClick={() => removeTag(tag)} className="ml-1 hover:opacity-70">×</button>
                 </Badge>
               ))}
@@ -327,6 +350,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
             maxLength={160}
           />
           
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Keywords</label>
             <div className="flex gap-2 mb-2">
               <input
@@ -342,7 +366,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
             <div className="flex flex-wrap gap-2">
               {formData.seoKeywords.map(keyword => (
                 <Badge key={keyword} variant="secondary">
-                  {keyword}</span>
+                  {keyword}
                   <button onClick={() => removeKeyword(keyword)} className="ml-1 hover:opacity-70">×</button>
                 </Badge>
               ))}

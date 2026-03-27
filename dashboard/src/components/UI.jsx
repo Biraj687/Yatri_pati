@@ -185,11 +185,16 @@ export function Modal({ isOpen, title, children, onClose, footer, size = 'md' })
   }[size];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={onClose}>
-      <div className={`bg-white rounded-lg shadow-xl ${sizeClass} max-h-[90vh] overflow-auto`} onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 p-4" onClick={onClose}>
+      <div className={`bg-white rounded-lg shadow-2xl ${sizeClass} w-full max-h-[90vh] overflow-auto animate-in fade-in zoom-in-95`} onClick={(e) => e.stopPropagation()}>
+        <div className="sticky top-0 flex items-center justify-between p-6 border-b border-gray-200 bg-white z-10">
           <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+          <button 
+            onClick={onClose} 
+            className="text-gray-500 hover:text-gray-700 text-2xl font-light w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded transition"
+          >
+            ×
+          </button>
         </div>
         <div className="p-6">{children}</div>
         {footer && <div className="border-t border-gray-200 p-6 bg-gray-50 flex justify-end gap-2">{footer}</div>}
