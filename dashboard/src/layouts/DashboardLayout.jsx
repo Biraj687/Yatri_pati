@@ -59,7 +59,7 @@ export function DashboardLayout({ children }) {
               title={!sidebarOpen ? label : ''}
             >
               <Icon size={20} />
-              {sidebarOpen && {label}</span>}
+              {sidebarOpen && <span>{label}</span>}
             </Link>
           ))}
         </nav>
@@ -71,7 +71,7 @@ export function DashboardLayout({ children }) {
             title={!sidebarOpen ? 'Logout' : ''}
           >
             <FiLogOut size={20} />
-            {sidebarOpen && Logout</span>}
+            {sidebarOpen && <span>Logout</span>}
           </button>
         </div>
       </aside>

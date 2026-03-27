@@ -82,19 +82,19 @@ export const AdvertisementManagementPage = () => {
       </div>
 
       {/* Create Advertisement Modal */}
-      {showCreateModal && (
-        <Modal
-          isOpen={showCreateModal}
-          title="Create New Advertisement"
-          onClose={handleCloseModal}
-          size="xl"
-        >
+      <Modal
+        isOpen={showCreateModal}
+        title="Create New Advertisement"
+        onClose={handleCloseModal}
+        size="xl"
+      >
+        {showCreateModal && (
           <AdvertisementForm
             onSubmitSuccess={handleCreateSuccess}
             onCancel={handleCloseModal}
           />
-        </Modal>
-      )}
+        )}
+      </Modal>
     </div>
   );
 };
