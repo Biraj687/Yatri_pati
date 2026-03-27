@@ -35,7 +35,7 @@ export function LoginPage() {
         showNotification('Invalid email or password', 'error');
       }
     } catch (error) {
-      showNotification((error as Error).message, 'error');
+      showNotification((error ).message, 'error');
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export function LoginPage() {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
+            
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
               </label>
@@ -64,7 +64,7 @@ export function LoginPage() {
               />
             </div>
 
-            <div>
+            
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                 Password
               </label>
@@ -91,9 +91,9 @@ export function LoginPage() {
             <p className="text-center text-sm text-gray-600">
               Demo credentials:
               <br />
-              Email: <strong>admin@example.com</strong>
+              Email: admin@example.com</strong>
               <br />
-              Password: <strong>password123</strong>
+              Password: password123</strong>
             </p>
           </div>
         </div>
@@ -101,3 +101,4 @@ export function LoginPage() {
     </div>
   );
 }
+

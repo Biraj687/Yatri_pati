@@ -8,15 +8,9 @@ import type { Advertisement, AsyncState, PaginatedResponse } from '@shared/types
 import { AdvertisementCard } from './AdvertisementCard';
 import { AdvertisementForm } from './AdvertisementForm';
 
-interface AdvertisementListProps {
-  advertisements: AsyncState<PaginatedResponse<Advertisement> | null>;
-  onCreateSuccess?: () => void;
-  onUpdateSuccess?: () => void;
-  onDeleteSuccess?: () => void;
-  onToggleSuccess?: () => void;
-}
 
-export const AdvertisementList: React.FC<AdvertisementListProps> = ({
+
+export const AdvertisementList: React.FC = ({
   advertisements,
   onCreateSuccess,
   onUpdateSuccess,
@@ -131,3 +125,4 @@ export const AdvertisementList: React.FC<AdvertisementListProps> = ({
     </div>
   );
 };
+

@@ -3,23 +3,15 @@ import type { NewsArticle } from '@types';
 import { formatDate, truncate, formatNumberCompact } from '@utils';
 import { Badge, Button } from './UI';
 
-interface NewsListProps {
-  articles: NewsArticle[];
-  onEdit: (article: NewsArticle) => void;
-  onDelete: (id: string) => void;
-  onToggleSticky: (id: string) => void;
-  onPublish: (id: string) => void;
-  loading?: boolean;
-  onRowClick?: (article: NewsArticle) => void;
-}
 
-export function NewsList({ articles, onEdit, onDelete, onToggleSticky, onPublish, loading: _loading, onRowClick }: NewsListProps) {
+
+export function NewsList({ articles, onEdit, onDelete, onToggleSticky, onPublish, loading, onRowClick }) {
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
+            
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Title</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Author(s)</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
@@ -30,7 +22,7 @@ export function NewsList({ articles, onEdit, onDelete, onToggleSticky, onPublish
           </thead>
           <tbody className="divide-y divide-gray-200">
             {articles.length === 0 ? (
-              <tr>
+              
                 <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
                   No articles found
                 </td>
@@ -108,12 +100,9 @@ export function NewsList({ articles, onEdit, onDelete, onToggleSticky, onPublish
   );
 }
 
-interface NewsCardPreviewProps {
-  article: NewsArticle;
-  compact?: boolean;
-}
 
-export function NewsCardPreview({ article, compact = false }: NewsCardPreviewProps) {
+
+export function NewsCardPreview({ article, compact = false }) {
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       {article.featured_image && (
@@ -123,7 +112,7 @@ export function NewsCardPreview({ article, compact = false }: NewsCardPreviewPro
             alt={article.title}
             className="w-full h-48 object-cover"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2224%22 fill=%22%239ca3af%22%3ENo Image%3C/text%3E%3C/svg%3E';
+              (e.target ).src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2224%22 fill=%22%239ca3af%22%3ENo Image%3C/text%3E%3C/svg%3E';
             }}
           />
           {article.sticky && (
@@ -143,7 +132,7 @@ export function NewsCardPreview({ article, compact = false }: NewsCardPreviewPro
           <p className="text-sm text-gray-600 mb-3 line-clamp-2">{article.excerpt}</p>
         )}
         <div className="flex items-center justify-between text-xs text-gray-500 pt-3 border-t border-gray-100">
-          <span>{formatDate(article.createdAt)}</span>
+          {formatDate(article.createdAt)}</span>
           <div className="flex items-center gap-1">
             <FiEye size={14} />
             {formatNumberCompact(article.views || 0)}
@@ -153,3 +142,4 @@ export function NewsCardPreview({ article, compact = false }: NewsCardPreviewPro
     </div>
   );
 }
+

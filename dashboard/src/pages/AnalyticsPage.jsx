@@ -6,13 +6,7 @@ import { useEffect, useState } from 'react';
 import { useDashboard } from '@context/DashboardContext';
 import { useNotification } from '@context/NotificationContext';
 
-interface AnalyticsData {
-  articleViews: number[];
-  articleClicks: number[];
-  adImpressions: number[];
-  adClicks: number[];
-  dates: string[];
-}
+
 
 export function AnalyticsPage() {
   const { stats, loadStats, loading } = useDashboard();
@@ -34,7 +28,7 @@ export function AnalyticsPage() {
         });
         showNotification('Analytics loaded successfully', 'success');
       } catch (error) {
-        showNotification((error as Error).message, 'error');
+        showNotification((error ).message, 'error');
       }
     };
 
@@ -48,7 +42,7 @@ export function AnalyticsPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
+      
         <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
         <p className="text-gray-600 mt-2">Track your dashboard performance metrics</p>
       </div>
@@ -118,7 +112,7 @@ export function AnalyticsPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
-              <tr>
+              
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Views</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Published</th>
@@ -163,7 +157,7 @@ function MetricCard({
   };
 
   return (
-    <div className={`${colors[color as keyof typeof colors]} rounded-lg p-6`}>
+    <div className={`${colors[color  typeof colors]} rounded-lg p-6`}>
       <p className="text-sm font-medium opacity-75">{title}</p>
       <p className="text-3xl font-bold mt-2">{value.toLocaleString()}</p>
       <p className="text-xs font-semibold mt-2">{change} vs last month</p>
@@ -278,3 +272,4 @@ function generateLast7Days(): string[] {
   }
   return dates;
 }
+

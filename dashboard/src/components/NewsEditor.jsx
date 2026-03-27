@@ -3,15 +3,9 @@ import { FiX } from 'react-icons/fi';
 import type { NewsArticle, Author } from '@types';
 import { Input, TextArea, Button, Badge } from './UI';
 
-interface NewsEditorProps {
-  article?: NewsArticle;
-  onSave: (payload: any) => Promise<void>;
-  onCancel: () => void;
-  loading?: boolean;
-  onMediaSelect?: (file: File) => void;
-}
 
-export function NewsEditor({ article, onSave, onCancel, loading = false, onMediaSelect }: NewsEditorProps) {
+
+export function NewsEditor({ article, onSave, onCancel, loading = false, onMediaSelect }) {
   const [formData, setFormData] = useState<{
     title: string;
     subtitle: string;
@@ -42,18 +36,18 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     category: '',
     tags: [],
     status: 'draft',
-    rank: 0,
-    sticky: false,
+    rank,
+    sticky,
     seoTitle: '',
     seoDescription: '',
     seoKeywords: [],
-    authors: [{ name: 'Yatripati' } as Author],
+    authors: [{ name: 'Yatripati' } ],
   });
 
   const [tagInput, setTagInput] = useState('');
   const [keywordInput, setKeywordInput] = useState('');
   const [authorInput, setAuthorInput] = useState('');
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (article) {
@@ -74,7 +68,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
         seoTitle: article.seoTitle || '',
         seoDescription: article.seoDescription || '',
         seoKeywords: article.seoKeywords || [],
-        authors: article.authors || [{ name: 'Yatripati' } as Author],
+        authors: article.authors || [{ name: 'Yatripati' } ],
       });
     }
   }, [article]);
@@ -83,7 +77,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]: type === 'checkbox' ? (e.target ).checked ,
     }));
   };
 
@@ -115,7 +109,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     setAuthorInput('');
   };
 
-  const removeAuthor = (index: number) => {
+  const removeAuthor = (index) => {
     setFormData(prev => ({
       ...prev,
       authors: prev.authors.filter((_, i) => i !== index),
@@ -134,7 +128,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     setTagInput('');
   };
 
-  const removeTag = (tag: string) => {
+  const removeTag = (tag) => {
     setFormData(prev => ({
       ...prev,
       tags: prev.tags.filter(t => t !== tag),
@@ -153,14 +147,14 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     setKeywordInput('');
   };
 
-  const removeKeyword = (keyword: string) => {
+  const removeKeyword = (keyword) => {
     setFormData(prev => ({
       ...prev,
       seoKeywords: prev.seoKeywords.filter(k => k !== keyword),
     }));
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent) => {
     const file = e.target.files?.[0];
     if (file) {
       onMediaSelect?.(file);
@@ -168,7 +162,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
       reader.onload = () => {
         setFormData(prev => ({
           ...prev,
-          featured_image: reader.result as string,
+          featured_image: reader.result ,
         }));
       };
       reader.readAsDataURL(file);
@@ -222,7 +216,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Media</h3>
         <div className="space-y-4">
-          <div>
+          
             <label className="block text-sm font-medium text-gray-700 mb-2">Featured Image</label>
             {formData.featured_image && (
               <div className="mb-4 relative group">
@@ -240,7 +234,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
                 <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
                 <div className="text-gray-500">
                   <div className="text-3xl mb-2">📸</div>
-                  <div>Click to upload or drag and drop</div>
+                  Click to upload or drag and drop</div>
                   <div className="text-xs text-gray-400">PNG, JPG, GIF up to 10MB</div>
                 </div>
               </label>
@@ -305,7 +299,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
             onChange={handleInputChange}
             placeholder="Enter category"
           />
-          <div>
+          
             <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
             <div className="flex gap-2 mb-2">
               <input
@@ -321,7 +315,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
             <div className="flex flex-wrap gap-2">
               {formData.tags.map(tag => (
                 <Badge key={tag} variant="info">
-                  <span>{tag}</span>
+                  {tag}</span>
                   <button onClick={() => removeTag(tag)} className="ml-1 hover:opacity-70">×</button>
                 </Badge>
               ))}
@@ -351,7 +345,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
             rows={2}
             maxLength={160}
           />
-          <div>
+          
             <label className="block text-sm font-medium text-gray-700 mb-2">Keywords</label>
             <div className="flex gap-2 mb-2">
               <input
@@ -367,7 +361,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
             <div className="flex flex-wrap gap-2">
               {formData.seoKeywords.map(keyword => (
                 <Badge key={keyword} variant="secondary">
-                  <span>{keyword}</span>
+                  {keyword}</span>
                   <button onClick={() => removeKeyword(keyword)} className="ml-1 hover:opacity-70">×</button>
                 </Badge>
               ))}
@@ -426,3 +420,4 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     </div>
   );
 }
+

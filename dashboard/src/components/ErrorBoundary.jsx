@@ -4,32 +4,26 @@
 
 import React, { ReactNode, ErrorInfo } from 'react';
 
-interface Props {
-  children: ReactNode;
-  fallback?: ReactNode;
-}
 
-interface State {
-  hasError: boolean;
-  error: Error | null;
-}
+
+
 
 export class ErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError, error: null };
   }
 
-  static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+  static getDerivedStateFromError(error): State {
+    return { hasError, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error, errorInfo) {
     console.error('[ErrorBoundary]', error, errorInfo);
   }
 
   handleReset = () => {
-    this.setState({ hasError: false, error: null });
+    this.setState({ hasError, error: null });
   };
 
   render() {
@@ -64,3 +58,4 @@ export class ErrorBoundary extends React.Component<Props, State> {
     return this.props.children;
   }
 }
+

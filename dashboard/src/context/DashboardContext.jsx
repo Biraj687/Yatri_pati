@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 import type {
   NewsArticle,
   FileItem,
@@ -8,58 +8,46 @@ import type {
   PaginationParams,
 } from '@types';
 
-interface DashboardContextType {
-  // State
-  articles: NewsArticle[];
-  files: FileItem[];
-  stats: DashboardStats | null;
-  loading: boolean;
-  error: string | null;
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+;
   
   // Article actions
-  loadArticles: (params?: PaginationParams) => Promise<void>;
-  loadArticleById: (id: string) => Promise<NewsArticle>;
-  createArticle: (payload: CreateNewsPayload) => Promise<NewsArticle>;
-  updateArticle: (id: string, payload: UpdateNewsPayload) => Promise<NewsArticle>;
-  deleteArticle: (id: string) => Promise<void>;
-  publishArticle: (id: string) => Promise<NewsArticle>;
-  toggleSticky: (id: string) => Promise<NewsArticle>;
+  loadArticles: (params?) => Promise;
+  loadArticleById: (id) => Promise;
+  createArticle: (payload) => Promise;
+  updateArticle: (id, payload) => Promise;
+  deleteArticle: (id) => Promise;
+  publishArticle: (id) => Promise;
+  toggleSticky: (id) => Promise;
   
   // File actions
-  loadFiles: () => Promise<void>;
-  uploadFile: (file: File) => Promise<FileItem>;
-  deleteFile: (id: string) => Promise<void>;
+  loadFiles: () => Promise;
+  uploadFile: (file) => Promise;
+  deleteFile: (id) => Promise;
   
   // Stats
-  loadStats: () => Promise<void>;
+  loadStats: () => Promise;
   
   // UI
   clearError: () => void;
-  setError: (error: string) => void;
+  setError: (error) => void;
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
-export function DashboardProvider({ children }: { children: ReactNode }) {
+export function DashboardProvider({ children }: { children }) {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
+  const [pagination, setPagination] = useState({ page, limit, total, totalPages: 0 });
 
-  const handleError = useCallback((err: Error) => {
+  const handleError = useCallback((err) => {
     setError(err.message);
     console.error('[Dashboard Error]', err);
   }, []);
 
-  const loadArticles = useCallback(async (params?: PaginationParams) => {
+  const loadArticles = useCallback(async (params?) => {
     setLoading(true);
     setError(null);
     try {
@@ -79,13 +67,13 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         totalPages: Math.ceil(allArticles.length / limit),
       });
     } catch (err) {
-      handleError(err as Error);
+      handleError(err );
     } finally {
       setLoading(false);
     }
   }, [articles, handleError]);
 
-  const loadArticleById = useCallback(async (id: string): Promise<NewsArticle> => {
+  const loadArticleById = useCallback(async (id): Promise => {
     setLoading(true);
     setError(null);
     try {
@@ -94,14 +82,14 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       if (!article) throw new Error('Article not found');
       return article;
     } catch (err) {
-      handleError(err as Error);
+      handleError(err );
       throw err;
     } finally {
       setLoading(false);
     }
   }, [articles, handleError]);
 
-  const createArticle = useCallback(async (payload: CreateNewsPayload): Promise<NewsArticle> => {
+  const createArticle = useCallback(async (payload): Promise => {
     setLoading(true);
     setError(null);
     try {
@@ -110,46 +98,46 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         id: Math.random().toString(36).substr(2, 9),
         ...payload,
         status: payload.status || 'draft',
-        views: 0,
+        views,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
       setArticles(prev => [article, ...prev]);
       return article;
     } catch (err) {
-      handleError(err as Error);
+      handleError(err );
       throw err;
     } finally {
       setLoading(false);
     }
   }, [handleError]);
 
-  const updateArticle = useCallback(async (id: string, payload: UpdateNewsPayload): Promise<NewsArticle> => {
+  const updateArticle = useCallback(async (id, payload): Promise => {
     // Optimistic update
     const originalArticles = articles;
     const updatedArticle = articles.find(a => a.id === id);
     if (!updatedArticle) throw new Error('Article not found');
     
     const optimisticArticle: NewsArticle = { ...updatedArticle, ...payload };
-    setArticles(prev => prev.map(a => a.id === id ? optimisticArticle : a));
+    setArticles(prev => prev.map(a => a.id === id ? optimisticArticle ));
 
     setLoading(true);
     setError(null);
     try {
       // Mock implementation - replace with actual API call
-      setArticles(prev => prev.map(a => a.id === id ? optimisticArticle : a));
+      setArticles(prev => prev.map(a => a.id === id ? optimisticArticle ));
       return optimisticArticle;
     } catch (err) {
       // Rollback optimistic update
       setArticles(originalArticles);
-      handleError(err as Error);
+      handleError(err );
       throw err;
     } finally {
       setLoading(false);
     }
   }, [articles, handleError]);
 
-  const deleteArticle = useCallback(async (id: string) => {
+  const deleteArticle = useCallback(async (id) => {
     // Optimistic delete
     const originalArticles = articles;
     setArticles(prev => prev.filter(a => a.id !== id));
@@ -162,32 +150,32 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       // Rollback optimistic delete
       setArticles(originalArticles);
-      handleError(err as Error);
+      handleError(err );
       throw err;
     } finally {
       setLoading(false);
     }
   }, [articles, handleError]);
 
-  const publishArticle = useCallback(async (id: string): Promise<NewsArticle> => {
+  const publishArticle = useCallback(async (id): Promise => {
     setLoading(true);
     setError(null);
     try {
       // Mock implementation - replace with actual API call
       const article = articles.find(a => a.id === id);
       if (!article) throw new Error('Article not found');
-      const updated = { ...article, status: 'published' as const };
-      setArticles(prev => prev.map(a => a.id === id ? updated : a));
+      const updated = { ...article, status: 'published'  };
+      setArticles(prev => prev.map(a => a.id === id ? updated ));
       return updated;
     } catch (err) {
-      handleError(err as Error);
+      handleError(err );
       throw err;
     } finally {
       setLoading(false);
     }
   }, [articles, handleError]);
 
-  const toggleSticky = useCallback(async (id: string): Promise<NewsArticle> => {
+  const toggleSticky = useCallback(async (id): Promise => {
     setLoading(true);
     setError(null);
     try {
@@ -195,10 +183,10 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       if (!currentArticle) throw new Error('Article not found');
       // Mock implementation - replace with actual API call
       const updated = { ...currentArticle, sticky: !currentArticle.sticky };
-      setArticles(prev => prev.map(a => a.id === id ? updated : a));
+      setArticles(prev => prev.map(a => a.id === id ? updated ));
       return updated;
     } catch (err) {
-      handleError(err as Error);
+      handleError(err );
       throw err;
     } finally {
       setLoading(false);
@@ -213,13 +201,13 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       // For now, this will use mock data
       setFiles([]);
     } catch (err) {
-      handleError(err as Error);
+      handleError(err );
     } finally {
       setLoading(false);
     }
   }, [handleError]);
 
-  const uploadFile = useCallback(async (file: File): Promise<FileItem> => {
+  const uploadFile = useCallback(async (file): Promise => {
     setLoading(true);
     setError(null);
     try {
@@ -239,14 +227,14 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       setFiles(prev => [fileItem, ...prev]);
       return fileItem;
     } catch (err) {
-      handleError(err as Error);
+      handleError(err );
       throw err;
     } finally {
       setLoading(false);
     }
   }, [handleError]);
 
-  const deleteFile = useCallback(async (id: string) => {
+  const deleteFile = useCallback(async (id) => {
     // Optimistic delete
     const originalFiles = files;
     setFiles(prev => prev.filter(f => f.id !== id));
@@ -259,7 +247,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       // Rollback optimistic delete
       setFiles(originalFiles);
-      handleError(err as Error);
+      handleError(err );
       throw err;
     } finally {
       setLoading(false);
@@ -281,14 +269,14 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       };
       setStats(data);
     } catch (err) {
-      handleError(err as Error);
+      handleError(err );
     } finally {
       setLoading(false);
     }
   }, [articles, handleError]);
 
   const clearError = useCallback(() => setError(null), []);
-  const setErrorMessage = useCallback((msg: string) => setError(msg), []);
+  const setErrorMessage = useCallback((msg) => setError(msg), []);
 
   const value: DashboardContextType = {
     articles,
@@ -309,7 +297,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     deleteFile,
     loadStats,
     clearError,
-    setError: setErrorMessage,
+    setError,
   };
 
   return (
@@ -326,3 +314,4 @@ export function useDashboard() {
   }
   return context;
 }
+

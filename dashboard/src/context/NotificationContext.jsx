@@ -2,29 +2,20 @@
  * Notification Context - Global toast/notification system
  */
 
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 
-export type NotificationType = 'success' | 'error' | 'warning' | 'info';
 
-export interface Notification {
-  id: string;
-  type: NotificationType;
-  message: string;
-  duration?: number;
-}
 
-interface NotificationContextType {
-  notifications: Notification[];
-  showNotification: (message: string, type: NotificationType, duration?: number) => void;
-  removeNotification: (id: string) => void;
-}
+
+
+
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
-export function NotificationProvider({ children }: { children: ReactNode }) {
+export function NotificationProvider({ children }: { children }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const showNotification = useCallback((message: string, type: NotificationType, duration = 4000) => {
+  const showNotification = useCallback((message, type, duration = 4000) => {
     const id = `${Date.now()}-${Math.random()}`;
     const notification: Notification = { id, type, message, duration };
 
@@ -35,7 +26,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const removeNotification = useCallback((id: string) => {
+  const removeNotification = useCallback((id) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
   }, []);
 
@@ -72,12 +63,9 @@ function NotificationContainer() {
   );
 }
 
-interface NotificationItemProps {
-  notification: Notification;
-  onClose: () => void;
-}
 
-function NotificationItem({ notification, onClose }: NotificationItemProps) {
+
+function NotificationItem({ notification, onClose }) {
   const bgColor = {
     success: 'bg-green-50 border-green-200',
     error: 'bg-red-50 border-red-200',
@@ -123,3 +111,4 @@ function NotificationItem({ notification, onClose }: NotificationItemProps) {
     </div>
   );
 }
+

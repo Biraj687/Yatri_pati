@@ -1,18 +1,15 @@
 import { FiEye, FiCalendar, FiUser } from 'react-icons/fi';
 import type { NewsArticle } from '@types';
 
-interface NewsCardPreviewProps {
-  article: NewsArticle;
-  compact?: boolean;
-}
 
-export function NewsCardPreview({ article, compact = false }: NewsCardPreviewProps) {
-  const truncateText = (text: string, length: number) => {
+
+export function NewsCardPreview({ article, compact = false }) {
+  const truncateText = (text, length) => {
     if (text.length > length) return text.substring(0, length) + '...';
     return text;
   };
 
-  const getStatusBadgeColor = (status: string) => {
+  const getStatusBadgeColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'published':
         return 'bg-green-100 text-green-800';
@@ -58,7 +55,7 @@ export function NewsCardPreview({ article, compact = false }: NewsCardPreviewPro
                 </span>
               )}
             </div>
-            <span>{new Date(article.createdAt).toLocaleDateString()}</span>
+            {new Date(article.createdAt).toLocaleDateString()}</span>
           </div>
         </div>
       </div>
@@ -111,3 +108,4 @@ export function NewsCardPreview({ article, compact = false }: NewsCardPreviewPro
     </div>
   );
 }
+

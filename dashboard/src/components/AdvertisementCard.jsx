@@ -7,14 +7,9 @@ import React, { useState } from 'react';
 import type { Advertisement } from '@shared/types';
 import { advertisementService } from '@shared/services';
 
-interface AdvertisementCardProps {
-  advertisement: Advertisement;
-  onEdit: (ad: Advertisement) => void;
-  onToggle?: () => void;
-  onDelete?: () => void;
-}
 
-export const AdvertisementCard: React.FC<AdvertisementCardProps> = ({
+
+export const AdvertisementCard: React.FC = ({
   advertisement,
   onEdit,
   onToggle,
@@ -35,7 +30,7 @@ export const AdvertisementCard: React.FC<AdvertisementCardProps> = ({
         alert(`Failed to delete: ${response.error}`);
       }
     } catch (error) {
-      alert(`Error: ${(error as Error).message}`);
+      alert(`Error: ${(error ).message}`);
     } finally {
       setIsDeleting(false);
     }
@@ -51,7 +46,7 @@ export const AdvertisementCard: React.FC<AdvertisementCardProps> = ({
         alert(`Failed to toggle: ${response.error}`);
       }
     } catch (error) {
-      alert(`Error: ${(error as Error).message}`);
+      alert(`Error: ${(error ).message}`);
     } finally {
       setIsToggling(false);
     }
@@ -94,11 +89,11 @@ export const AdvertisementCard: React.FC<AdvertisementCardProps> = ({
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-2 py-2 border-y text-xs">
-          <div>
+          
             <p className="text-gray-500">Impressions</p>
             <p className="font-semibold">{advertisement.impressions || 0}</p>
           </div>
-          <div>
+          
             <p className="text-gray-500">Clicks</p>
             <p className="font-semibold">{advertisement.clicks || 0}</p>
           </div>
@@ -151,3 +146,4 @@ export const AdvertisementCard: React.FC<AdvertisementCardProps> = ({
     </div>
   );
 };
+

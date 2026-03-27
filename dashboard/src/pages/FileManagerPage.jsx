@@ -15,7 +15,7 @@ export function FileManagerPage() {
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
   const handleFileUpload = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
+    async (event: React.ChangeEvent) => {
       const fileList = event.target.files;
       if (!fileList) return;
 
@@ -44,14 +44,14 @@ export function FileManagerPage() {
   );
 
   const handleDelete = useCallback(
-    async (id: string) => {
+    async (id) => {
       if (!window.confirm('Are you sure you want to delete this file?')) return;
 
       try {
         await deleteFile(id);
         showNotification('File deleted successfully!', 'success');
       } catch (error) {
-        showNotification((error as Error).message, 'error');
+        showNotification((error ).message, 'error');
       }
     },
     [deleteFile, showNotification]
@@ -68,11 +68,11 @@ export function FileManagerPage() {
       setSelectedFiles([]);
       showNotification('Files deleted successfully!', 'success');
     } catch (error) {
-      showNotification((error as Error).message, 'error');
+      showNotification((error ).message, 'error');
     }
   }, [selectedFiles, deleteFile, showNotification]);
 
-  const toggleSelect = (id: string) => {
+  const toggleSelect = (id) => {
     setSelectedFiles(prev =>
       prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
     );
@@ -86,7 +86,7 @@ export function FileManagerPage() {
     }
   };
 
-  const formatFileSize = (bytes: number): string => {
+  const formatFileSize = (bytes): string => {
     if (bytes === 0) return '0 B';
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
@@ -105,7 +105,7 @@ export function FileManagerPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
+      
         <h1 className="text-3xl font-bold text-gray-900">File Manager</h1>
         <p className="text-gray-600 mt-2">Upload, manage, and organize your files</p>
       </div>
@@ -146,13 +146,13 @@ export function FileManagerPage() {
 
         {files.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
-            <p>No files yet. Upload one to get started!</p>
+            No files yet. Upload one to get started!</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
-                <tr>
+                
                   <th className="px-6 py-3 text-left">
                     <input
                       type="checkbox"
@@ -216,11 +216,12 @@ export function FileManagerPage() {
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
         <h3 className="font-semibold text-blue-900 mb-2">Storage Information</h3>
         <div className="space-y-2 text-sm text-blue-800">
-          <p>Total files: <strong>{files.length}</strong></p>
-          <p>Total size: <strong>{formatFileSize(files.reduce((sum, f) => sum + f.size, 0))}</strong></p>
-          <p>Max file size: <strong>10 MB</strong></p>
+          Total files: {files.length}</strong></p>
+          Total size: {formatFileSize(files.reduce((sum, f) => sum + f.size, 0))}</strong></p>
+          Max file size: 10 MB</strong></p>
         </div>
       </div>
     </div>
   );
 }
+

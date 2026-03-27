@@ -20,14 +20,14 @@ const defaultSettings: DashboardSettings = {
     instagram: 'https://instagram.com/yatripati',
     linkedin: 'https://linkedin.com/company/yatripati',
   },
-  maintenanceMode: false,
-  enableComments: true,
-  postsPerPage: 10,
+  maintenanceMode,
+  enableComments,
+  postsPerPage,
   timezone: 'UTC',
 };
 
 export function SettingsPage() {
-  const [_settings, setSettings] = useState<DashboardSettings>(defaultSettings);
+  const [_settings, setSettings] = useState(defaultSettings);
   const [loading, setLoading] = useState(false);
   const { showNotification } = useNotification();
 
@@ -38,7 +38,7 @@ export function SettingsPage() {
     reset,
   } = useForm({
     resolver: zodResolver(dashboardSettingsSchema),
-    defaultValues: defaultSettings,
+    defaultValues,
   });
 
   useEffect(() => {
@@ -48,14 +48,14 @@ export function SettingsPage() {
       try {
         const parsed = JSON.parse(savedSettings);
         setSettings(parsed);
-        reset(parsed as DashboardSettingsInput);
+        reset(parsed );
       } catch (e) {
         console.error('Failed to load settings', e);
       }
     }
   }, [reset]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data) => {
     setLoading(true);
     try {
       // TODO: Replace with actual API call
@@ -63,10 +63,10 @@ export function SettingsPage() {
       
       // For now, save to localStorage
       localStorage.setItem('dashboardSettings', JSON.stringify(data));
-      setSettings(data as DashboardSettings);
+      setSettings(data );
       showNotification('Settings saved successfully!', 'success');
     } catch (error) {
-      showNotification((error as Error).message, 'error');
+      showNotification((error ).message, 'error');
     } finally {
       setLoading(false);
     }
@@ -75,7 +75,7 @@ export function SettingsPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
+      
         <h1 className="text-3xl font-bold text-gray-900">Dashboard Settings</h1>
         <p className="text-gray-600 mt-2">Configure your dashboard and site preferences</p>
       </div>
@@ -177,11 +177,11 @@ export function SettingsPage() {
                 {...register('timezone')}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
-                <option>UTC</option>
-                <option>EST</option>
-                <option>CST</option>
-                <option>MST</option>
-                <option>PST</option>
+                UTC</option>
+                EST</option>
+                CST</option>
+                MST</option>
+                PST</option>
               </select>
             </FormGroup>
 
@@ -233,13 +233,9 @@ export function SettingsPage() {
 
 // Helper Components
 
-interface SectionProps {
-  title: string;
-  description: string;
-  children: React.ReactNode;
-}
 
-function Section({ title, description, children }: SectionProps) {
+
+function Section({ title, description, children }) {
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="mb-6">
@@ -251,18 +247,15 @@ function Section({ title, description, children }: SectionProps) {
   );
 }
 
-interface FormGroupProps {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}
 
-function FormGroup({ label, error, children }: FormGroupProps) {
+
+function FormGroup({ label, error, children }) {
   return (
-    <div>
+    
       <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
       {children}
       {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
     </div>
   );
 }
+

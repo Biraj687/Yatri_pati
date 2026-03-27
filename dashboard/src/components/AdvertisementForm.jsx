@@ -7,26 +7,22 @@ import React, { useState } from 'react';
 import type { Advertisement, CreateAdvPayload } from '@shared/types';
 import { advertisementService } from '@shared/services';
 
-interface AdvertisementFormProps {
-  initialData?: Advertisement;
-  onSubmitSuccess?: () => void;
-  onCancel?: () => void;
-}
 
-export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
+
+export const AdvertisementForm: React.FC = ({
   initialData,
   onSubmitSuccess,
   onCancel,
 }) => {
-  const [formData, setFormData] = useState<CreateAdvPayload>({
-    title: initialData?.title || '',
-    description: initialData?.description || '',
-    imageUrl: initialData?.imageUrl || '',
-    linkUrl: initialData?.linkUrl || '',
-    position: initialData?.position || 'inline',
-    isActive: initialData?.isActive !== undefined ? initialData.isActive : true,
-    startDate: initialData?.startDate || '',
-    endDate: initialData?.endDate || '',
+  const [formData, setFormData] = useState({
+    title.title || '',
+    description.description || '',
+    imageUrl.imageUrl || '',
+    linkUrl.linkUrl || '',
+    position.position || 'inline',
+    isActive.isActive !== undefined ? initialData.isActive ,
+    startDate.startDate || '',
+    endDate.endDate || '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,7 +35,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
 
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]: type === 'checkbox' ? (e.target ).checked ,
     }));
   };
 
@@ -68,7 +64,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
         setError(response.error || 'Failed to save advertisement');
       }
     } catch (err) {
-      setError((err as Error).message);
+      setError((err ).message);
     } finally {
       setIsSubmitting(false);
     }
@@ -83,7 +79,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
       )}
 
       {/* Title */}
-      <div>
+      
         <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
         <input
           type="text"
@@ -97,7 +93,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
       </div>
 
       {/* Description */}
-      <div>
+      
         <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
         <textarea
           name="description"
@@ -110,7 +106,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
       </div>
 
       {/* Image URL */}
-      <div>
+      
         <label className="block text-sm font-medium text-gray-700 mb-1">Image URL *</label>
         <input
           type="url"
@@ -124,7 +120,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
       </div>
 
       {/* Link URL */}
-      <div>
+      
         <label className="block text-sm font-medium text-gray-700 mb-1">Link URL *</label>
         <input
           type="url"
@@ -138,7 +134,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
       </div>
 
       {/* Position */}
-      <div>
+      
         <label className="block text-sm font-medium text-gray-700 mb-1">Position *</label>
         <select
           name="position"
@@ -156,7 +152,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
 
       {/* Date Range */}
       <div className="grid grid-cols-2 gap-4">
-        <div>
+        
           <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
           <input
             type="date"
@@ -166,7 +162,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div>
+        
           <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
           <input
             type="date"
@@ -179,7 +175,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
       </div>
 
       {/* Active Status */}
-      <div>
+      
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -199,7 +195,7 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
           disabled={isSubmitting}
           className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? 'Saving...' : initialData ? 'Update' : 'Create'}
+          {isSubmitting ? 'Saving...'  'Update' : 'Create'}
         </button>
         <button
           type="button"
@@ -212,3 +208,4 @@ export const AdvertisementForm: React.FC<AdvertisementFormProps> = ({
     </form>
   );
 };
+

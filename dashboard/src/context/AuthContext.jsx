@@ -2,26 +2,15 @@
  * Authentication Context - Manages user authentication state
  */
 
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-export interface User {
-  email: string;
-  name: string;
-  role: 'admin' | 'editor' | 'viewer';
-}
 
-interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
-  hasRole: (role: string | string[]) => boolean;
-}
+
+
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -52,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   }, []);
 
-  const login = useCallback(async (email: string, _password: string) => {
+  const login = useCallback(async (email, _password) => {
     // TODO: Replace with actual API call
     const mockUser: User = {
       email,
@@ -99,3 +88,4 @@ export function useAuth() {
   }
   return context;
 }
+

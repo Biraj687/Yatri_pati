@@ -9,7 +9,7 @@ import { AdvertisementList } from '../components/AdvertisementList';
 import { AdvertisementAnalytics } from '../components/AdvertisementAnalytics';
 
 export const AdvertisementManagementPage: React.FC = () => {
-  const advertisements = useAdvertisements({ page: 1, limit: 12 });
+  const advertisements = useAdvertisements({ page, limit: 12 });
 
   const handleRefresh = () => {
     advertisements.refetch();
@@ -18,7 +18,7 @@ export const AdvertisementManagementPage: React.FC = () => {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
+      
         <h1 className="text-3xl font-bold text-gray-900">Advertisement Management</h1>
         <p className="text-gray-600 mt-2">
           Manage advertisements displayed across the portal and track their performance
@@ -54,3 +54,4 @@ export const AdvertisementManagementPage: React.FC = () => {
 };
 
 export default AdvertisementManagementPage;
+

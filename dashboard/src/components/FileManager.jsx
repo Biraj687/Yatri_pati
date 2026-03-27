@@ -4,20 +4,13 @@ import type { FileItem } from '@types';
 import { formatFileSize, formatDate, getFileIcon, isImage, isVideo } from '@utils';
 import { Button, Input } from './UI';
 
-interface FileManagerProps {
-  files: FileItem[];
-  onUpload: (file: File) => Promise<FileItem | void>;
-  onDelete: (id: string) => void;
-  onSelect?: (file: FileItem) => void;
-  loading?: boolean;
-  selectable?: boolean;
-}
 
-export function FileManager({ files, onUpload, onDelete, onSelect, loading, selectable = false }: FileManagerProps) {
+
+export function FileManager({ files, onUpload, onDelete, onSelect, loading, selectable = false }) {
   const [dragActive, setDragActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'images' | 'videos' | 'documents'>('all');
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -42,7 +35,7 @@ export function FileManager({ files, onUpload, onDelete, onSelect, loading, sele
     }
   };
 
-  const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async (file) => {
     setUploading(true);
     try {
       await onUpload(file);
@@ -63,7 +56,7 @@ export function FileManager({ files, onUpload, onDelete, onSelect, loading, sele
     return matchesSearch && matchesFilter;
   });
 
-  const copyToClipboard = (url: string, fileId: string) => {
+  const copyToClipboard = (url, fileId) => {
     navigator.clipboard.writeText(url);
     setCopiedId(fileId);
     setTimeout(() => setCopiedId(null), 2000);
@@ -113,7 +106,7 @@ export function FileManager({ files, onUpload, onDelete, onSelect, loading, sele
           </div>
           <select
             value={filterType}
-            onChange={(e) => setFilterType(e.target.value as any)}
+            onChange={(e) => setFilterType(e.target.value )}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Files</option>
@@ -128,7 +121,7 @@ export function FileManager({ files, onUpload, onDelete, onSelect, loading, sele
       {filteredFiles.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-200 p-12 text-center text-gray-500">
           <div className="text-4xl mb-2">📭</div>
-          <p>{searchTerm || filterType !== 'all' ? 'No files found' : 'No files uploaded yet'}</p>
+          {searchTerm || filterType !== 'all' ? 'No files found' : 'No files uploaded yet'}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -192,10 +185,10 @@ export function FileManager({ files, onUpload, onDelete, onSelect, loading, sele
       {/* Stats */}
       {files.length > 0 && (
         <div className="bg-blue-50 rounded-lg border border-blue-200 p-4 text-sm text-blue-800">
-          <strong>{filteredFiles.length}</strong> of <strong>{files.length}</strong> files shown
+          {filteredFiles.length}</strong> of {files.length}</strong> files shown
           {' '}
           •
-          <strong>
+          
             {(filteredFiles.reduce((sum, f) => sum + f.size, 0) / 1024 / 1024).toFixed(2)}MB
           </strong>
           total
@@ -206,7 +199,8 @@ export function FileManager({ files, onUpload, onDelete, onSelect, loading, sele
 }
 
 // Compact version for selecting media in editor
-export function MediaSelector({ onSelect: _onSelect }: { onSelect: (file: FileItem) => void }) {
+export function MediaSelector({ onSelect: _onSelect }: { onSelect: (file) => void }) {
   // This would be integrated with FileManager in a modal
-  return <div>Media Selector Component</div>;
+  return Media Selector Component</div>;
 }
+

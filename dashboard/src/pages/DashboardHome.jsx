@@ -44,45 +44,45 @@ export function DashboardHome() {
 
   // Fallback mock stats for development when stats is null (should not happen)
   const safeStats = stats || {
-    totalArticles: 0,
-    publishedArticles: 0,
-    draftArticles: 0,
-    totalViews: 0,
-    totalAuthors: 0,
+    totalArticles,
+    publishedArticles,
+    draftArticles,
+    totalViews,
+    totalAuthors,
     recentArticles: [],
   };
 
   const statCards = [
     {
-      icon: FiFileText,
+      icon,
       label: 'Total Articles',
       value: safeStats.totalArticles,
       color: 'bg-blue-50 text-blue-600',
       borderColor: 'border-blue-200',
     },
     {
-      icon: FiTrendingUp,
+      icon,
       label: 'Published',
       value: safeStats.publishedArticles,
       color: 'bg-green-50 text-green-600',
       borderColor: 'border-green-200',
     },
     {
-      icon: FiFileText,
+      icon,
       label: 'Drafts',
       value: safeStats.draftArticles,
       color: 'bg-yellow-50 text-yellow-600',
       borderColor: 'border-yellow-200',
     },
     {
-      icon: FiEye,
+      icon,
       label: 'Total Views',
       value: formatNumberCompact(safeStats.totalViews),
       color: 'bg-purple-50 text-purple-600',
       borderColor: 'border-purple-200',
     },
     {
-      icon: FiUsers,
+      icon,
       label: 'Authors',
       value: safeStats.totalAuthors,
       color: 'bg-pink-50 text-pink-600',
@@ -111,7 +111,7 @@ export function DashboardHome() {
       </div>
 
       {/* Recent Articles */}
-      <div>
+      
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Articles</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {safeStats.recentArticles.slice(0, 6).map(article => (
@@ -121,7 +121,7 @@ export function DashboardHome() {
         {safeStats.recentArticles.length === 0 && (
           <Card className="p-12 text-center text-gray-500">
             <div className="text-4xl mb-2">📭</div>
-            <p>No articles yet. Start by creating your first article!</p>
+            No articles yet. Start by creating your first article!</p>
           </Card>
         )}
       </div>
@@ -130,19 +130,19 @@ export function DashboardHome() {
       <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 border-indigo-200">
         <h3 className="text-lg font-semibold text-gray-900 mb-3">Dashboard Snapshot</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div>
+          
             <p className="text-gray-600 mb-1">Publish Rate</p>
             <p className="text-2xl font-bold text-blue-600">
               {safeStats.totalArticles > 0 ? Math.round((safeStats.publishedArticles / safeStats.totalArticles) * 100) : 0}%
             </p>
           </div>
-          <div>
+          
             <p className="text-gray-600 mb-1">Avg. Views</p>
             <p className="text-2xl font-bold text-indigo-600">
               {safeStats.publishedArticles > 0 ? Math.round(safeStats.totalViews / safeStats.publishedArticles) : 0}
             </p>
           </div>
-          <div>
+          
             <p className="text-gray-600 mb-1">Active Authors</p>
             <p className="text-2xl font-bold text-purple-600">{safeStats.totalAuthors}</p>
           </div>
@@ -183,10 +183,11 @@ export function DashboardHome() {
           </div>
         ) : (
           <Card className="p-8 text-center text-gray-500">
-            <p>No advertisement data available</p>
+            No advertisement data available</p>
           </Card>
         )}
       </div>
     </div>
   );
 }
+

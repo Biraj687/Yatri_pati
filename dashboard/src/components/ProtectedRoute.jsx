@@ -6,15 +6,12 @@ import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@context/AuthContext';
 
-interface ProtectedRouteProps {
-  children: ReactNode;
-  requiredRole?: string | string[];
-}
+
 
 export function ProtectedRoute({
   children,
   requiredRole,
-}: ProtectedRouteProps) {
+}) {
   const { isAuthenticated, loading, user } = useAuth();
 
   if (loading) {
@@ -51,3 +48,4 @@ export function ProtectedRoute({
 
   return <>{children}</>;
 }
+

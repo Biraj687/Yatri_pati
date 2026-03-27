@@ -58,14 +58,14 @@ export function NewsManagementPage() {
     setShowEditor(true);
   };
 
-  const handleEdit = (article: NewsArticle) => {
+  const handleEdit = (article) => {
     setSelectedArticle(article);
     setSaveError(null);
     setSaveSuccess(false);
     setShowEditor(true);
   };
 
-  const handleSave = async (payload: any) => {
+  const handleSave = async (payload) => {
     setSaveError(null);
     setSaveSuccess(false);
 
@@ -85,7 +85,7 @@ export function NewsManagementPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id) => {
     setDeleteTarget(id);
     setShowDeleteConfirm(true);
   };
@@ -101,7 +101,7 @@ export function NewsManagementPage() {
     }
   };
 
-  const publishDraft = async (id: string) => {
+  const publishDraft = async (id) => {
     try {
       await publishArticle(id);
       setSaveSuccess(true);
@@ -111,7 +111,7 @@ export function NewsManagementPage() {
     }
   };
 
-  const toggleArticleSticky = async (id: string) => {
+  const toggleArticleSticky = async (id) => {
     try {
       await toggleSticky(id);
     } catch (err) {
@@ -123,7 +123,7 @@ export function NewsManagementPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
-        <div>
+        
           <h1 className="text-3xl font-bold text-gray-900">News Management</h1>
           <p className="text-gray-600 mt-1">Manage all your news articles and content</p>
         </div>
@@ -246,3 +246,4 @@ export function NewsManagementPage() {
     </div>
   );
 }
+

@@ -1,15 +1,9 @@
 import React from 'react';
 import { FiAlertCircle, FiCheckCircle, FiInfo, FiX } from 'react-icons/fi';
 
-interface AlertProps {
-  type: 'error' | 'success' | 'info' | 'warning';
-  message: string;
-  onClose?: () => void;
-  dismissible?: boolean;
-  className?: string;
-}
 
-export function Alert({ type, message, onClose, dismissible = true, className = '' }: AlertProps) {
+
+export function Alert({ type, message, onClose, dismissible = true, className = '' }) {
   const getColors = () => {
     switch (type) {
       case 'error': return 'bg-red-50 text-red-800 border-red-200';
@@ -42,14 +36,9 @@ export function Alert({ type, message, onClose, dismissible = true, className = 
   );
 }
 
-interface BadgeProps {
-  children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info';
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
 
-export function Badge({ children, variant = 'primary', size = 'md', className = '' }: BadgeProps) {
+
+export function Badge({ children, variant = 'primary', size = 'md', className = '' }) {
   const sizeClass = size === 'sm' ? 'px-2 py-1 text-xs' : size === 'lg' ? 'px-4 py-2 text-base' : 'px-3 py-1.5 text-sm';
   const variantClass = {
     primary: 'bg-blue-100 text-blue-800',
@@ -67,7 +56,7 @@ export function Badge({ children, variant = 'primary', size = 'md', className = 
   );
 }
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends React.ButtonHTMLAttributes {
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
@@ -84,7 +73,7 @@ export function Button({
   disabled,
   children,
   ...props
-}: ButtonProps) {
+}) {
   const sizeClass = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-4 py-2 text-base',
@@ -112,14 +101,14 @@ export function Button({
   );
 }
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends React.InputHTMLAttributes {
   label?: string;
   error?: string;
   helperText?: string;
   icon?: React.ReactNode;
 }
 
-export function Input({ label, error, helperText, icon, className = '', ...props }: InputProps) {
+export function Input({ label, error, helperText, icon, className = '', ...props }) {
   return (
     <div className="w-full">
       {label && <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>}
@@ -138,13 +127,13 @@ export function Input({ label, error, helperText, icon, className = '', ...props
   );
 }
 
-interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextAreaProps extends React.TextareaHTMLAttributes {
   label?: string;
   error?: string;
   helperText?: string;
 }
 
-export function TextArea({ label, error, helperText, className = '', ...props }: TextAreaProps) {
+export function TextArea({ label, error, helperText, className = '', ...props }) {
   return (
     <div className="w-full">
       {label && <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>}
@@ -160,11 +149,9 @@ export function TextArea({ label, error, helperText, className = '', ...props }:
   );
 }
 
-interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg';
-}
 
-export function LoadingSpinner({ size = 'md' }: LoadingSpinnerProps) {
+
+export function LoadingSpinner({ size = 'md' }) {
   const sizeClass = {
     sm: 'w-4 h-4',
     md: 'w-8 h-8',
@@ -178,13 +165,9 @@ export function LoadingSpinner({ size = 'md' }: LoadingSpinnerProps) {
   );
 }
 
-interface CardProps {
-  children: React.ReactNode;
-  className?: string;
-  hoverable?: boolean;
-}
 
-export function Card({ children, className = '', hoverable = false }: CardProps) {
+
+export function Card({ children, className = '', hoverable = false }) {
   return (
     <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${hoverable ? 'hover:shadow-md transition-shadow cursor-pointer' : ''} ${className}`}>
       {children}
@@ -192,16 +175,9 @@ export function Card({ children, className = '', hoverable = false }: CardProps)
   );
 }
 
-interface ModalProps {
-  isOpen: boolean;
-  title: string;
-  children: React.ReactNode;
-  onClose: () => void;
-  footer?: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-}
 
-export function Modal({ isOpen, title, children, onClose, footer, size = 'md' }: ModalProps) {
+
+export function Modal({ isOpen, title, children, onClose, footer, size = 'md' }) {
   if (!isOpen) return null;
 
   const sizeClass = {
@@ -225,16 +201,15 @@ export function Modal({ isOpen, title, children, onClose, footer, size = 'md' }:
   );
 }
 
-interface TabsProps {
-  tabs: Array<{ label: string; value: string; content: React.ReactNode }>;
+>;
   defaultValue?: string;
 }
 
-export function Tabs({ tabs, defaultValue }: TabsProps) {
+export function Tabs({ tabs, defaultValue }) {
   const [activeTab, setActiveTab] = React.useState(defaultValue || tabs[0]?.value);
 
   return (
-    <div>
+    
       <div className="flex border-b border-gray-200">
         {tabs.map(tab => (
           <button
@@ -261,13 +236,13 @@ export function Skeleton({ width = 'w-full', height = 'h-4', className = '' }: {
   return <div className={`${width} ${height} bg-gray-200 rounded animate-pulse ${className}`} />;
 }
 
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectProps extends React.SelectHTMLAttributes {
   label?: string;
   error?: string;
   options: { value: string; label: string }[];
 }
 
-export function Select({ label, error, options, className = '', ...props }: SelectProps) {
+export function Select({ label, error, options, className = '', ...props }) {
   return (
     <div className="w-full">
       {label && <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>}
@@ -285,3 +260,4 @@ export function Select({ label, error, options, className = '', ...props }: Sele
     </div>
   );
 }
+

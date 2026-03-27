@@ -25,7 +25,7 @@ export const AdvertisementAnalytics: React.FC = () => {
     );
   }
 
-  const data = analyticsState.data as AnalyticsData | null;
+  const data = analyticsState.data  | null;
 
   if (!data) {
     return (
@@ -69,7 +69,7 @@ export const AdvertisementAnalytics: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
-              <tr>
+              
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Title</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Impressions</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Clicks</th>
@@ -97,3 +97,4 @@ export const AdvertisementAnalytics: React.FC = () => {
     </div>
   );
 };
+

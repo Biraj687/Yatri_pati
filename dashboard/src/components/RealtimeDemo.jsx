@@ -37,18 +37,18 @@ export function RealtimeDemo() {
     { id: '3', title: 'Sample Article 3', status: 'published', views: 200 }
   ]);
 
-  const [demoStats, setDemoStats] = useState<DashboardStats>({
-    totalArticles: 3,
-    publishedArticles: 2,
-    draftArticles: 1,
-    totalFiles: 0,
-    totalViews: 350,
+  const [demoStats, setDemoStats] = useState({
+    totalArticles,
+    publishedArticles,
+    draftArticles,
+    totalFiles,
+    totalViews,
     recentArticles: [],
     popularCategories: []
   });
 
   const [isConnected, setIsConnected] = useState(false);
-  const [lastEvent, setLastEvent] = useState<string>('');
+  const [lastEvent, setLastEvent] = useState('');
 
   // Subscribe to real-time events
   useEffect(() => {
@@ -66,7 +66,7 @@ export function RealtimeDemo() {
       onUpdate: (article) => {
         setLastEvent(`Article updated: ${article.title}`);
         setDemoArticles(prev =>
-          prev.map(a => a.id === article.id ? article : a)
+          prev.map(a => a.id === article.id ? article )
         );
       },
       onDelete: (articleId) => {
@@ -102,12 +102,12 @@ export function RealtimeDemo() {
       image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2VlZWVlZSIvPjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5OTk5OTkiPk5ldyBBcnRpY2xlPC90ZXh0Pjwvc3ZnPg==',
       excerpt: 'This is a demo article created with optimistic UI',
       date: new Date().toISOString().split('T')[0],
-      status: 'draft' as const,
+      status: 'draft' ,
       views: 0
     };
 
     // Simulate API call
-    const apiPromise = new Promise<Article>((resolve) => {
+    const apiPromise = new Promise((resolve) => {
       setTimeout(() => {
         resolve({
           ...newArticle,
@@ -127,23 +127,22 @@ export function RealtimeDemo() {
     apiPromise.then((realArticle) => {
       setDemoArticles(prev =>
         prev.map(article =>
-          article.id === result.tempId ? realArticle : article
-        )
+          article.id === result.tempId ? realArticle )
       );
     });
   }, [demoArticles, optimisticallyCreateArticle]);
 
   // Demo: Optimistically update article
-  const handleUpdateDemoArticle = useCallback((articleId: string) => {
+  const handleUpdateDemoArticle = useCallback((articleId) => {
     const updates = {
       title: `Updated ${Date.now()}`,
       views: Math.floor(Math.random() * 1000)
     };
 
     // Simulate API call
-    const apiPromise = new Promise<any>((resolve) => {
+    const apiPromise = new Promise((resolve) => {
       setTimeout(() => {
-        resolve({ id: articleId, ...updates });
+        resolve({ id, ...updates });
       }, 2000);
     });
 
@@ -152,9 +151,9 @@ export function RealtimeDemo() {
   }, [demoArticles, optimisticallyUpdateArticle]);
 
   // Demo: Optimistically delete article
-  const handleDeleteDemoArticle = useCallback((articleId: string) => {
+  const handleDeleteDemoArticle = useCallback((articleId) => {
     // Simulate API call
-    const apiPromise = new Promise<void>((resolve, reject) => {
+    const apiPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
         // Simulate random failure (30% chance)
         if (Math.random() < 0.3) {
@@ -222,11 +221,11 @@ export function RealtimeDemo() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Mode:</span>
-                <span>{connectionStatus.usePolling ? 'Polling' : 'WebSocket'}</span>
+                {connectionStatus.usePolling ? 'Polling' : 'WebSocket'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Reconnect Attempts:</span>
-                <span>{connectionStatus.reconnectAttempts}</span>
+                {connectionStatus.reconnectAttempts}</span>
               </div>
               {lastEvent && (
                 <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded">
@@ -282,7 +281,7 @@ export function RealtimeDemo() {
               key={article.id}
               className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50"
             >
-              <div>
+              
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{article.title}</span>
                   {isTempId(article.id) && (
@@ -342,7 +341,7 @@ export function RealtimeDemo() {
                   className={`p-3 border rounded-lg ${notification.read ? 'bg-gray-50' : 'bg-blue-50 border-blue-200'}`}
                 >
                   <div className="flex justify-between items-start">
-                    <div>
+                    
                       <div className="font-medium">{notification.title}</div>
                       <div className="text-sm text-gray-600 mt-1">
                         {notification.message}
@@ -413,20 +412,20 @@ export function RealtimeDemo() {
       <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50">
         <h3 className="font-semibold text-gray-800 mb-3">How It Works</h3>
         <div className="space-y-3 text-gray-700">
-          <p>
-            <strong>Real-time Updates:</strong> This demo shows how articles and stats can update in real-time
+          
+            Real-time Updates:</strong> This demo shows how articles and stats can update in real-time
             using WebSocket or polling. When enabled, changes from other users would appear instantly.
           </p>
-          <p>
-            <strong>Optimistic UI:</strong> When you create, update, or delete articles, the UI updates immediately
+          
+            Optimistic UI:</strong> When you create, update, or delete articles, the UI updates immediately
             (optimistically) while the API request is in progress. If the request fails, the UI rolls back.
           </p>
-          <p>
-            <strong>Notifications:</strong> Real-time notifications appear for system events and user activities.
+          
+            Notifications:</strong> Real-time notifications appear for system events and user activities.
           </p>
           <p className="text-sm text-gray-600">
             Note: This is a frontend demo. For full functionality, you need a backend with WebSocket support.
-            Enable real-time features by setting <code>VITE_ENABLE_REALTIME=true</code> in your environment.
+            Enable real-time features by setting VITE_ENABLE_REALTIME=true</code> in your environment.
           </p>
         </div>
       </Card>
