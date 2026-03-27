@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { dashboardSettingsSchema, type DashboardSettingsInput } from '@utils/validation';
 import { useNotification } from '@context/NotificationContext';
-import type { DashboardSettings } from '@types';
 
 const defaultSettings: DashboardSettings = {
   siteName: 'Yatripati Dashboard',

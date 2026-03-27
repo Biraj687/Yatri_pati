@@ -1,5 +1,4 @@
 import { FiEye, FiCalendar, FiUser } from 'react-icons/fi';
-import type { NewsArticle } from '@types';
 
 
 

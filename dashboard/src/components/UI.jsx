@@ -56,12 +56,11 @@ export function Badge({ children, variant = 'primary', size = 'md', className = 
   );
 }
 
-interface ButtonProps extends React.ButtonHTMLAttributes {
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
-  loading?: boolean;
-  fullWidth?: boolean;
-  children: React.ReactNode;
+  loading?;
+  fullWidth?;
+  children;
 }
 
 export function Button({
@@ -101,11 +100,10 @@ export function Button({
   );
 }
 
-interface InputProps extends React.InputHTMLAttributes {
-  label?: string;
-  error?: string;
-  helperText?: string;
-  icon?: React.ReactNode;
+  label?;
+  error?;
+  helperText?;
+  icon?;
 }
 
 export function Input({ label, error, helperText, icon, className = '', ...props }) {
@@ -127,10 +125,9 @@ export function Input({ label, error, helperText, icon, className = '', ...props
   );
 }
 
-interface TextAreaProps extends React.TextareaHTMLAttributes {
-  label?: string;
-  error?: string;
-  helperText?: string;
+  label?;
+  error?;
+  helperText?;
 }
 
 export function TextArea({ label, error, helperText, className = '', ...props }) {
@@ -202,7 +199,7 @@ export function Modal({ isOpen, title, children, onClose, footer, size = 'md' })
 }
 
 >;
-  defaultValue?: string;
+  defaultValue?;
 }
 
 export function Tabs({ tabs, defaultValue }) {
@@ -232,14 +229,13 @@ export function Tabs({ tabs, defaultValue }) {
   );
 }
 
-export function Skeleton({ width = 'w-full', height = 'h-4', className = '' }: { width?: string; height?: string; className?: string }) {
+export function Skeleton({ width = 'w-full', height = 'h-4', className = '' }: { width?; height?; className?}) {
   return <div className={`${width} ${height} bg-gray-200 rounded animate-pulse ${className}`} />;
 }
 
-interface SelectProps extends React.SelectHTMLAttributes {
-  label?: string;
-  error?: string;
-  options: { value: string; label: string }[];
+  label?;
+  error?;
+  options: { value; label}[];
 }
 
 export function Select({ label, error, options, className = '', ...props }) {

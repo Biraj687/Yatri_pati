@@ -6,7 +6,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRealtimeDashboard, useDashboardNotifications } from '../../../shared/hooks/useRealtimeDashboard';
 import { Button, Card, Alert, Badge } from './UI';
-import type { Article, DashboardStats } from '../../../shared/types';
 
 export function RealtimeDemo() {
   const {
@@ -31,7 +30,7 @@ export function RealtimeDemo() {
     isEnabled: notificationsEnabled
   } = useDashboardNotifications();
 
-  const [demoArticles, setDemoArticles] = useState<any[]>([
+  const [demoArticles, setDemoArticles] = useState([
     { id: '1', title: 'Sample Article 1', status: 'published', views: 100 },
     { id: '2', title: 'Sample Article 2', status: 'draft', views: 50 },
     { id: '3', title: 'Sample Article 3', status: 'published', views: 200 }
@@ -97,7 +96,7 @@ export function RealtimeDemo() {
 
   // Demo: Optimistically create article
   const handleCreateDemoArticle = useCallback(() => {
-    const newArticle: Omit<Article, 'id'> = {
+    const newArticle = {
       title: `New Article ${Date.now()}`,
       image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2VlZWVlZSIvPjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5OTk5OTkiPk5ldyBBcnRpY2xlPC90ZXh0Pjwvc3ZnPg==',
       excerpt: 'This is a demo article created with optimistic UI',

@@ -4,14 +4,10 @@
 
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
+const AuthContext = createContext(undefined);
 
-
-
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export function AuthProvider({ children }: { children }) {
-  const [user, setUser] = useState<User | null>(null);
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Initialize auth on mount
@@ -29,7 +25,7 @@ export function AuthProvider({ children }: { children }) {
       }
     } else {
       // Auto-login for development - remove this in production
-      const devUser: User = {
+      const devUser = {
         email: 'admin@example.com',
         name: 'Admin',
         role: 'admin',
@@ -43,7 +39,7 @@ export function AuthProvider({ children }: { children }) {
 
   const login = useCallback(async (email, _password) => {
     // TODO: Replace with actual API call
-    const mockUser: User = {
+    const mockUser = {
       email,
       name: email.split('@')[0],
       role: 'admin',
@@ -59,7 +55,7 @@ export function AuthProvider({ children }: { children }) {
     localStorage.removeItem('dashboardUser');
   }, []);
 
-  const hasRole = useCallback((role: string | string[]) => {
+  const hasRole = useCallback((role) => {
     if (!user) return false;
     const roles = Array.isArray(role) ? role : [role];
     return roles.includes(user.role);
@@ -88,4 +84,3 @@ export function useAuth() {
   }
   return context;
 }
-

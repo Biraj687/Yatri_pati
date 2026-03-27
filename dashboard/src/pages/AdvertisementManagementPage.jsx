@@ -8,7 +8,7 @@ import { useAdvertisements } from '@shared/hooks';
 import { AdvertisementList } from '../components/AdvertisementList';
 import { AdvertisementAnalytics } from '../components/AdvertisementAnalytics';
 
-export const AdvertisementManagementPage: React.FC = () => {
+export const AdvertisementManagementPage= () => {
   const advertisements = useAdvertisements({ page, limit: 12 });
 
   const handleRefresh = () => {

@@ -12,10 +12,10 @@ export function FileManagerPage() {
   const { files, loading, uploadFile, deleteFile } = useDashboard();
   const { showNotification } = useNotification();
   const [uploading, setUploading] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const handleFileUpload = useCallback(
-    async (event: React.ChangeEvent) => {
+    async (event) => {
       const fileList = event.target.files;
       if (!fileList) return;
 
@@ -86,7 +86,7 @@ export function FileManagerPage() {
     }
   };
 
-  const formatFileSize = (bytes): string => {
+  const formatFileSize = (bytes)=> {
     if (bytes === 0) return '0 B';
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];

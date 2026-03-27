@@ -14,7 +14,7 @@ export function DashboardLayout({ children }) {
   const isActive = (path) => location.pathname === path;
 
   const menuItems = [
-    { label: 'Dashboard', path: '/', icon, requiredRole: null },
+    { label: 'Dashboard', path: '/', icon, requiredRole},
     { label: 'News', path: '/news', icon, requiredRole: ['admin', 'editor'] },
     { label: 'Advertisements', path: '/advertisements', icon, requiredRole: 'admin' },
     { label: 'File Manager', path: '/files', icon, requiredRole: 'admin' },

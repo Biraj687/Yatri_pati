@@ -50,8 +50,8 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
 
   const renderArticle = (article: Article, isLarge = false) => {
     const titleClasses = isLarge
-      ? 'text-3xl md:text-4xl font-bold leading-[2.5rem]'
-      : 'text-xl font-bold leading-[2.5rem]';
+      ? 'text-[2.5rem] font-bold leading-[2.5rem]'
+      : 'text-[2.5rem] font-bold leading-[2.5rem]';
     
     const containerClasses = `group transition-all duration-300 ${articleClassName} ${
       isLarge ? 'min-h-[300px]' : ''
@@ -151,7 +151,7 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 line-clamp-2 mb-1 leading-[2.5rem]">
+                    <h4 className="text-[2.5rem] font-bold text-gray-900 dark:text-gray-100 line-clamp-2 mb-1 leading-[2.5rem]">
                       {article.title}
                     </h4>
                     {showAuthor && article.author && (
@@ -201,7 +201,7 @@ export const NewsSection: React.FC<NewsSectionProps> = ({
                   />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 line-clamp-2 mb-2 leading-[2.5rem]">
+                  <h4 className="text-[2.5rem] font-bold text-gray-900 dark:text-gray-100 line-clamp-2 mb-2 leading-[2.5rem]">
                     {article.title}
                   </h4>
                   {article.excerpt && (

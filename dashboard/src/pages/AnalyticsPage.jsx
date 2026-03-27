@@ -11,7 +11,7 @@ import { useNotification } from '@context/NotificationContext';
 export function AnalyticsPage() {
   const { stats, loadStats, loading } = useDashboard();
   const { showNotification } = useNotification();
-  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [analytics, setAnalytics] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +28,7 @@ export function AnalyticsPage() {
         });
         showNotification('Analytics loaded successfully', 'success');
       } catch (error) {
-        showNotification((error ).message, 'error');
+        showNotification(error.message, 'error');
       }
     };
 
@@ -144,10 +144,10 @@ function MetricCard({
   change,
   color,
 }: {
-  title: string;
-  value: number;
-  change: string;
-  color: string;
+  title;
+  value;
+  change;
+  color;
 }) {
   const colors = {
     blue: 'bg-blue-50 text-blue-600',
@@ -172,7 +172,7 @@ function BarChart({
 }: {
   data: number[];
   dates: string[];
-  color?: string;
+  color?;
 }) {
   const max = Math.max(...data);
 
@@ -205,7 +205,7 @@ function LineChart({
   color = 'purple',
 }: {
   data: number[];
-  color?: string;
+  color?;
 }) {
   const max = Math.max(...data);
   const points = data.map((v, i) => ({

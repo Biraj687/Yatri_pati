@@ -13,7 +13,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const { showNotification } = useNotification();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -93,7 +93,7 @@ export function LoginPage() {
               <br />
               Email: admin@example.com</strong>
               <br />
-              Password: password123</strong>
+              Password
             </p>
           </div>
         </div>

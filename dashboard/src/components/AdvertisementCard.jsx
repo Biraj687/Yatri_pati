@@ -4,12 +4,11 @@
  */
 
 import React, { useState } from 'react';
-import type { Advertisement } from '@shared/types';
 import { advertisementService } from '@shared/services';
 
 
 
-export const AdvertisementCard: React.FC = ({
+export const AdvertisementCard= ({
   advertisement,
   onEdit,
   onToggle,

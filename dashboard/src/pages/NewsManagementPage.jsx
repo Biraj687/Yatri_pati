@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { FiPlus, FiSearch } from 'react-icons/fi';
 import { useDashboard } from '@context/DashboardContext';
 import { NewsList, NewsEditor, Button, Modal, Alert, LoadingSpinner, Input } from '@components';
-import type { NewsArticle } from '@types';
 
 export function NewsManagementPage() {
   const {
@@ -21,10 +20,10 @@ export function NewsManagementPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
-  const [selectedArticle, setSelectedArticle] = useState<NewsArticle | undefined>();
+  const [selectedArticle, setSelectedArticle] = useState();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
-  const [saveError, setSaveError] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [saveError, setSaveError] = useState(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
 
@@ -205,7 +204,7 @@ export function NewsManagementPage() {
           <div className="text-center py-8">
             <div className="text-5xl mb-3">✅</div>
             <p className="text-lg font-semibold text-gray-900">
-              Article {selectedArticle ? 'updated' : 'created'} successfully!
+              Article {selectedArticle ? 'updated' : 'created'} successfully
             </p>
           </div>
         ) : (

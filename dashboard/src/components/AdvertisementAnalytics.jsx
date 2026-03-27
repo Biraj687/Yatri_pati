@@ -5,9 +5,8 @@
 
 import React from 'react';
 import { useAdvertisementAnalytics } from '@shared/hooks';
-import type { AnalyticsData } from '@shared/types';
 
-export const AdvertisementAnalytics: React.FC = () => {
+export const AdvertisementAnalytics= () => {
   const analyticsState = useAdvertisementAnalytics();
 
   if (analyticsState.loading && !analyticsState.data) {

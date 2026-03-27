@@ -1,5 +1,4 @@
 import { FiEdit2, FiTrash2, FiEye, FiStar } from 'react-icons/fi';
-import type { NewsArticle } from '@types';
 import { formatDate, truncate, formatNumberCompact } from '@utils';
 import { Badge, Button } from './UI';
 

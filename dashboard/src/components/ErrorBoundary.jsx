@@ -2,7 +2,7 @@
  * ErrorBoundary Component - Catches React errors and displays fallback UI
  */
 
-import React, { ReactNode, ErrorInfo } from 'react';
+import React, {, ErrorInfo } from 'react';
 
 
 
@@ -11,7 +11,7 @@ import React, { ReactNode, ErrorInfo } from 'react';
 export class ErrorBoundary extends React.Component<Props, State> {
   constructor(props) {
     super(props);
-    this.state = { hasError, error: null };
+    this.state = { hasError, error};
   }
 
   static getDerivedStateFromError(error): State {
@@ -23,7 +23,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   handleReset = () => {
-    this.setState({ hasError, error: null });
+    this.setState({ hasError, error});
   };
 
   render() {

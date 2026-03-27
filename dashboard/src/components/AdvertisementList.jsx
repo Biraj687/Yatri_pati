@@ -4,20 +4,19 @@
  */
 
 import React, { useState } from 'react';
-import type { Advertisement, AsyncState, PaginatedResponse } from '@shared/types';
 import { AdvertisementCard } from './AdvertisementCard';
 import { AdvertisementForm } from './AdvertisementForm';
 
 
 
-export const AdvertisementList: React.FC = ({
+export const AdvertisementList= ({
   advertisements,
   onCreateSuccess,
   onUpdateSuccess,
   onDeleteSuccess,
   onToggleSuccess,
 }) => {
-  const [selectedAd, setSelectedAd] = useState<Advertisement | null>(null);
+  const [selectedAd, setSelectedAd] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
   const { data, loading, error } = advertisements;

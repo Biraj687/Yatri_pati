@@ -4,20 +4,14 @@
 
 import { createContext, useContext, useState, useCallback } from 'react';
 
+const NotificationContext = createContext(undefined);
 
-
-
-
-
-
-const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
-
-export function NotificationProvider({ children }: { children }) {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+export function NotificationProvider({ children }) {
+  const [notifications, setNotifications] = useState([]);
 
   const showNotification = useCallback((message, type, duration = 4000) => {
     const id = `${Date.now()}-${Math.random()}`;
-    const notification: Notification = { id, type, message, duration };
+    const notification = { id, type, message, duration };
 
     setNotifications(prev => [...prev, notification]);
 
@@ -62,8 +56,6 @@ function NotificationContainer() {
     </div>
   );
 }
-
-
 
 function NotificationItem({ notification, onClose }) {
   const bgColor = {
@@ -111,4 +103,3 @@ function NotificationItem({ notification, onClose }) {
     </div>
   );
 }
-

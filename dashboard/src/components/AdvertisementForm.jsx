@@ -4,12 +4,11 @@
  */
 
 import React, { useState } from 'react';
-import type { Advertisement, CreateAdvPayload } from '@shared/types';
 import { advertisementService } from '@shared/services';
 
 
 
-export const AdvertisementForm: React.FC = ({
+export const AdvertisementForm= ({
   initialData,
   onSubmitSuccess,
   onCancel,
@@ -26,10 +25,10 @@ export const AdvertisementForm: React.FC = ({
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e
   ) => {
     const { name, value, type } = e.target;
 
@@ -39,7 +38,7 @@ export const AdvertisementForm: React.FC = ({
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);

@@ -16,11 +16,11 @@ import { appConfig } from './config';
 
 function AppRoutes() {
   return (
-    
+    <Routes>
       <Route
         path="/"
         element={
-          
+          <DashboardLayout>
             <DashboardHome />
           </DashboardLayout>
         }
@@ -28,7 +28,7 @@ function AppRoutes() {
       <Route
         path="/news"
         element={
-          
+          <DashboardLayout>
             <NewsManagementPage />
           </DashboardLayout>
         }
@@ -36,7 +36,7 @@ function AppRoutes() {
       <Route
         path="/files"
         element={
-          
+          <DashboardLayout>
             <FileManagerPage />
           </DashboardLayout>
         }
@@ -44,7 +44,7 @@ function AppRoutes() {
       <Route
         path="/analytics"
         element={
-          
+          <DashboardLayout>
             <AnalyticsPage />
           </DashboardLayout>
         }
@@ -52,7 +52,7 @@ function AppRoutes() {
       <Route
         path="/settings"
         element={
-          
+          <DashboardLayout>
             <SettingsPage />
           </DashboardLayout>
         }
@@ -60,7 +60,7 @@ function AppRoutes() {
       <Route
         path="/advertisements"
         element={
-          
+          <DashboardLayout>
             <AdvertisementManagementPage />
           </DashboardLayout>
         }
@@ -74,11 +74,11 @@ function App() {
   const basename = import.meta.env.DEV ? '/' : appConfig.dashboardBasePath;
 
   return (
-    
+    <ErrorBoundary>
       <BrowserRouter basename={basename}>
-        
-          
-            
+        <AuthProvider>
+          <NotificationProvider>
+            <DashboardProvider>
               <AppRoutes />
             </DashboardProvider>
           </NotificationProvider>

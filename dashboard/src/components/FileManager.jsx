@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { FiTrash2, FiDownload, FiCopy } from 'react-icons/fi';
-import type { FileItem } from '@types';
 import { formatFileSize, formatDate, getFileIcon, isImage, isVideo } from '@utils';
 import { Button, Input } from './UI';
 
@@ -9,12 +8,12 @@ import { Button, Input } from './UI';
 export function FileManager({ files, onUpload, onDelete, onSelect, loading, selectable = false }) {
   const [dragActive, setDragActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'images' | 'videos' | 'documents'>('all');
+  const [filterType, setFilterType] = useState('all');
   const fileInputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState(null);
 
-  const handleDrag = (e: React.DragEvent) => {
+  const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.type === 'dragenter' || e.type === 'dragover') {
@@ -24,7 +23,7 @@ export function FileManager({ files, onUpload, onDelete, onSelect, loading, sele
     }
   };
 
-  const handleDrop = async (e: React.DragEvent) => {
+  const handleDrop = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);

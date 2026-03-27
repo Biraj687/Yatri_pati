@@ -21,19 +21,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredRoles = [],
   fallback,
 }) => {
-  const { isAuthenticated, user, loading } = useAuth();
-
-  // Show loading state while checking authentication
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+  const { isAuthenticated, user } = useAuth();
 
   // Not authenticated
   if (!isAuthenticated) {
@@ -91,22 +79,21 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
  * Hook for route protection
  */
 export const useRequireAuth = (requiredRoles?: string[]) => {
-  const { isAuthenticated, user, loading } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   React.useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (!isAuthenticated) {
       window.location.href = '/login';
     }
 
-    if (!loading && isAuthenticated && user && requiredRoles && !requiredRoles.includes(user.role)) {
+    if (isAuthenticated && user && requiredRoles && !requiredRoles.includes(user.role)) {
       window.location.href = '/access-denied';
     }
-  }, [isAuthenticated, loading, requiredRoles, user]);
+  }, [isAuthenticated, requiredRoles, user]);
 
   return {
     isAuthenticated,
     user,
-    loading,
     isAuthorized: 
       isAuthenticated &&
       (!requiredRoles || (user && requiredRoles.includes(user.role))),

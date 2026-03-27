@@ -1,30 +1,11 @@
 import { useState, useEffect } from 'react';
 import { FiX } from 'react-icons/fi';
-import type { NewsArticle, Author } from '@types';
 import { Input, TextArea, Button, Badge } from './UI';
 
 
 
 export function NewsEditor({ article, onSave, onCancel, loading = false, onMediaSelect }) {
-  const [formData, setFormData] = useState<{
-    title: string;
-    subtitle: string;
-    slug: string;
-    content: string;
-    excerpt: string;
-    featured_image: string;
-    image_caption: string;
-    video_url: string;
-    category: string;
-    tags: string[];
-    status: 'draft' | 'published' | 'archived';
-    rank: number;
-    sticky: boolean;
-    seoTitle: string;
-    seoDescription: string;
-    seoKeywords: string[];
-    authors: Author[];
-  }>({
+  const [formData, setFormData] = useState({
     title: '',
     subtitle: '',
     slug: '',
@@ -73,7 +54,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     }
   }, [article]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (e) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -81,8 +62,8 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     }));
   };
 
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
+  const validateForm = ()=> {
+    const newErrors = {};
     if (!formData.title.trim()) newErrors.title = 'Title is required';
     if (!formData.content.trim()) newErrors.content = 'Content is required';
     if (formData.authors.length === 0) newErrors.authors = 'At least one author is required';
@@ -154,7 +135,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     }));
   };
 
-  const handleImageUpload = (e: React.ChangeEvent) => {
+  const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
       onMediaSelect?.(file);
