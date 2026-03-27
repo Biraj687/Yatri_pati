@@ -1,9 +1,23 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { createContext, useContext, useState, useCallback } from 'react';
 const DashboardContext = createContext(undefined);
+
+// Default categories
+const DEFAULT_CATEGORIES = [
+  { id: '1', name: 'Politics', slug: 'politics', order: 1, isActive: true, createdAt: new Date().toISOString() },
+  { id: '2', name: 'Tourism', slug: 'tourism', order: 2, isActive: true, createdAt: new Date().toISOString() },
+  { id: '3', name: 'Economy', slug: 'economy', order: 3, isActive: true, createdAt: new Date().toISOString() },
+  { id: '4', name: 'Culture', slug: 'culture', order: 4, isActive: true, createdAt: new Date().toISOString() },
+  { id: '5', name: 'Entertainment', slug: 'entertainment', order: 5, isActive: true, createdAt: new Date().toISOString() },
+  { id: '6', name: 'Sports', slug: 'sports', order: 6, isActive: true, createdAt: new Date().toISOString() },
+  { id: '7', name: 'Technology', slug: 'technology', order: 7, isActive: true, createdAt: new Date().toISOString() },
+  { id: '8', name: 'Health', slug: 'health', order: 8, isActive: true, createdAt: new Date().toISOString() },
+];
+
 export function DashboardProvider({ children }) {
     const [articles, setArticles] = useState([]);
     const [files, setFiles] = useState([]);
+    const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -252,9 +266,131 @@ export function DashboardProvider({ children }) {
     }, [articles, handleError]);
     const clearError = useCallback(() => setError(null), []);
     const setErrorMessage = useCallback((msg) => setError(msg), []);
+    
+    // Category Management Methods
+    const loadCategories = useCallback(async () => {
+        console.log('DashboardContext: loadCategories called');
+        setLoading(true);
+        setError(null);
+        try {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 300));
+            // Return categories sorted by order
+            const sorted = [...categories].sort((a, b) => a.order - b.order);
+            console.log('DashboardContext: returning', sorted.length, 'categories');
+            return sorted;
+        } catch (err) {
+            console.error('DashboardContext: loadCategories error', err);
+            handleError(err);
+        } finally {
+            setLoading(false);
+        }
+    }, [categories, handleError]);
+
+    const createCategory = useCallback(async (payload) => {
+        setLoading(true);
+        setError(null);
+        try {
+            // Check for duplicate names
+            if (categories.some(c => c.name.toLowerCase() === payload.name.toLowerCase())) {
+                throw new Error('Category with this name already exists');
+            }
+
+            const category = {
+                id: Math.random().toString(36).substr(2, 9),
+                ...payload,
+                order: categories.length + 1,
+                isActive: payload.isActive !== undefined ? payload.isActive : true,
+                createdAt: new Date().toISOString(),
+            };
+            setCategories(prev => [...prev, category]);
+            return category;
+        } catch (err) {
+            handleError(err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }, [categories, handleError]);
+
+    const updateCategory = useCallback(async (id, payload) => {
+        const originalCategories = categories;
+        setLoading(true);
+        setError(null);
+        try {
+            // Check for duplicate names (excluding current category)
+            if (categories.some(c => c.id !== id && c.name.toLowerCase() === payload.name.toLowerCase())) {
+                throw new Error('Category with this name already exists');
+            }
+
+            const updated = { ...categories.find(c => c.id === id), ...payload, updatedAt: new Date().toISOString() };
+            setCategories(prev => prev.map(c => c.id === id ? updated : c));
+            return updated;
+        } catch (err) {
+            setCategories(originalCategories);
+            handleError(err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }, [categories, handleError]);
+
+    const deleteCategory = useCallback(async (id) => {
+        const originalCategories = categories;
+        setCategories(prev => prev.filter(c => c.id !== id));
+        setLoading(true);
+        setError(null);
+        try {
+            await new Promise(resolve => setTimeout(resolve, 300));
+        } catch (err) {
+            setCategories(originalCategories);
+            handleError(err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }, [categories, handleError]);
+
+    const reorderCategories = useCallback(async (orderedIds) => {
+        const originalCategories = categories;
+        setLoading(true);
+        setError(null);
+        try {
+            const reordered = orderedIds.map((id, index) => {
+                const category = categories.find(c => c.id === id);
+                return { ...category, order: index + 1 };
+            });
+            setCategories(reordered);
+            return reordered;
+        } catch (err) {
+            setCategories(originalCategories);
+            handleError(err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }, [categories, handleError]);
+
+    const toggleCategoryStatus = useCallback(async (id) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const category = categories.find(c => c.id === id);
+            if (!category) throw new Error('Category not found');
+            const updated = { ...category, isActive: !category.isActive };
+            setCategories(prev => prev.map(c => c.id === id ? updated : c));
+            return updated;
+        } catch (err) {
+            handleError(err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }, [categories, handleError]);
     const value = {
         articles,
         files,
+        categories,
         stats,
         loading,
         error,
@@ -270,6 +406,12 @@ export function DashboardProvider({ children }) {
         uploadFile,
         deleteFile,
         loadStats,
+        loadCategories,
+        createCategory,
+        updateCategory,
+        deleteCategory,
+        reorderCategories,
+        toggleCategoryStatus,
         clearError,
         setError: setErrorMessage,
     };

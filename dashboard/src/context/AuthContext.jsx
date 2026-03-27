@@ -56,9 +56,15 @@ export function AuthProvider({ children }) {
   }, []);
 
   const hasRole = useCallback((role) => {
-    if (!user) return false;
+    console.log('AuthContext: hasRole called with', role, 'user role:', user?.role);
+    if (!user) {
+      console.log('AuthContext: No user, returning false');
+      return false;
+    }
     const roles = Array.isArray(role) ? role : [role];
-    return roles.includes(user.role);
+    const hasAccess = roles.includes(user.role);
+    console.log('AuthContext: roles:', roles, 'hasAccess:', hasAccess);
+    return hasAccess;
   }, [user]);
 
   return (

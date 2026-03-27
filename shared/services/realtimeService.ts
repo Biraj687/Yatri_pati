@@ -64,11 +64,39 @@ export class RealtimeService {
    */
   private connectWebSocket() {
     try {
-      const wsUrl = apiConfig.url.replace('http', 'ws') + '/ws';
+      // Build WebSocket URL from API config
+      let apiUrl = apiConfig.url;
+      
+      // Handle both localhost and production environments
+      if (apiUrl.startsWith('http://')) {
+        // For localhost, use appropriate WebSocket endpoint
+        if (apiUrl.includes('localhost') || apiUrl.includes('127.0.0.1')) {
+          apiUrl = apiUrl.replace('http://', 'ws://');
+        } else {
+          apiUrl = apiUrl.replace('http://', 'wss://');
+        }
+      } else if (apiUrl.startsWith('https://')) {
+        apiUrl = apiUrl.replace('https://', 'wss://');
+      }
+      
+      // Ensure no double slashes in the path
+      const wsUrl = apiUrl.replace(/\/$/, '') + '/ws';
+      
+      console.log(`🔌 Attempting WebSocket connection to: ${wsUrl}`);
       this.ws = new WebSocket(wsUrl);
       
+      // Set connection timeout
+      const connectionTimeout = setTimeout(() => {
+        if (this.ws && this.ws.readyState === WebSocket.CONNECTING) {
+          console.warn('WebSocket connection timeout, falling back to polling');
+          this.ws?.close();
+          this.fallbackToPolling();
+        }
+      }, 5000);
+      
       this.ws.onopen = () => {
-        console.log('🔌 WebSocket connected');
+        clearTimeout(connectionTimeout);
+        console.log('🔌 WebSocket connected successfully');
         this.isConnected = true;
         this.reconnectAttempts = 0;
         this.notifySubscribers('system.notification', { type: 'connected', message: 'Real-time connection established' });
@@ -84,14 +112,20 @@ export class RealtimeService {
       };
 
       this.ws.onclose = () => {
+        clearTimeout(connectionTimeout);
         console.log('🔌 WebSocket disconnected');
         this.isConnected = false;
         this.handleDisconnection();
       };
 
       this.ws.onerror = (error) => {
+        clearTimeout(connectionTimeout);
         console.error('WebSocket error:', error);
         this.isConnected = false;
+        // Fallback to polling on first error
+        if (this.reconnectAttempts === 0) {
+          this.fallbackToPolling();
+        }
       };
     } catch (error) {
       console.error('Failed to connect WebSocket:', error);

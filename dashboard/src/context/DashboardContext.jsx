@@ -237,14 +237,18 @@ export function DashboardProvider({ children }) {
 
   // Category Management Methods
   const loadCategories = useCallback(async () => {
+    console.log('DashboardContext: loadCategories called');
     setLoading(true);
     setError(null);
     try {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 300));
       // Return categories sorted by order
-      return categories.sort((a, b) => a.order - b.order);
+      const sorted = [...categories].sort((a, b) => a.order - b.order);
+      console.log('DashboardContext: returning', sorted.length, 'categories');
+      return sorted;
     } catch (err) {
+      console.error('DashboardContext: loadCategories error', err);
       handleError(err);
     } finally {
       setLoading(false);

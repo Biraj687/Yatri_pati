@@ -34,8 +34,13 @@ export function CategoryManagementPage() {
   const [sortBy, setSortBy] = useState('order'); // order, name, status
 
   useEffect(() => {
+    console.log('CategoryManagementPage: Loading categories...');
     loadCategories();
   }, []);
+  
+  useEffect(() => {
+    console.log('CategoryManagementPage: categories =', categories.length, 'loading =', loading, 'error =', error);
+  }, [categories, loading, error]);
 
   const filteredAndSorted = categories
     .filter(cat => 
