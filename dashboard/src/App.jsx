@@ -8,7 +8,6 @@ import {
   DashboardHome,
   NewsManagementPage,
   CategoryManagementPage,
-  FileManagerPage,
   AnalyticsPage,
   SettingsPage,
   AdvertisementManagementPage,
@@ -39,14 +38,6 @@ function AppRoutes() {
         element={
           <DashboardLayout>
             <CategoryManagementPage />
-          </DashboardLayout>
-        }
-      />
-      <Route
-        path="/files"
-        element={
-          <DashboardLayout>
-            <FileManagerPage />
           </DashboardLayout>
         }
       />

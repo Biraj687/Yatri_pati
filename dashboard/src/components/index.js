@@ -1,7 +1,6 @@
 export * from './UI';
 export * from './NewsList';
 export * from './NewsEditor';
-export * from './FileManager';
 export * from './AdvertisementAnalytics';
 export * from './AdvertisementCard';
 export * from './AdvertisementForm';

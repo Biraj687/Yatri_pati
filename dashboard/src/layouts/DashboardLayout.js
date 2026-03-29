@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FiMenu, FiX, FiHome, FiFileText, FiFolder, FiBarChart2, FiSettings, FiLogOut, FiAward } from 'react-icons/fi';
+import { FiMenu, FiX, FiHome, FiFileText, FiBarChart2, FiSettings, FiLogOut, FiAward } from 'react-icons/fi';
 import { useAuth } from '@context/AuthContext';
 export function DashboardLayout({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -13,7 +13,6 @@ export function DashboardLayout({ children }) {
         { label: 'Dashboard', path: '/', icon: FiHome, requiredRole: null },
         { label: 'News', path: '/news', icon: FiFileText, requiredRole: ['admin', 'editor'] },
         { label: 'Advertisements', path: '/advertisements', icon: FiAward, requiredRole: 'admin' },
-        { label: 'File Manager', path: '/files', icon: FiFolder, requiredRole: 'admin' },
         { label: 'Analytics', path: '/analytics', icon: FiBarChart2, requiredRole: 'admin' },
         { label: 'Settings', path: '/settings', icon: FiSettings, requiredRole: 'admin' },
     ];

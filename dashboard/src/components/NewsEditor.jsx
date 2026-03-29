@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FiX } from 'react-icons/fi';
 import { Input, TextArea, Button, Badge } from './UI';
+import { useDashboard } from '@context/DashboardContext';
 
 // Default categories - will be fetched from backend in real implementation
 const DEFAULT_CATEGORIES = [
@@ -19,6 +20,7 @@ const DEFAULT_CATEGORIES = [
 ];
 
 export function NewsEditor({ article, onSave, onCancel, loading = false, onMediaSelect, categories = DEFAULT_CATEGORIES }) {
+  const { files = [] } = useDashboard();
   const [formData, setFormData] = useState({
     title: '',
     subtitle: '',
@@ -37,6 +39,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
     seoDescription: '',
     seoKeywords: [],
     authors: [{ name: 'Yatripati' }],
+    scheduledPublishDate: '',
   });
 
   const [tagInput, setTagInput] = useState('');
@@ -64,6 +67,7 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
         seoDescription: article.seoDescription || '',
         seoKeywords: article.seoKeywords || [],
         authors: article.authors || [{ name: 'Yatripati' } ],
+        scheduledPublishDate: article.scheduledPublishDate || '',
       });
     }
   }, [article]);
@@ -254,6 +258,47 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
         </div>
       </div>
 
+      {/* Previously Uploaded Media */}
+      {files && files.length > 0 && (
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">📸 Previously Uploaded Media</h3>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">Click on an image to use it as your featured image</p>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {files.map((file) => (
+                <div key={file.id} className="relative group rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-all cursor-pointer">
+                  {file.url && (
+                    <img
+                      src={file.url}
+                      alt={file.name}
+                      className="w-full h-32 object-cover"
+                      onError={(e) => {
+                        (e.target).style.display = 'none';
+                      }}
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all flex items-center justify-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData(prev => ({
+                          ...prev,
+                          featured_image: file.url,
+                        }));
+                      }}
+                      className="bg-white text-gray-900 px-3 py-1 rounded text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      Use as Featured
+                    </button>
+                  </div>
+                  <div className="p-2 bg-gray-50 text-xs truncate text-gray-700 font-medium">{file.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Authors */}
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Authors</h3>
@@ -410,6 +455,18 @@ export function NewsEditor({ article, onSave, onCancel, loading = false, onMedia
             onChange={handleInputChange}
             min="0"
           />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Schedule Publish Date (Optional)</label>
+            <input
+              type="datetime-local"
+              name="scheduledPublishDate"
+              value={formData.scheduledPublishDate}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Leave empty to publish immediately"
+            />
+            <p className="text-xs text-gray-500 mt-1">Set a date and time to automatically publish this article in the future</p>
+          </div>
         </div>
       </div>
 
