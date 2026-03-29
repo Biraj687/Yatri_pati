@@ -72,9 +72,13 @@ export function Modal({ isOpen, title, children, onClose, footer, size = 'md' })
         md: 'max-w-md',
         lg: 'max-w-lg',
         xl: 'max-w-2xl',
+        '2xl': 'max-w-4xl',
+        '3xl': 'max-w-6xl',
+        'fullscreen': 'w-[95vw] h-[95vh]',
     }[size];
-    return (_jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50", onClick: onClose, children: _jsxs("div", { className: `bg-white rounded-lg shadow-xl ${sizeClass} max-h-[90vh] overflow-auto`, onClick: (e) => e.stopPropagation(), children: [_jsxs("div", { className: "flex items-center justify-between p-6 border-b border-gray-200", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900", children: title }), _jsx("button", { onClick: onClose, className: "text-gray-500 hover:text-gray-700 text-2xl", children: "\u00D7" })] }), _jsx("div", { className: "p-6", children: children }), footer && _jsx("div", { className: "border-t border-gray-200 p-6 bg-gray-50 flex justify-end gap-2", children: footer })] }) }));
+    return (_jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-2", onClick: onClose, children: _jsxs("div", { className: `bg-white rounded-lg shadow-xl ${sizeClass} w-full overflow-auto flex flex-col`, onClick: (e) => e.stopPropagation(), children: [_jsxs("div", { className: "flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white z-10", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900", children: title }), _jsx("button", { onClick: onClose, className: "text-gray-500 hover:text-gray-700 text-2xl", children: "\u00D7" })] }), _jsx("div", { className: "p-6 flex-1 overflow-auto", children: children }), footer && _jsx("div", { className: "border-t border-gray-200 p-6 bg-gray-50 flex justify-end gap-2 sticky bottom-0", children: footer })] }) }));
 }
+
 export function Tabs({ tabs, defaultValue }) {
     const [activeTab, setActiveTab] = React.useState(defaultValue || tabs[0]?.value);
     return (_jsxs("div", { children: [_jsx("div", { className: "flex border-b border-gray-200", children: tabs.map(tab => (_jsx("button", { onClick: () => setActiveTab(tab.value), className: `px-4 py-2 font-medium text-sm transition-colors ${activeTab === tab.value

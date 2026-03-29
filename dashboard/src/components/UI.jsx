@@ -157,11 +157,14 @@ export function Modal({ isOpen, title, children, onClose, footer, size = 'md' })
     md: 'max-w-md',
     lg: 'max-w-lg',
     xl: 'max-w-2xl',
+    '2xl': 'max-w-4xl',
+    '3xl': 'max-w-6xl',
+    'fullscreen': 'w-[95vw] h-[95vh]',
   }[size];
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 p-4" onClick={onClose}>
-      <div className={`bg-white rounded-lg shadow-2xl ${sizeClass} w-full max-h-[90vh] overflow-auto`} onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 p-2" onClick={onClose}>
+      <div className={`bg-white rounded-lg shadow-2xl ${sizeClass} w-full overflow-auto flex flex-col`} onClick={(e) => e.stopPropagation()}>
         <div className="sticky top-0 flex items-center justify-between p-6 border-b border-gray-200 bg-white z-10">
           <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
           <button 

@@ -215,7 +215,7 @@ export function NewsManagementPage() {
           setSaveError(null);
           setSaveSuccess(false);
         }}
-        size="xl"
+        size="fullscreen"
       >
         {saveSuccess ? (
           <div className="text-center py-8">
